@@ -6,11 +6,11 @@
 import { LogLevel } from "@azure/msal-browser";
 
 export const deployment = {
-    policyPrefix : "V3_",
+    policyPrefix : "V1_",
     b2cTenantName: "b2cmultitenant",
-    b2cTenantId: "d06b10f6-c712-40c1-9617-cec9c7d02390",
-    b2cClientId: "93242ad4-9084-4493-a4cf-10c7b0266e1d",
-    restUrl: "https://b2cmtapi.azurewebsites.net/"
+    b2cTenantId: "31e8eecd-9d43-42ef-bdfa-7d40335bdd0e",
+    b2cClientId: "46c6b5f3-bfc0-4ef3-ac5b-198d0b383a42",
+    restUrl: "https://aipb2cpoc.azurewebsites.net/"
 }
 
 export const policyNames = {
