@@ -84,7 +84,7 @@ export const msalConfig = {
  * https://docs.microsoft.com/en-us/azure/active-directory/develop/v2-permissions-and-consent#openid-connect-scopes
  */
 export const loginRequest = {
-    scopes: ["openid", "profile", "https://aip-tenant-api-poc.azurewebsites.net/mtrest/User.Invite", "https://aip-tenant-api-poc.azurewebsites.net/mtrest/User.ReadAll"]
+    scopes: ["openid", "profile", "https://aipb2cpoc.onmicrosoft.com/mtrest/User.Invite", "https://aipb2cpoc.onmicrosoft.com/mtrest/User.ReadAll"]
 };
 
 /**
@@ -92,5 +92,5 @@ export const loginRequest = {
  * between applications by providing a "login_hint" property.
  */
 export const silentRequest = {
-  scopes: ["openid", "profile", "https://aip-tenant-api-poc.azurewebsites.net/mtrest/User.Invite", "https://aip-tenant-api-poc.azurewebsites.net/mtrest/User.ReadAll"]
+  scopes: ["openid", "profile", "https://aipb2cpoc.onmicrosoft.com/mtrest/User.Invite", "https://aipb2cpoc.onmicrosoft.com/mtrest/User.ReadAll"]
 };
