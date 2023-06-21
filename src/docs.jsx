@@ -25,12 +25,12 @@ export const Docs = (props) => {
                     <Container className="text-justify">
                         <Row>
                             <Col>
-                            <p>Implement a single Azure B2C directory to provide user identity support for the AIP application and partition
-                                                        users into distinct groups called <b>application tenants</b>.  Since Azure Active Directory itself uses the term <b>tenant</b> when describing it's own instances, the term <b>application tenant</b>
-                                                        will be used to describe the tenancy that is implemented here.</p>
-                                                    <p><i>Note that as implemented here, users may be <b>authenticated</b> using other Identity Providers but, <b>authorization</b> information including the
+                            <p>POC Implementation of a single Azure B2C directory providing user identity support for the AIP application that partitions
+                                                        users into <b>application tenants</b>.  Since Azure Active Directory itself uses the term <b>tenant</b> when describing it's own instances, the term 
+                                                        <b>application tenant</b> will be used to describe the tenancy that is implemented here.</p>
+                                                    <p><i>Note that as implemented here, users may be <b>authenticated</b> using other Identity Providers but, <b>authorization</b> information including the 
                                                         <b>application tenant</b> and roles etc. will be provided by the single B2C directory used here.</i></p>
-                                                    <p>This process here leverages some 'out of the box' policies that assume self-creation of a tenant.  These will be adjusted to require a separate application run by site
+                                                    <p>This process here leverages some 'out of the box' policies that assume self-creation of a tenant.  These will be adjusted and split to require a separate application run by site
                                                         administrators that will create and provision the tenants, and a public facing application that will allow access by fund managers and investors based on our requirements and use cases.</p>
                             </Col>
                         </Row>
