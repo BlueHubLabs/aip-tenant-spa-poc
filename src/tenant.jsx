@@ -56,40 +56,41 @@ const IdTokenContent = () => {
     );
 };
 
-const IdTokenClaims = (props) => {
-    const tokenClaims = createClaimsTable(props.idTokenClaims);
-
-    const tableRow = Object.keys(tokenClaims).map((key, index) => {
-        return (
-            <tr key={key}>
-                {tokenClaims[key].map((claimItem) => (
-                    <td key={claimItem}>{claimItem}</td>
-                ))}
-            </tr>
-        );
-    });
+const IdTokenClaims = (props) => {  
     return (
         <>
-            <h5 className="card-title">Token claims</h5>
-            <p>
-                For more information, visit:{' '}
-                <span>
-                    <a href="https://docs.microsoft.com/en-us/azure/active-directory/develop/id-tokens#claims-in-an-id-token">
-                        docs.microsoft.com
-                    </a>
-                </span>
-            </p>
+            <h5 className="card-title">Some token claims</h5>
             <Table>
                 <thead>
-                    <tr>
-                        <th>Claim</th>
+                    <tr key="ix">
+                        <th>Name</th>
                         <th>Value</th>
-                        <th>Description</th>
                     </tr>
-                </thead>
-                <tbody>{tableRow}</tbody>
-            </Table>
-        </>
+                </thead>    
+                <tbody>
+                    <tr>
+                        <td><strong>Email/sign in name</strong></td>
+                        <td>{props.idTokenClaims.email?? props.idTokenClaims.signInName}</td>
+                    </tr> 
+                    <tr>
+                        <td><strong>Object id</strong></td>
+                        <td>{props.idTokenClaims.sub}</td>
+                    </tr>   
+                    <tr>
+                        <td><strong>App tenant name</strong></td>
+                        <td>{props.idTokenClaims.appTenantName}</td>
+                    </tr>      
+                    <tr>
+                        <td><strong>App tenant id</strong></td>
+                        <td>{props.idTokenClaims.appTenantId}</td>
+                    </tr>     
+                    <tr>
+                        <td><strong>Role(s)</strong></td>
+                        <td><ul className="plain-list"><ListRoles roles={props.idTokenClaims.roles} /></ul></td>
+                    </tr>                                                                                                          
+                </tbody>                                
+            </Table>      
+            </>  
     );
 }
 
