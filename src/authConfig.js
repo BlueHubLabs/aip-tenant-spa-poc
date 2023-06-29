@@ -10,7 +10,8 @@ export const deployment = {
     b2cTenantName: "aipb2cpoc",
     b2cTenantId: "31e8eecd-9d43-42ef-bdfa-7d40335bdd0e",
     b2cClientId: "46c6b5f3-bfc0-4ef3-ac5b-198d0b383a42",
-    restUrl: "http://aip-tenant-api-poc.azurewebsites.net"
+    restUrl: "http://aip-tenant-api-poc.azurewebsites.net",
+    AIPUrl: "https://aipbackend.azurewebsites.net"
 }
 
 export const policyNames = {

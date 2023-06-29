@@ -135,8 +135,21 @@ const InviteMember = () => {
                             `${deployment.restUrl}tenant/oauth2/invite`,
                             { inviteEmail: email, additionalClaims: { isAdmin: isAdmin.toString() } },
                             { headers: { 'Authorization': `Bearer ${accessToken}` } }
-                        ).then(response => { setInvitation(response.data); console.log("invite received"); })
+                        ).then(response => { 
+                            setInvitation(response.data); 
+                            console.log("invite received"); 
+
+                            // This code is to send activation link to recipient
+                            axios.get(
+                                `${deployment.AIPUrl}/v1/EmailService/SendOAuthEmail`,
+                                { recipientEmail: email, URL: response.data }
+                            ).then(response => { 
+                                console.log(`Email sent to - ${email}`); 
+                            })
                             .catch(error => console.log(error));
+                            // This code is to send activation link to recipient
+                        })
+                        .catch(error => console.log(error));
                     }
                     instance.acquireTokenSilent(request).then(function (accessTokenResponse) {
                         console.log("Email:" + email);
