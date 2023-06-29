@@ -141,8 +141,7 @@ const InviteMember = () => {
                                 console.log("invite received");
                                     // This code is to send activation link to recipient
                                     axios.get(
-                                        `${deployment.aipUrl}/v1/EmailService/SendOAuthEmail`,
-                                        { recipientEmail: email, URL: response.data }
+                                        `${deployment.aipUrl}/v1/EmailService/SendOAuthEmail?recipientEmail=${email}&URL=${response.data}`
                                     ).then(response => {
                                         console.log(`Email sent to - ${email}`);
                                     })
