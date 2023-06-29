@@ -19,3 +19,19 @@ td, th {
 .plain-list {
   list-style-type: none
 }
+
+.dropdownposition
+{
+  position: absolute;
+  top:110px;
+  width:100%;
+  display: flow-root;
+  align-items: center;
+  justify-content: center;
+  text-align: center; 
+}
+
+.dropright .dropdown-menu
+{
+  left:54% !important;
+}

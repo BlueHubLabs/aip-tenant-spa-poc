@@ -23,7 +23,8 @@ const NavigationBar = () => {
     return (
         <>
             <AuthenticatedTemplate>
-                <div className="ml-auto">
+                <div className="ml-auto dropdownposition">
+                    <div>Please select a tenant below</div>
                     <SwitchTenant/>
                 </div>                  
                 <div className="ml-auto">
@@ -65,11 +66,13 @@ export const PageLayout = (props) => {
     return (
         <>
             <Navbar bg="primary" variant="dark">
-                <a className="navbar-brand" href="/">B2C multi-tenant</a>
+                <a className="navbar-brand" href="/">AIP Tenant Management</a>
                 <NavigationBar />
             </Navbar>
             <br />
-            <h5><center>Welcome to the 'B2C as multi-tenant identity' sample</center></h5>
+            <h5><center>Welcome to the AIP Tenant Management</center></h5>
+            <br />
+            <br />
             <br />
             {props.children}
             <br />
@@ -106,7 +109,8 @@ export const SwitchTenant = () => {
     if(accounts[0].idTokenClaims.allTenants.length > 1) {
         var title = `${accounts[0].idTokenClaims.appTenantName}`
         return (
-                <DropdownButton variant="warning" className="ml-auto" drop="left" title={title}>{listTenants}</DropdownButton>
+                <DropdownButton variant="warning"  className="ml-auto" 
+                drop="right" title={title}>{listTenants}</DropdownButton>
     )} else return null;
 };
 
