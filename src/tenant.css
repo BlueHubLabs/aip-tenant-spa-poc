@@ -1,0 +1,62 @@
+.tenantListCont{
+    width: 29%;
+    text-align: left;
+}
+.headerTitle{
+    color: #808080;
+    font-size: 12px;
+    font-weight: 500;
+}
+.tenantsInfoWrapper{
+    margin: 0px 5%;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+}
+.tenantsWrapper{
+    background-color: #D2DAE0;
+    border-radius: 8px;
+    padding: 8px;
+    width: 100%;
+}
+.tenantItem{
+    background-color: white;
+    border-radius: 8px;
+    padding: 8px 12px;
+    margin-bottom: 10px;
+    box-shadow: 0px 3px 6px #00000029;
+    cursor: pointer;
+}
+.addActionsWrapper{
+    text-align: right;
+    margin: 0px 5%;
+}
+.memberTableWrapper{
+    width: 69%;
+    text-align: left;
+}
+.memberTableWrapper table{
+    border-collapse: separate;
+    border-spacing: 0 12px;
+}
+.memberTableWrapper th{
+    color: #808080;
+    font-size: 12px;
+}
+.memberRowData{
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0px 3px 6px #00000029;
+    margin: 8px 0px;
+}
+.memberTableWrapper thead tr th{
+    border-bottom: 2px solid #D2DAE0;
+}
+
+td:first-child{
+  border-radius: 10px 0 0 10px;
+}
+
+td:last-child{
+  border-radius: 0 10px 10px 0;
+}

@@ -8,32 +8,127 @@ import axios from 'axios';
 
 import { useMsal } from "@azure/msal-react";
 
-import { ButtonGroup, Button, Table, ToggleButton, ToggleButtonGroup } from "react-bootstrap";
+import { ButtonGroup, Button, ToggleButton, ToggleButtonGroup } from "react-bootstrap";
 
 import { b2cPolicies, deployment } from "./authConfig";
 import { useEffect } from "react";
+import ActionButton from '@mui/material/Button';
+import ControlPointOutlinedIcon from '@mui/icons-material/ControlPointOutlined';
+import './tenant.css';
+import ArrowDropDownOutlinedIcon from '@mui/icons-material/ArrowDropDownOutlined';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+import Spinner from "./spinner";
+
+const membersData = [
+    {
+        userName: 'User1',
+        role: 'Fund Manager',
+        invited: true
+    },
+    {
+        userName: 'User2',
+        role: 'Fund Manager',
+        invited: true
+    },
+    {
+        userName: 'User3',
+        role: 'Fund Manager',
+        invited: false
+    },
+    {
+        userName: 'User4',
+        role: 'Fund Manager',
+        invited: true
+    }
+]
 
 export const Tenant = () => {
-    const [nowShowing, setState] = useState("claims");
     const { instance, accounts } = useMsal();
-    let options = [["claims", "Claims"], ["members", "Members"], ["invitation", "New"], ["myurl", "My url"]].filter(role).map((v) =>
-        <Button key={v[0]} onClick={() => setState(v[0])}>{v[1]}</Button>
-    );
-    function role(option) {
-        if (option[0] === "invitation")
-            if (accounts[0].idTokenClaims.roles.includes("Tenant.admin")) return true; else return false;
-        //if(option[0] === "myurl")
-        //    if (accounts[0].idTokenClaims.idp != 'local') return true; else return false;            
-        return true;
+    const [loading, setLoading] = useState(true);
+    
+    useEffect(()=>{
+        if(accounts && accounts.length && accounts[0].idTokenClaims){
+            setLoading(false);
+        } else{
+            setLoading(true);
+        }
+    }, [accounts[0].idTokenClaims]);
+
+    const handleSwitchTenant = (tenant) =>{
+        setLoading(true);
+        instance.loginRedirect({ 
+            authority:b2cPolicies.authorities.signIn.authority,
+            scopes: ["openid", "profile", `https://${deployment.b2cTenantName}.onmicrosoft.com/mtrest/User.Invite`, `https://${deployment.b2cTenantName}.onmicrosoft.com/mtrest/User.ReadAll`],                    
+            account: accounts[0],
+            extraQueryParameters: { tenant: tenant }
+        })
     }
+    
     return (
-        <>
-            <div>
-                <ButtonGroup className="mb-2">
-                    {options}
-                </ButtonGroup>
+        <> 
+            <div className="addActionsWrapper">
+                <ActionButton
+                    variant="outlined"
+                    startIcon={<ControlPointOutlinedIcon />}
+                    sx={{
+                        margin: '0px 10px',
+                        color: '#0A1A27',
+                        border: '1px solid #0A1A27'
+                    }}
+                    >ADD TENANT</ActionButton>
+                <ActionButton
+                    variant="outlined"
+                    startIcon={<ControlPointOutlinedIcon />}
+                    sx={{
+                        margin: '0px 10px',
+                        color: '#0A1A27',
+                        border: '1px solid #0A1A27'
+                    }}
+                    >ADD USER</ActionButton>
             </div>
-            {nowShowing === "claims" ?
+            <div className="tenantsInfoWrapper">
+                <div className="tenantListCont">
+                    <div className="headerTitle">TETANT LIST</div>
+                    {!loading && <div className="tenantsWrapper">{accounts[0].idTokenClaims.allTenants.map( tenant=>(
+                        <div 
+                            className="tenantItem"
+                            onClick={() => handleSwitchTenant(tenant)}>{tenant}</div>
+                    ))}</div>}
+                </div>
+                <div className="memberTableWrapper">
+                <Table>
+                    <thead>
+                        <tr key="ix">
+                            <th style={{paddingLeft: "8px"}}><span>USERNAME</span><ArrowDropDownOutlinedIcon /></th>
+                            <th><span>ROLE</span><ArrowDropDownOutlinedIcon /></th>
+                            <th><span>INVITED</span><ArrowDropDownOutlinedIcon /></th>
+                            <th></th>
+                        </tr>
+                    </thead>    
+                    <tbody>
+                        {
+                            membersData.map(member=>(
+                                <><tr className="memberRowData">
+                                    <td style={{paddingLeft: "8px"}}>{member.userName}</td>
+                                    <td>{member.role}</td>
+                                    <td>{member.invited ? 'YES' : 'NO'}</td>
+                                    <td align="right"><ActionButton>RESET PASSWORD</ActionButton></td>
+                                </tr>
+                                </>
+                            ))
+                        }
+                                                                                                                             
+                    </tbody>                                
+                </Table>
+                </div>
+            </div>
+            {/* {nowShowing === "claims" ?
                 <IdTokenContent />
                 : (nowShowing === "members") ?
                     <Members instance={instance} account={accounts[0]} />
@@ -41,7 +136,8 @@ export const Tenant = () => {
                         <InviteMember />
                         :
                         <MyUrl domain_hint={accounts[0].idTokenClaims.idp} login_hint={accounts[0].idTokenClaims.email ?? accounts[0].idTokenClaims.signInName} tenant={accounts[0].idTokenClaims.appTenantName} />
-            }
+            } */}
+            {loading && <div className="spinnerWrapper"><Spinner/></div>}
         </>
     );
 }
