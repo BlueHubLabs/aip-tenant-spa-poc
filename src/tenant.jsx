@@ -51,6 +51,7 @@ const membersData = [
 export const Tenant = () => {
     const { instance, accounts } = useMsal();
     const [loading, setLoading] = useState(true);
+    const [membersData, setMembers] = useState([]);
     
     useEffect(()=>{
         if(accounts && accounts.length && accounts[0].idTokenClaims){
@@ -60,6 +61,8 @@ export const Tenant = () => {
         }
     }, [accounts[0].idTokenClaims]);
 
+
+
     const handleSwitchTenant = (tenant) =>{
         setLoading(true);
         instance.loginRedirect({ 
@@ -67,7 +70,7 @@ export const Tenant = () => {
             scopes: ["openid", "profile", `https://${deployment.b2cTenantName}.onmicrosoft.com/mtrest/User.Invite`, `https://${deployment.b2cTenantName}.onmicrosoft.com/mtrest/User.ReadAll`],                    
             account: accounts[0],
             extraQueryParameters: { tenant: tenant }
-        })
+        }).then(()=>getMemberAccessToken())
     }
 
     const getMembers = (accessToken) => {
@@ -83,7 +86,7 @@ export const Tenant = () => {
             .catch(error => console.log(error));
     }
 
-    useEffect(() => {
+    const getMemberAccessToken = () => {
         let request = {
             authority: `https://${deployment.b2cTenantName}.b2clogin.com/${deployment.b2cTenantId}/${accounts[0].idTokenClaims.acr}`,
             scopes: ["openid", "profile", `https://${deployment.b2cTenantName}.onmicrosoft.com/mtrest/User.Invite`, `https://${deployment.b2cTenantName}.onmicrosoft.com/mtrest/User.ReadAll`],
@@ -102,7 +105,11 @@ export const Tenant = () => {
             }
             console.log(error);
         });
-    }, [])
+    }
+
+    useEffect(()=>{
+        getMemberAccessToken();
+    },[]);
     
     return (
         <> 
@@ -151,16 +158,16 @@ export const Tenant = () => {
                         </tr>
                     </thead>    
                     <tbody>
-                        {
+                        {   membersData.length ?
                             membersData.map(member=>(
                                 <><tr className="memberRowData">
-                                    <td style={{paddingLeft: "8px"}}>{member.userName}</td>
-                                    <td>{member.role}</td>
-                                    <td>{member.invited ? 'YES' : 'NO'}</td>
+                                    <td style={{paddingLeft: "8px"}}>{member.name}</td>
+                                    <td>{member.roles[0] === "Tenant.admin" ? 'Fund Manager' : 'Investor'}</td>
+                                    <td>Yes</td>
                                     <td align="right"><ActionButton>RESET PASSWORD</ActionButton></td>
                                 </tr>
                                 </>
-                            ))
+                            )):<div>No members to display</div>
                         }
                                                                                                                              
                     </tbody>                                

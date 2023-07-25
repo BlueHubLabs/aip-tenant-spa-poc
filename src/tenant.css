@@ -19,13 +19,19 @@
     padding: 8px;
     width: 100%;
 }
+
 .tenantItem{
     background-color: white;
     border-radius: 8px;
-    padding: 8px 12px;
+    padding: 10px 18px;
     margin-bottom: 10px;
     box-shadow: 0px 3px 6px #00000029;
     cursor: pointer;
+    color: #0A1A27;
+    font-size: 14px;
+}
+.tenantItem:last-child{
+    margin-bottom: 0px;
 }
 .addActionsWrapper{
     text-align: right;
@@ -48,6 +54,11 @@
     border-radius: 8px;
     box-shadow: 0px 3px 6px #00000029;
     margin: 8px 0px;
+}
+.memberRowData td{
+    color: #0A1A27;
+    font-size: 14px;
+    padding: 2px 0px;
 }
 .memberTableWrapper thead tr th{
     border-bottom: 2px solid #D2DAE0;
