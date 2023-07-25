@@ -89,27 +89,17 @@ const NavigationBar = () => {
                 {/* </div> */}
             </AuthenticatedTemplate>
             <UnauthenticatedTemplate>
-                <div className="ml-auto">
-                    <Button variant="warning" className="ml-auto" drop="left" onClick={() => 
-                        instance.loginRedirect({ 
-                            authority:b2cPolicies.authorities.newTenant.authority,
-                            scopes: loginRequest.scopes                           
-                        }).catch((error) => console.log(error))
-                    }>Create new tenant</Button>
-                </div>   
-                <div className="ml-auto">                         
+                <div className="navbarBrandHeaderWrapper">
+                    <div className="navbarBrandHeader">
+                        <img  alt="" src="/group-330.svg" />
+                        <div className="headerBrandName">Alternative Investment Platform</div>
+                    </div>
                     <Button variant="warning" className="ml-auto" onClick={() => 
                         instance.loginRedirect({
                             scopes: loginRequest.scopes
                             }).catch((error) => console.log(error))
                         }>Sign in</Button>  
                 </div>   
-                {/*              
-                <DropdownButton variant="secondary" className="ml-auto" drop="left" title="Sign In">
-                    <Dropdown.Item as="button" onClick={() => instance.loginPopup(loginRequest)}>Sign in using Popup</Dropdown.Item>
-                    <Dropdown.Item as="button" onClick={() => instance.loginRedirect(loginRequest)}>Sign in using Redirect</Dropdown.Item>
-                </DropdownButton>
-                */}
             </UnauthenticatedTemplate>
         </>
     );
@@ -135,8 +125,7 @@ export const PageLayout = (props) => {
                 </footer> 
             </AuthenticatedTemplate>*/}
             <UnauthenticatedTemplate>
-            <Navbar bg="primary" variant="dark">
-                <a className="navbar-brand" href="/">AIP Tenant Management</a>
+            <Navbar bg="light" variant="dark">
                 <NavigationBar />
             </Navbar>
             <br />

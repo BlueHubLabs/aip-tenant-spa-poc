@@ -30,6 +30,9 @@
     color: #0A1A27;
     font-size: 14px;
 }
+.selectedTenant{
+    background-color: #b8dcff;
+}
 .tenantItem:last-child{
     margin-bottom: 0px;
 }

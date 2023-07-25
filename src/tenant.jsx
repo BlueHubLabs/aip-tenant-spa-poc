@@ -52,6 +52,7 @@ export const Tenant = () => {
     const { instance, accounts } = useMsal();
     const [loading, setLoading] = useState(true);
     const [membersData, setMembers] = useState([]);
+    const [isInvite, setIsInvite] = useState(false);
     
     useEffect(()=>{
         if(accounts && accounts.length && accounts[0].idTokenClaims){
@@ -65,13 +66,12 @@ export const Tenant = () => {
 
     const handleSwitchTenant = (tenant) =>{
         setLoading(true);
-        // instance.loginRedirect({ 
-        //     authority:b2cPolicies.authorities.signIn.authority,
-        //     scopes: ["openid", "profile", `https://${deployment.b2cTenantName}.onmicrosoft.com/mtrest/User.Invite`, `https://${deployment.b2cTenantName}.onmicrosoft.com/mtrest/User.ReadAll`],                    
-        //     account: accounts[0],
-        //     extraQueryParameters: { tenant: tenant }
-        // }).then(()=>getMemberAccessToken())
-        getMemberAccessToken(tenant)
+        instance.loginRedirect({ 
+            authority:b2cPolicies.authorities.signIn.authority,
+            scopes: ["openid", "profile", `https://${deployment.b2cTenantName}.onmicrosoft.com/mtrest/User.Invite`, `https://${deployment.b2cTenantName}.onmicrosoft.com/mtrest/User.ReadAll`],                    
+            account: accounts[0],
+            extraQueryParameters: { tenant: tenant }
+        }).then(()=>getMemberAccessToken());
     }
 
     const getMembers = (accessToken) => {
@@ -87,12 +87,12 @@ export const Tenant = () => {
             .catch(error => console.log(error));
     }
 
-    const getMemberAccessToken = (tenantName) => {
+    const getMemberAccessToken = () => {
         let request = {
             authority: `https://${deployment.b2cTenantName}.b2clogin.com/${deployment.b2cTenantId}/${accounts[0].idTokenClaims.acr}`,
             scopes: ["openid", "profile", `https://${deployment.b2cTenantName}.onmicrosoft.com/mtrest/User.Invite`, `https://${deployment.b2cTenantName}.onmicrosoft.com/mtrest/User.ReadAll`],
             account: accounts[0],
-            extraQueryParameters: { tenant: tenantName }
+            extraQueryParameters: { tenant: accounts[0].idTokenClaims.appTenantName }
         };
         instance.acquireTokenSilent(request).then(function (accessTokenResponse) {
             getMembers(accessTokenResponse.accessToken);
@@ -109,12 +109,12 @@ export const Tenant = () => {
     }
 
     useEffect(()=>{
-        getMemberAccessToken(accounts[0].idTokenClaims.appTenantName);
+        getMemberAccessToken();
     },[]);
     
     return (
         <> 
-            <div className="addActionsWrapper">
+            {!isInvite && <><div className="addActionsWrapper">
                 <ActionButton
                     variant="outlined"
                     startIcon={<ControlPointOutlinedIcon />}
@@ -137,6 +137,7 @@ export const Tenant = () => {
                         color: '#0A1A27',
                         border: '1px solid #0A1A27'
                     }}
+                    onClick={()=> setIsInvite(true)}
                     >ADD USER</ActionButton>
             </div>
             <div className="tenantsInfoWrapper">
@@ -144,7 +145,7 @@ export const Tenant = () => {
                     <div className="headerTitle">TETANT LIST</div>
                     {!loading && <div className="tenantsWrapper">{accounts[0].idTokenClaims.allTenants.map( tenant=>(
                         <div 
-                            className="tenantItem"
+                            className={`tenantItem ${(accounts[0].idTokenClaims.appTenantName === tenant) && 'selectedTenant'}`}
                             onClick={() => handleSwitchTenant(tenant)}>{tenant}</div>
                     ))}</div>}
                 </div>
@@ -174,7 +175,8 @@ export const Tenant = () => {
                     </tbody>                                
                 </Table>
                 </div>
-            </div>
+            </div></>}
+            {isInvite && <InviteMember />}
             {/* {nowShowing === "claims" ?
                 <IdTokenContent />
                 : (nowShowing === "members") ?
@@ -258,7 +260,7 @@ const InviteMember = () => {
                     checked={isAdmin}
                     value="0"
                     onChange={(e) => { setIsAdmin(e.currentTarget.checked); setInvitation(""); }} >
-                    Is co-admin?
+                    Is fund manager?
                 </ToggleButton>
                 <br />
                 <div><Button onClick={() => {
