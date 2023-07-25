@@ -65,12 +65,13 @@ export const Tenant = () => {
 
     const handleSwitchTenant = (tenant) =>{
         setLoading(true);
-        instance.loginRedirect({ 
-            authority:b2cPolicies.authorities.signIn.authority,
-            scopes: ["openid", "profile", `https://${deployment.b2cTenantName}.onmicrosoft.com/mtrest/User.Invite`, `https://${deployment.b2cTenantName}.onmicrosoft.com/mtrest/User.ReadAll`],                    
-            account: accounts[0],
-            extraQueryParameters: { tenant: tenant }
-        }).then(()=>getMemberAccessToken())
+        // instance.loginRedirect({ 
+        //     authority:b2cPolicies.authorities.signIn.authority,
+        //     scopes: ["openid", "profile", `https://${deployment.b2cTenantName}.onmicrosoft.com/mtrest/User.Invite`, `https://${deployment.b2cTenantName}.onmicrosoft.com/mtrest/User.ReadAll`],                    
+        //     account: accounts[0],
+        //     extraQueryParameters: { tenant: tenant }
+        // }).then(()=>getMemberAccessToken())
+        getMemberAccessToken(tenant)
     }
 
     const getMembers = (accessToken) => {
@@ -86,12 +87,12 @@ export const Tenant = () => {
             .catch(error => console.log(error));
     }
 
-    const getMemberAccessToken = () => {
+    const getMemberAccessToken = (tenantName) => {
         let request = {
             authority: `https://${deployment.b2cTenantName}.b2clogin.com/${deployment.b2cTenantId}/${accounts[0].idTokenClaims.acr}`,
             scopes: ["openid", "profile", `https://${deployment.b2cTenantName}.onmicrosoft.com/mtrest/User.Invite`, `https://${deployment.b2cTenantName}.onmicrosoft.com/mtrest/User.ReadAll`],
             account: accounts[0],
-            extraQueryParameters: { tenant: accounts[0].idTokenClaims.appTenantName }
+            extraQueryParameters: { tenant: tenantName }
         };
         instance.acquireTokenSilent(request).then(function (accessTokenResponse) {
             getMembers(accessTokenResponse.accessToken);
@@ -108,7 +109,7 @@ export const Tenant = () => {
     }
 
     useEffect(()=>{
-        getMemberAccessToken();
+        getMemberAccessToken(accounts[0].idTokenClaims.appTenantName);
     },[]);
     
     return (
