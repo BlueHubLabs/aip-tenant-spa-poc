@@ -85,10 +85,10 @@ export const Tenant = () => {
 
     useEffect(() => {
         let request = {
-            authority: `https://${deployment.b2cTenantName}.b2clogin.com/${deployment.b2cTenantId}/${account.idTokenClaims.acr}`,
+            authority: `https://${deployment.b2cTenantName}.b2clogin.com/${deployment.b2cTenantId}/${accounts[0].idTokenClaims.acr}`,
             scopes: ["openid", "profile", `https://${deployment.b2cTenantName}.onmicrosoft.com/mtrest/User.Invite`, `https://${deployment.b2cTenantName}.onmicrosoft.com/mtrest/User.ReadAll`],
             account: accounts[0],
-            extraQueryParameters: { tenant: account.idTokenClaims.appTenantName }
+            extraQueryParameters: { tenant: accounts[0].idTokenClaims.appTenantName }
         };
         instance.acquireTokenSilent(request).then(function (accessTokenResponse) {
             getMembers(accessTokenResponse.accessToken);
