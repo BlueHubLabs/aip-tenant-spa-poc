@@ -40,6 +40,8 @@
 .memberTableWrapper{
     width: 69%;
     text-align: left;
+    height: 55vh;
+    overflow: auto;
 }
 .memberTableWrapper table{
     border-collapse: separate;
