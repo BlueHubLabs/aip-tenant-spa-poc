@@ -62,6 +62,10 @@
 }
 .memberTableWrapper thead tr th{
     border-bottom: 2px solid #D2DAE0;
+    position: sticky;
+    background-color: #eaf0f7;
+    top: 0;
+    z-index: 9;
 }
 
 td:first-child{
