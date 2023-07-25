@@ -118,7 +118,7 @@ const NavigationBar = () => {
 export const PageLayout = (props) => {
     return (
         <>
-        
+        <AuthenticatedTemplate>
             <Navbar bg="light" variant="light">
                 <NavigationBar />
             </Navbar>
@@ -126,7 +126,7 @@ export const PageLayout = (props) => {
                 <h4 className="managementTitle"><center>AIP Tenant Management</center></h4>
                 {props.children}
             </div>
-            
+            </AuthenticatedTemplate>
             {/*<AuthenticatedTemplate>
                 <footer>
                     <center> 
@@ -135,7 +135,17 @@ export const PageLayout = (props) => {
                 </footer> 
             </AuthenticatedTemplate>*/}
             <UnauthenticatedTemplate>
-
+            <Navbar bg="primary" variant="dark">
+                <a className="navbar-brand" href="/">AIP Tenant Management</a>
+                <NavigationBar />
+            </Navbar>
+            <br />
+            <h5><center>Welcome to the AIP Tenant Management</center></h5>
+            <br />
+            <br />
+            <br />
+            {props.children}
+            <br />
             </UnauthenticatedTemplate>
         </>
     );

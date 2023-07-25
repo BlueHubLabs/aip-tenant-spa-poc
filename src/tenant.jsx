@@ -10,7 +10,7 @@ import { useMsal } from "@azure/msal-react";
 
 import { ButtonGroup, Button, ToggleButton, ToggleButtonGroup } from "react-bootstrap";
 
-import { b2cPolicies, deployment } from "./authConfig";
+import { b2cPolicies, deployment, loginRequest } from "./authConfig";
 import { useEffect } from "react";
 import ActionButton from '@mui/material/Button';
 import ControlPointOutlinedIcon from '@mui/icons-material/ControlPointOutlined';
@@ -69,6 +69,40 @@ export const Tenant = () => {
             extraQueryParameters: { tenant: tenant }
         })
     }
+
+    const getMembers = (accessToken) => {
+        console.log("Starting getMembers");
+        axios.get(
+            `${deployment.restUrl}tenant/oauth2/members`,
+            { headers: { 'Authorization': `Bearer ${accessToken}` } }
+        )
+            .then(response => {
+                console.log(`${response.data} members received`);
+                setMembers(response.data)
+            })
+            .catch(error => console.log(error));
+    }
+
+    useEffect(() => {
+        let request = {
+            authority: `https://${deployment.b2cTenantName}.b2clogin.com/${deployment.b2cTenantId}/${account.idTokenClaims.acr}`,
+            scopes: ["openid", "profile", `https://${deployment.b2cTenantName}.onmicrosoft.com/mtrest/User.Invite`, `https://${deployment.b2cTenantName}.onmicrosoft.com/mtrest/User.ReadAll`],
+            account: accounts[0],
+            extraQueryParameters: { tenant: account.idTokenClaims.appTenantName }
+        };
+        instance.acquireTokenSilent(request).then(function (accessTokenResponse) {
+            getMembers(accessTokenResponse.accessToken);
+        }).catch(function (error) {
+            if (error instanceof InteractionRequiredAuthError) {
+                instance.acquireTokenPopup(request).then(function (accessTokenResponse) {
+                    getMembers(accessTokenResponse.accessToken);
+                }).catch(function (error) {
+                    console.log(error);
+                });
+            }
+            console.log(error);
+        });
+    }, [])
     
     return (
         <> 
@@ -81,6 +115,11 @@ export const Tenant = () => {
                         color: '#0A1A27',
                         border: '1px solid #0A1A27'
                     }}
+                    onClick={()=>
+                        instance.loginRedirect({ 
+                            authority:b2cPolicies.authorities.newTenant.authority,
+                            scopes: loginRequest.scopes                           
+                        }).catch((error) => console.log(error))}
                     >ADD TENANT</ActionButton>
                 <ActionButton
                     variant="outlined"
