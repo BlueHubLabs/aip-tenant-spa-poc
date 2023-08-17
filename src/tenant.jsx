@@ -1,7 +1,3 @@
-/*
- * Copyright (c) Microsoft Corporation. All rights reserved.
- * Licensed under the MIT License.
- */
 import React, { useState } from "react";
 
 import axios from 'axios';
@@ -140,6 +136,7 @@ export const Tenant = () => {
                     onClick={()=> setIsInvite(true)}
                     >ADD USER</ActionButton>
             </div>
+            <div className="tenantsInfoWrapperParent">
             <div className="tenantsInfoWrapper">
                 <div className="tenantListCont">
                     <div className="headerTitle">TETANT LIST</div>
@@ -149,7 +146,12 @@ export const Tenant = () => {
                             onClick={() => handleSwitchTenant(tenant)}>{tenant}</div>
                     ))}</div>}
                 </div>
+                </div>
+                <div className="tenantsInfoWrapperContent">
+        
+
                 <div className="memberTableWrapper">
+                <h2 style={{ fontSize: "20px", marginBottom: "10px" }}>Users</h2>
                 <Table>
                     <thead>
                         <tr key="ix">
@@ -159,7 +161,7 @@ export const Tenant = () => {
                             <th></th>
                         </tr>
                     </thead>    
-                    <tbody>
+                   <tbody>
                         {   membersData.length ?
                             membersData.map(member=>(
                                 <><tr className="memberRowData">
@@ -175,7 +177,75 @@ export const Tenant = () => {
                     </tbody>                                
                 </Table>
                 </div>
-            </div></>}
+
+                <div className="memberTableWrapper">
+                {/* <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                <ActionButton
+                    variant="outlined"
+                    startIcon={<ControlPointOutlinedIcon />}
+                    sx={{
+                        margin: '0px 10px',
+                        color: '#0A1A27',
+                        border: '1px solid #0A1A27'
+                    }}
+                    onClick={()=> setIsInvite(true)}
+                    >ADD NEW GROUP</ActionButton> </div> */}
+              <h2 style={{ fontSize: "20px", marginBottom: "10px" }}>Roles</h2>
+              <Table>
+                  <thead>
+                      <tr key="ix">
+                          <th style={{paddingLeft: "8px"}}><span>ROLE</span><ArrowDropDownOutlinedIcon /></th>
+                          <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>FEATURE</span><ArrowDropDownOutlinedIcon /></th>
+                          <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>CREATE</span></th>
+                          <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>READ</span></th>
+                          <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>UPDATE</span></th>
+                          <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>DELETE</span></th>
+                          <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>ACTION</span></th>
+                          <th></th>
+                      </tr>
+                  </thead>    
+                 <tbody>
+                      {   membersData.length ?
+                          membersData.map(member=>(
+                              <><tr className="memberRowData">
+                                  {/* <td style={{paddingLeft: "8px"}}>{member.name}</td> */}
+                                  <td>{member.roles[0] === "Tenant.admin" ? 'Fund Manager' : 'Investor'}</td>
+                                  <td>{member.roles[0] === "Tenant.admin" ? '' : 'Service, Fund, Subscription'}</td>
+                                  <td>{member.roles[0] === "Tenant.admin" ? '' : <input type="checkbox" />}</td>
+                                  <td>{member.roles[0] === "Tenant.admin" ? '' : <input type="checkbox" />}</td>
+                                  <td>{member.roles[0] === "Tenant.admin" ? '' : <input type="checkbox" />}</td>
+                                  <td>{member.roles[0] === "Tenant.admin" ? '' : <input type="checkbox" />}</td>
+                                  <td>{member.roles[0] === "Tenant.admin" ? '' : <a href="/edit">Edit</a>}</td>
+                                  {/* <td>Yes</td> */}
+                                  {/* <td align="right"><ActionButton>ASSIGN ROLES</ActionButton></td> */}
+                              </tr>
+                              </>
+                          )):<div>No members to display</div>
+                      }
+                                                                                                                           
+                  </tbody>                                
+              </Table>
+              </div>    
+            
+            </div> </div></> }
+           {/*  <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+            <ActionButton
+                    variant="outlined"
+                    startIcon={<ControlPointOutlinedIcon />}
+                    sx={{
+                        margin: '0px 10px',
+                        color: '#0A1A27',
+                        border: '1px solid #0A1A27'
+                    }}
+                    onClick={()=>
+                        instance.loginRedirect({ 
+                            authority:b2cPolicies.authorities.newTenant.authority,
+                            scopes: loginRequest.scopes                           
+                        }).catch((error) => console.log(error))}
+                    >ADD NEW GROUP</ActionButton></div> */}
+              {/*   <div style={{ display: 'flex', justifyContent: 'flex-end' }}> */}
+           
+                {/* </div>  */} 
             {isInvite && <InviteMember />}
             {/* {nowShowing === "claims" ?
                 <IdTokenContent />
@@ -189,18 +259,22 @@ export const Tenant = () => {
             {loading && <div className="spinnerWrapper"><Spinner/></div>}
         </>
     );
-}
-
-const IdTokenContent = () => {
-    const { accounts } = useMsal();
-    const [idTokenClaims, setIdTokenClaims] = useState(accounts[0].idTokenClaims);
-    return (
-        <>
-            <IdTokenClaims idTokenClaims={idTokenClaims} />
-        </>
-    );
+     
 };
+<div className="memberTableWrapper">
+                <h2 style={{ fontSize: "20px", marginBottom: "10px" }}>Users</h2>
+                <Table>
+                    <thead>
+                        <tr key="ix">
+                            <th style={{paddingLeft: "8px"}}><span>USERNAME</span><ArrowDropDownOutlinedIcon /></th>
+                            <th><span>ROLE</span><ArrowDropDownOutlinedIcon /></th>
+                            <th><span>INVITED</span><ArrowDropDownOutlinedIcon /></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                </Table>
 
+</div>
 const IdTokenClaims = (props) => {  
     return (
         <>
@@ -433,4 +507,3 @@ const MyUrl = (props) => {
         </>
     )
 }
-

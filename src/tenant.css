@@ -1,5 +1,5 @@
 .tenantListCont{
-    width: 29%;
+    width: 100%;
     text-align: left;
 }
 .headerTitle{
@@ -7,17 +7,45 @@
     font-size: 12px;
     font-weight: 500;
 }
-.tenantsInfoWrapper{
+/* .tenantsInfoWrapperParent{
     margin: 0px 5%;
     display: flex;
     justify-content: space-between;
     margin-top: 30px;
+    flex-direction: column;
+} */
+.tenantsInfoWrapperParent
+{
+    margin: 0px 5%;
+    margin-left: 10px;
+    display: flex;
+   /*  justify-content: space-between; */
+    margin-top: 30px;
+    flex-direction: row;
+    width: auto;
+}
+.tenantsInfoWrapper
+{
+    margin: 0px 5%;
+    margin-left: 10px;
+    width: 800px;
+ 
+}
+.tenantsInfoWrapperContent
+{
+    margin: 0px 5%;
+    margin-left: 10px;
+    display: flex;
+    margin-top: 10px;
+    flex-direction: column;
+    width: 1200px;
 }
 .tenantsWrapper{
     background-color: #D2DAE0;
     border-radius: 8px;
     padding: 8px;
     width: 100%;
+    min-height: 650px;
 }
 
 .tenantItem{
@@ -39,12 +67,20 @@
 .addActionsWrapper{
     text-align: right;
     margin: 0px 5%;
+    
 }
 .memberTableWrapper{
     width: 69%;
     text-align: left;
     height: 55vh;
-    overflow: auto;
+    /* overflow: auto; */
+  
+}
+.memberTableWrapper1{
+    width: 69%;
+    text-align: right;
+    height: 55vh;
+    overflow: auto;  
 }
 .memberTableWrapper table{
     border-collapse: separate;
