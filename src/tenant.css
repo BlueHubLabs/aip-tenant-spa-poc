@@ -1,0 +1,118 @@
+.tenantListCont{
+    width: 100%;
+    text-align: left;
+}
+.headerTitle{
+    color: #808080;
+    font-size: 12px;
+    font-weight: 500;
+}
+/* .tenantsInfoWrapperParent{
+    margin: 0px 5%;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+    flex-direction: column;
+} */
+.tenantsInfoWrapperParent
+{
+    margin: 0px 5%;
+    margin-left: 10px;
+    display: flex;
+   /*  justify-content: space-between; */
+    margin-top: 30px;
+    flex-direction: row;
+    width: auto;
+}
+.tenantsInfoWrapper
+{
+    margin: 0px 5%;
+    margin-left: 10px;
+    width: 800px;
+ 
+}
+.tenantsInfoWrapperContent
+{
+    margin: 0px 5%;
+    margin-left: 10px;
+    display: flex;
+    margin-top: 10px;
+    flex-direction: column;
+    width: 1200px;
+}
+.tenantsWrapper{
+    background-color: #D2DAE0;
+    border-radius: 8px;
+    padding: 8px;
+    width: 100%;
+    min-height: 650px;
+}
+
+.tenantItem{
+    background-color: white;
+    border-radius: 8px;
+    padding: 10px 18px;
+    margin-bottom: 10px;
+    box-shadow: 0px 3px 6px #00000029;
+    cursor: pointer;
+    color: #0A1A27;
+    font-size: 14px;
+}
+.selectedTenant{
+    background-color: #b8dcff;
+}
+.tenantItem:last-child{
+    margin-bottom: 0px;
+}
+.addActionsWrapper{
+    text-align: right;
+    margin: 0px 5%;
+    
+}
+.memberTableWrapper{
+    width: 69%;
+    text-align: left;
+    height: 55vh;
+    /* overflow: auto; */
+  
+}
+.memberTableWrapper1{
+    width: 69%;
+    text-align: right;
+    height: 55vh;
+    overflow: auto;  
+}
+.memberTableWrapper table{
+    border-collapse: separate;
+    border-spacing: 0 12px;
+}
+.memberTableWrapper th{
+    color: #808080;
+    font-size: 12px;
+}
+.memberRowData{
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0px 3px 6px #00000029;
+    margin: 8px 0px;
+}
+.memberRowData td{
+    color: #0A1A27;
+    font-size: 14px;
+    padding: 2px 0px;
+}
+.memberTableWrapper thead tr th{
+    border-bottom: 2px solid #D2DAE0;
+    position: sticky;
+    background-color: #eaf0f7;
+    top: 0;
+    z-index: 9;
+}
+
+td:first-child{
+  border-radius: 10px 0 0 10px;
+}
+
+td:last-child{
+  border-radius: 0 10px 10px 0;
+}

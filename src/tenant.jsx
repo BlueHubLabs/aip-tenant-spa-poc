@@ -1,39 +1,253 @@
-/*
- * Copyright (c) Microsoft Corporation. All rights reserved.
- * Licensed under the MIT License.
- */
 import React, { useState } from "react";
 
 import axios from 'axios';
 
 import { useMsal } from "@azure/msal-react";
 
-import { ButtonGroup, Button, Table, ToggleButton, ToggleButtonGroup } from "react-bootstrap";
+import { ButtonGroup, Button, ToggleButton, ToggleButtonGroup } from "react-bootstrap";
 
-import { b2cPolicies, deployment } from "./authConfig";
+import { b2cPolicies, deployment, loginRequest } from "./authConfig";
 import { useEffect } from "react";
+import ActionButton from '@mui/material/Button';
+import ControlPointOutlinedIcon from '@mui/icons-material/ControlPointOutlined';
+import './tenant.css';
+import ArrowDropDownOutlinedIcon from '@mui/icons-material/ArrowDropDownOutlined';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+import Spinner from "./spinner";
+
+const membersData = [
+    {
+        userName: 'User1',
+        role: 'Fund Manager',
+        invited: true
+    },
+    {
+        userName: 'User2',
+        role: 'Fund Manager',
+        invited: true
+    },
+    {
+        userName: 'User3',
+        role: 'Fund Manager',
+        invited: false
+    },
+    {
+        userName: 'User4',
+        role: 'Fund Manager',
+        invited: true
+    }
+]
 
 export const Tenant = () => {
-    const [nowShowing, setState] = useState("claims");
     const { instance, accounts } = useMsal();
-    let options = [["claims", "Claims"], ["members", "Members"], ["invitation", "New"], ["myurl", "My url"]].filter(role).map((v) =>
-        <Button key={v[0]} onClick={() => setState(v[0])}>{v[1]}</Button>
-    );
-    function role(option) {
-        if (option[0] === "invitation")
-            if (accounts[0].idTokenClaims.roles.includes("Tenant.admin")) return true; else return false;
-        //if(option[0] === "myurl")
-        //    if (accounts[0].idTokenClaims.idp != 'local') return true; else return false;            
-        return true;
+    const [loading, setLoading] = useState(true);
+    const [membersData, setMembers] = useState([]);
+    const [isInvite, setIsInvite] = useState(false);
+    
+    useEffect(()=>{
+        if(accounts && accounts.length && accounts[0].idTokenClaims){
+            setLoading(false);
+        } else{
+            setLoading(true);
+        }
+    }, [accounts[0].idTokenClaims]);
+
+
+
+    const handleSwitchTenant = (tenant) =>{
+        setLoading(true);
+        instance.loginRedirect({ 
+            authority:b2cPolicies.authorities.signIn.authority,
+            scopes: ["openid", "profile", `https://${deployment.b2cTenantName}.onmicrosoft.com/mtrest/User.Invite`, `https://${deployment.b2cTenantName}.onmicrosoft.com/mtrest/User.ReadAll`],                    
+            account: accounts[0],
+            extraQueryParameters: { tenant: tenant }
+        }).then(()=>getMemberAccessToken());
     }
+
+    const getMembers = (accessToken) => {
+        console.log("Starting getMembers");
+        axios.get(
+            `${deployment.restUrl}tenant/oauth2/members`,
+            { headers: { 'Authorization': `Bearer ${accessToken}` } }
+        )
+            .then(response => {
+                console.log(`${response.data} members received`);
+                setMembers(response.data)
+            })
+            .catch(error => console.log(error));
+    }
+
+    const getMemberAccessToken = () => {
+        let request = {
+            authority: `https://${deployment.b2cTenantName}.b2clogin.com/${deployment.b2cTenantId}/${accounts[0].idTokenClaims.acr}`,
+            scopes: ["openid", "profile", `https://${deployment.b2cTenantName}.onmicrosoft.com/mtrest/User.Invite`, `https://${deployment.b2cTenantName}.onmicrosoft.com/mtrest/User.ReadAll`],
+            account: accounts[0],
+            extraQueryParameters: { tenant: accounts[0].idTokenClaims.appTenantName }
+        };
+        instance.acquireTokenSilent(request).then(function (accessTokenResponse) {
+            getMembers(accessTokenResponse.accessToken);
+        }).catch(function (error) {
+            if (error instanceof InteractionRequiredAuthError) {
+                instance.acquireTokenPopup(request).then(function (accessTokenResponse) {
+                    getMembers(accessTokenResponse.accessToken);
+                }).catch(function (error) {
+                    console.log(error);
+                });
+            }
+            console.log(error);
+        });
+    }
+
+    useEffect(()=>{
+        getMemberAccessToken();
+    },[]);
+    
     return (
-        <>
-            <div>
-                <ButtonGroup className="mb-2">
-                    {options}
-                </ButtonGroup>
+        <> 
+            {!isInvite && <><div className="addActionsWrapper">
+                <ActionButton
+                    variant="outlined"
+                    startIcon={<ControlPointOutlinedIcon />}
+                    sx={{
+                        margin: '0px 10px',
+                        color: '#0A1A27',
+                        border: '1px solid #0A1A27'
+                    }}
+                    onClick={()=>
+                        instance.loginRedirect({ 
+                            authority:b2cPolicies.authorities.newTenant.authority,
+                            scopes: loginRequest.scopes                           
+                        }).catch((error) => console.log(error))}
+                    >ADD TENANT</ActionButton>
+                <ActionButton
+                    variant="outlined"
+                    startIcon={<ControlPointOutlinedIcon />}
+                    sx={{
+                        margin: '0px 10px',
+                        color: '#0A1A27',
+                        border: '1px solid #0A1A27'
+                    }}
+                    onClick={()=> setIsInvite(true)}
+                    >ADD USER</ActionButton>
             </div>
-            {nowShowing === "claims" ?
+            <div className="tenantsInfoWrapperParent">
+            <div className="tenantsInfoWrapper">
+                <div className="tenantListCont">
+                    <div className="headerTitle">TETANT LIST</div>
+                    {!loading && <div className="tenantsWrapper">{accounts[0].idTokenClaims.allTenants.map( tenant=>(
+                        <div 
+                            className={`tenantItem ${(accounts[0].idTokenClaims.appTenantName === tenant) && 'selectedTenant'}`}
+                            onClick={() => handleSwitchTenant(tenant)}>{tenant}</div>
+                    ))}</div>}
+                </div>
+                </div>
+                <div className="tenantsInfoWrapperContent">
+        
+
+                <div className="memberTableWrapper">
+                <h2 style={{ fontSize: "20px", marginBottom: "10px" }}>Users</h2>
+                <Table>
+                    <thead>
+                        <tr key="ix">
+                            <th style={{paddingLeft: "8px"}}><span>USERNAME</span><ArrowDropDownOutlinedIcon /></th>
+                            <th><span>ROLE</span><ArrowDropDownOutlinedIcon /></th>
+                            <th><span>INVITED</span><ArrowDropDownOutlinedIcon /></th>
+                            <th></th>
+                        </tr>
+                    </thead>    
+                   <tbody>
+                        {   membersData.length ?
+                            membersData.map(member=>(
+                                <><tr className="memberRowData">
+                                    <td style={{paddingLeft: "8px"}}>{member.name}</td>
+                                    <td>{member.roles[0] === "Tenant.admin" ? 'Fund Manager' : 'Investor'}</td>
+                                    <td>Yes</td>
+                                    <td align="right"><ActionButton>RESET PASSWORD</ActionButton></td>
+                                </tr>
+                                </>
+                            )):<div>No members to display</div>
+                        }
+                                                                                                                             
+                    </tbody>                                
+                </Table>
+                </div>
+
+                <div className="memberTableWrapper">
+                {/* <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                <ActionButton
+                    variant="outlined"
+                    startIcon={<ControlPointOutlinedIcon />}
+                    sx={{
+                        margin: '0px 10px',
+                        color: '#0A1A27',
+                        border: '1px solid #0A1A27'
+                    }}
+                    onClick={()=> setIsInvite(true)}
+                    >ADD NEW GROUP</ActionButton> </div> */}
+              <h2 style={{ fontSize: "20px", marginBottom: "10px" }}>Roles</h2>
+              <Table>
+                  <thead>
+                      <tr key="ix">
+                          <th style={{paddingLeft: "8px"}}><span>ROLE</span><ArrowDropDownOutlinedIcon /></th>
+                          <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>FEATURE</span><ArrowDropDownOutlinedIcon /></th>
+                          <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>CREATE</span></th>
+                          <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>READ</span></th>
+                          <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>UPDATE</span></th>
+                          <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>DELETE</span></th>
+                          <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>ACTION</span></th>
+                          <th></th>
+                      </tr>
+                  </thead>    
+                 <tbody>
+                      {   membersData.length ?
+                          membersData.map(member=>(
+                              <><tr className="memberRowData">
+                                  {/* <td style={{paddingLeft: "8px"}}>{member.name}</td> */}
+                                  <td>{member.roles[0] === "Tenant.admin" ? 'Fund Manager' : 'Investor'}</td>
+                                  <td>{member.roles[0] === "Tenant.admin" ? '' : 'Service, Fund, Subscription'}</td>
+                                  <td>{member.roles[0] === "Tenant.admin" ? '' : <input type="checkbox" />}</td>
+                                  <td>{member.roles[0] === "Tenant.admin" ? '' : <input type="checkbox" />}</td>
+                                  <td>{member.roles[0] === "Tenant.admin" ? '' : <input type="checkbox" />}</td>
+                                  <td>{member.roles[0] === "Tenant.admin" ? '' : <input type="checkbox" />}</td>
+                                  <td>{member.roles[0] === "Tenant.admin" ? '' : <a href="/edit">Edit</a>}</td>
+                                  {/* <td>Yes</td> */}
+                                  {/* <td align="right"><ActionButton>ASSIGN ROLES</ActionButton></td> */}
+                              </tr>
+                              </>
+                          )):<div>No members to display</div>
+                      }
+                                                                                                                           
+                  </tbody>                                
+              </Table>
+              </div>    
+            
+            </div> </div></> }
+           {/*  <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+            <ActionButton
+                    variant="outlined"
+                    startIcon={<ControlPointOutlinedIcon />}
+                    sx={{
+                        margin: '0px 10px',
+                        color: '#0A1A27',
+                        border: '1px solid #0A1A27'
+                    }}
+                    onClick={()=>
+                        instance.loginRedirect({ 
+                            authority:b2cPolicies.authorities.newTenant.authority,
+                            scopes: loginRequest.scopes                           
+                        }).catch((error) => console.log(error))}
+                    >ADD NEW GROUP</ActionButton></div> */}
+              {/*   <div style={{ display: 'flex', justifyContent: 'flex-end' }}> */}
+           
+                {/* </div>  */} 
+            {isInvite && <InviteMember />}
+            {/* {nowShowing === "claims" ?
                 <IdTokenContent />
                 : (nowShowing === "members") ?
                     <Members instance={instance} account={accounts[0]} />
@@ -41,21 +255,26 @@ export const Tenant = () => {
                         <InviteMember />
                         :
                         <MyUrl domain_hint={accounts[0].idTokenClaims.idp} login_hint={accounts[0].idTokenClaims.email ?? accounts[0].idTokenClaims.signInName} tenant={accounts[0].idTokenClaims.appTenantName} />
-            }
+            } */}
+            {loading && <div className="spinnerWrapper"><Spinner/></div>}
         </>
     );
-}
-
-const IdTokenContent = () => {
-    const { accounts } = useMsal();
-    const [idTokenClaims, setIdTokenClaims] = useState(accounts[0].idTokenClaims);
-    return (
-        <>
-            <IdTokenClaims idTokenClaims={idTokenClaims} />
-        </>
-    );
+     
 };
+<div className="memberTableWrapper">
+                <h2 style={{ fontSize: "20px", marginBottom: "10px" }}>Users</h2>
+                <Table>
+                    <thead>
+                        <tr key="ix">
+                            <th style={{paddingLeft: "8px"}}><span>USERNAME</span><ArrowDropDownOutlinedIcon /></th>
+                            <th><span>ROLE</span><ArrowDropDownOutlinedIcon /></th>
+                            <th><span>INVITED</span><ArrowDropDownOutlinedIcon /></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                </Table>
 
+</div>
 const IdTokenClaims = (props) => {  
     return (
         <>
@@ -115,7 +334,7 @@ const InviteMember = () => {
                     checked={isAdmin}
                     value="0"
                     onChange={(e) => { setIsAdmin(e.currentTarget.checked); setInvitation(""); }} >
-                    Is co-admin?
+                    Is fund manager?
                 </ToggleButton>
                 <br />
                 <div><Button onClick={() => {
@@ -288,4 +507,3 @@ const MyUrl = (props) => {
         </>
     )
 }
-
