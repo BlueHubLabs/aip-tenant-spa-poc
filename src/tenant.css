@@ -2,10 +2,30 @@
     width: 100%;
     text-align: left;
 }
-.headerTitle{
+/* .headerTitle{
     color: #808080;
     font-size: 12px;
     font-weight: 500;
+    border-radius: 20px;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);
+    background-color: lightgrey;
+    width: 30%;
+    font-size: 14px;
+} */
+.headerTitle {
+    position: absolute;
+    color: #808080;
+    font-size: 12px;
+    text-align: -1px;
+    top: 184px;
+    font-weight: 500;
+    text-align: center;
+    height: 30px;
+    border-radius: 20px;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);
+    background-color: lightgrey;
+    width: 12%;
+    font-size: 14px;
 }
 /* .tenantsInfoWrapperParent{
     margin: 0px 5%;
@@ -116,3 +136,59 @@ td:first-child{
 td:last-child{
   border-radius: 0 10px 10px 0;
 }
+.tabsContainer {
+    background-color: lightgrey;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    overflow: hidden;
+    border-radius: 20px;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);
+    width: 60%; /* Adjust the width as needed */
+    margin-left: 500px; /* Adjust the right margin as needed */
+    position: absolute;
+}
+
+  
+  .tabItem {
+    position: relative; /* Add relative positioning */
+    background-color: white;
+    padding: 10px 20px;
+    border: none;
+    border-top: 3px solid transparent;
+    transition: border-top-color 0.3s ease-in-out;
+    cursor: pointer;
+    font-weight: bold;
+  }
+  
+  .tabItem:hover {
+    border-top-color: #007bff;
+  }
+  
+  .tabItem::before {
+    content: ""; /* Add content for the pseudo-element */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 24px;
+    height: 24px;
+    /* background-image: url("path-to-your-image/circle-with-i.png"); */
+    background-size: cover;
+  }
+  .tabLabelContainer {
+    display: absolute;
+    align-items: center;
+    border-radius:40px;
+    /* border-radius: var(--br-181xl); */
+    cursor: pointer;
+    width: 254px;
+    left: -46px;
+  }
+  
+  .tabIcon {
+    width: 24px; /* Adjust the width and height as needed */
+    height: 24px;
+    margin-right: 8px; /* Add some spacing between the icon and label */
+  }
+  

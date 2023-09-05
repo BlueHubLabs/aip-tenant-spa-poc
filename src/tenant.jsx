@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 
 import axios from 'axios';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
 
 import { useMsal } from "@azure/msal-react";
 
@@ -47,8 +49,14 @@ const membersData = [
 export const Tenant = () => {
     const { instance, accounts } = useMsal();
     const [loading, setLoading] = useState(true);
+
     const [membersData, setMembers] = useState([]);
     const [isInvite, setIsInvite] = useState(false);
+    const [value, setValue] = useState(0);
+
+    const handleChange = (event, newValue) => {
+        setValue(newValue);
+    };
     
     useEffect(()=>{
         if(accounts && accounts.length && accounts[0].idTokenClaims){
@@ -110,8 +118,62 @@ export const Tenant = () => {
     
     return (
         <> 
-            {!isInvite && <><div className="addActionsWrapper">
-                <ActionButton
+            < header />
+           
+       
+            
+            
+         
+            {!isInvite && <>
+            {/* <div className="addActionsWrapper"> */}
+           
+            <div className="tabsContainer">
+                <Tab
+                    className={`tabItem ${value === 0 ? 'active' : ''}`}
+                    label={
+                        <div className="tabLabelContainer">
+                            <img src="https://www.thesslstore.com/blog/wp-content/uploads/2017/05/circle-with-i-1.png" alt="Icon" className="tabIcon" />
+                            <span>USERS</span>
+                        </div>
+                    }
+                    onClick={() => handleChange(null, 0)}
+                />
+                 <Tab
+                    className={`tabItem ${value === 1 ? 'active' : ''}`}
+                    label={
+                        <div className="tabLabelContainer">
+                            <img src="https://www.nicepng.com/png/detail/423-4238489_rep…rrow-chart-business-graph-stock-data-comments.png" alt="Icon" className="tabIcon" />
+                            <span>ROLES</span>
+                        </div>
+                    }
+                    onClick={() => handleChange(null, 1)}
+                />
+                <Tab
+                    className={`tabItem ${value === 2 ? 'active' : ''}`}
+                    label={
+                        <div className="tabLabelContainer">
+                            <img src="https://cdn-icons-png.flaticon.com/512/5431/5431304.png" alt="Icon" className="tabIcon" />
+                            <span>FEATURES</span>
+                        </div>
+                    }
+                    onClick={() => handleChange(null, 2)}
+                />
+                
+                 </div>
+
+                 
+                {/* <Tab className={`tabItem ${value === 0 ? 'active' : ''}`} label="USERS" onClick={() => handleChange(null, 0)} />
+                <Tab className={`tabItem ${value === 1 ? 'active' : ''}`} label="ROLES" onClick={() => handleChange(null, 1)} />
+                <Tab className={`tabItem ${value === 2 ? 'active' : ''}`} label="FEATURES" onClick={() => handleChange(null, 2)} /> */}
+            
+            {/* <div className="tabsContainer">
+                <Tabs value={value} onChange={handleChange} centered>
+                    <Tab className="tabItem" label="USERS" />
+                    <Tab className="tabItem" label="ROLES" />
+                    <Tab className="tabItem" label="FEATURES" />
+                </Tabs>
+            </div> */}
+                {/* <ActionButton
                     variant="outlined"
                     startIcon={<ControlPointOutlinedIcon />}
                     sx={{
@@ -124,8 +186,8 @@ export const Tenant = () => {
                             authority:b2cPolicies.authorities.newTenant.authority,
                             scopes: loginRequest.scopes                           
                         }).catch((error) => console.log(error))}
-                    >ADD TENANT</ActionButton>
-                <ActionButton
+                    >ADD TENANT</ActionButton> */}
+                {/* <ActionButton
                     variant="outlined"
                     startIcon={<ControlPointOutlinedIcon />}
                     sx={{
@@ -134,25 +196,32 @@ export const Tenant = () => {
                         border: '1px solid #0A1A27'
                     }}
                     onClick={()=> setIsInvite(true)}
-                    >ADD USER</ActionButton>
-            </div>
+                    >ADD USER</ActionButton> */}
+            {/* </div> */}
             <div className="tenantsInfoWrapperParent">
             <div className="tenantsInfoWrapper">
                 <div className="tenantListCont">
-                    <div className="headerTitle">TETANT LIST</div>
+                    <div className="headerTitle">TENANT LIST</div>
                     {!loading && <div className="tenantsWrapper">{accounts[0].idTokenClaims.allTenants.map( tenant=>(
                         <div 
                             className={`tenantItem ${(accounts[0].idTokenClaims.appTenantName === tenant) && 'selectedTenant'}`}
                             onClick={() => handleSwitchTenant(tenant)}>{tenant}</div>
                     ))}</div>}
+                
                 </div>
                 </div>
                 <div className="tenantsInfoWrapperContent">
-        
+               
 
                 <div className="memberTableWrapper">
-                <h2 style={{ fontSize: "20px", marginBottom: "10px" }}>Users</h2>
-                <Table>
+                {/* <Tabs value={value} onChange={handleChange} centered>
+                <Tab label="Item One" />
+                <Tab label="Item Two" />
+                <Tab label="Item Three" />
+                </Tabs> */}
+                {/* <h2 style={{ fontSize: "20px", marginBottom: "10px" }}>Users</h2> */}
+               
+                {/* <Table>
                     <thead>
                         <tr key="ix">
                             <th style={{paddingLeft: "8px"}}><span>USERNAME</span><ArrowDropDownOutlinedIcon /></th>
@@ -160,8 +229,8 @@ export const Tenant = () => {
                             <th><span>INVITED</span><ArrowDropDownOutlinedIcon /></th>
                             <th></th>
                         </tr>
-                    </thead>    
-                   <tbody>
+                    </thead>     */}
+                   {/* <tbody>
                         {   membersData.length ?
                             membersData.map(member=>(
                                 <><tr className="memberRowData">
@@ -175,7 +244,8 @@ export const Tenant = () => {
                         }
                                                                                                                              
                     </tbody>                                
-                </Table>
+                </Table> */}
+                
                 </div>
 
                 <div className="memberTableWrapper">
@@ -190,8 +260,8 @@ export const Tenant = () => {
                     }}
                     onClick={()=> setIsInvite(true)}
                     >ADD NEW GROUP</ActionButton> </div> */}
-              <h2 style={{ fontSize: "20px", marginBottom: "10px" }}>Roles</h2>
-              <Table>
+              {/* <h2 style={{ fontSize: "20px", marginBottom: "10px" }}>Roles</h2> */}
+              {/* <Table>
                   <thead>
                       <tr key="ix">
                           <th style={{paddingLeft: "8px"}}><span>ROLE</span><ArrowDropDownOutlinedIcon /></th>
@@ -203,28 +273,28 @@ export const Tenant = () => {
                           <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>ACTION</span></th>
                           <th></th>
                       </tr>
-                  </thead>    
-                 <tbody>
+                  </thead>     */}
+                 {/* <tbody>
                       {   membersData.length ?
                           membersData.map(member=>(
                               <><tr className="memberRowData">
                                   {/* <td style={{paddingLeft: "8px"}}>{member.name}</td> */}
-                                  <td>{member.roles[0] === "Tenant.admin" ? 'Fund Manager' : 'Investor'}</td>
+                                  {/* <td>{member.roles[0] === "Tenant.admin" ? 'Fund Manager' : 'Investor'}</td>
                                   <td>{member.roles[0] === "Tenant.admin" ? '' : 'Service, Fund, Subscription'}</td>
                                   <td>{member.roles[0] === "Tenant.admin" ? '' : <input type="checkbox" />}</td>
                                   <td>{member.roles[0] === "Tenant.admin" ? '' : <input type="checkbox" />}</td>
                                   <td>{member.roles[0] === "Tenant.admin" ? '' : <input type="checkbox" />}</td>
                                   <td>{member.roles[0] === "Tenant.admin" ? '' : <input type="checkbox" />}</td>
-                                  <td>{member.roles[0] === "Tenant.admin" ? '' : <a href="/edit">Edit</a>}</td>
+                                  <td>{member.roles[0] === "Tenant.admin" ? '' : <a href="/edit">Edit</a>}</td> */}
                                   {/* <td>Yes</td> */}
-                                  {/* <td align="right"><ActionButton>ASSIGN ROLES</ActionButton></td> */}
+                                  {/* <td align="right"><ActionButton>ASSIGN ROLES</ActionButton></td>
                               </tr>
                               </>
                           )):<div>No members to display</div>
-                      }
+                      } */}
                                                                                                                            
-                  </tbody>                                
-              </Table>
+                  {/* </tbody>                                 *} */}
+              {/* </Table> */}
               </div>    
             
             </div> </div></> }
