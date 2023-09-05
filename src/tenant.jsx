@@ -3,6 +3,11 @@ import React, { useState } from "react";
 import axios from 'axios';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
+import AIPDataGrid from './AIPDataGrid';
+import jsonData from './tenant.json';
+
+
+
 
 import { useMsal } from "@azure/msal-react";
 
@@ -22,6 +27,13 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Spinner from "./spinner";
+
+
+
+
+
+  
+    
 
 const membersData = [
     {
@@ -66,7 +78,9 @@ export const Tenant = () => {
         }
     }, [accounts[0].idTokenClaims]);
 
-
+    // const handleUsersTabClick = async () => {
+    //     // ...
+    //   };
 
     const handleSwitchTenant = (tenant) =>{
         setLoading(true);
@@ -115,10 +129,40 @@ export const Tenant = () => {
     useEffect(()=>{
         getMemberAccessToken();
     },[]);
+    // const [tab1Content, setTab1Content] = useState(null);
+    const [usersTabContent, setUsersTabContent] = useState(null);
+    
+    const loadUsersTabContent = async () => {
+        try {
+            const dummyData = "This is the content for the USERS tab.";
+            setUsersTabContent(dummyData);
+          } catch (error) {
+            console.error('Error loading content for USERS tab:', error);
+          }
+        };
+
+     const handleUsersTabClick = () => {
+            loadUsersTabContent();
+          };
+
+    // const loadTab1Content = async () => {
+    //     try {
+    //       // Fetch and set content for Tab 1
+    //       const response = await fetch('your-api-endpoint-for-tab1-content');
+    //       const data = await response.json();
+    //       setTab1Content(data);
+    //     } catch (error) {
+    //       console.error('Error loading content for Tab 1:', error);
+    //     }
+    //   };
+
+    const handleTabChange = (event, newValue) => {
+        setValue(newValue);
+      };
     
     return (
         <> 
-            < header />
+          
            
        
             
@@ -126,19 +170,42 @@ export const Tenant = () => {
          
             {!isInvite && <>
             {/* <div className="addActionsWrapper"> */}
-           
-            <div className="tabsContainer">
-                <Tab
+       
+            <div className="tabsContainer" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+            <Tabs value={value} onChange={handleTabChange}   >
+        {/* Define your tab labels here */}
+        
+        
+
+
+        
+        <Tab label="USERS" className="tabLabel"  style={{ marginRight: '250px' }}/>
+        <Tab label="ROLES" className="tabLabel" style={{ marginRight: '250px' }}/>
+        <Tab label="FEATURES" className="tabLabel" />
+
+      </Tabs>
+      
+      
+     
+     
+                 {/* <Tab
                     className={`tabItem ${value === 0 ? 'active' : ''}`}
                     label={
-                        <div className="tabLabelContainer">
+                        <div className="tabLabelContainer" onClick={handleUsersTabClick}>
+                            
                             <img src="https://www.thesslstore.com/blog/wp-content/uploads/2017/05/circle-with-i-1.png" alt="Icon" className="tabIcon" />
                             <span>USERS</span>
-                        </div>
-                    }
+                            
+                            </div>
+                         
+                         }
+                         
+                        
                     onClick={() => handleChange(null, 0)}
-                />
-                 <Tab
+                /> */}
+                
+                {/* <AIPDataGrid onRowsSelectionHandler={() => { }} columns={jsonData.UserColumns} rows={jsonData.UserRows} /> */}
+                {/* <Tab
                     className={`tabItem ${value === 1 ? 'active' : ''}`}
                     label={
                         <div className="tabLabelContainer">
@@ -147,8 +214,8 @@ export const Tenant = () => {
                         </div>
                     }
                     onClick={() => handleChange(null, 1)}
-                />
-                <Tab
+                /> */}
+                {/* <Tab
                     className={`tabItem ${value === 2 ? 'active' : ''}`}
                     label={
                         <div className="tabLabelContainer">
@@ -157,10 +224,17 @@ export const Tenant = () => {
                         </div>
                     }
                     onClick={() => handleChange(null, 2)}
-                />
-                
+                /> */}
+                 
                  </div>
+                 {/* {value === 0 && tab1Content && ( */}
+  {/* <div>
+    <h2>Tab 1 Content</h2>
+    <AIPDataGrid onRowsSelectionHandler={() => { }} columns={jsonData.UserColumns} rows={jsonData.UserRows} />
 
+  </div>
+)} */}
+                
                  
                 {/* <Tab className={`tabItem ${value === 0 ? 'active' : ''}`} label="USERS" onClick={() => handleChange(null, 0)} />
                 <Tab className={`tabItem ${value === 1 ? 'active' : ''}`} label="ROLES" onClick={() => handleChange(null, 1)} />
@@ -214,24 +288,26 @@ export const Tenant = () => {
                
 
                 <div className="memberTableWrapper">
+               
                 {/* <Tabs value={value} onChange={handleChange} centered>
                 <Tab label="Item One" />
                 <Tab label="Item Two" />
                 <Tab label="Item Three" />
                 </Tabs> */}
                 {/* <h2 style={{ fontSize: "20px", marginBottom: "10px" }}>Users</h2> */}
-               
-                {/* <Table>
-                    <thead>
+                {/* <AIPDataGrid onRowsSelectionHandler={() => { }} columns={jsonData.UserColumns} rows={jsonData.UserRows} /> */}
+                <Table>
+                    {/* <thead>
                         <tr key="ix">
                             <th style={{paddingLeft: "8px"}}><span>USERNAME</span><ArrowDropDownOutlinedIcon /></th>
                             <th><span>ROLE</span><ArrowDropDownOutlinedIcon /></th>
-                            <th><span>INVITED</span><ArrowDropDownOutlinedIcon /></th>
+                            <th><span>ROLE ASSIGNED</span><ArrowDropDownOutlinedIcon /></th>
                             <th></th>
                         </tr>
                     </thead>     */}
-                   {/* <tbody>
-                        {   membersData.length ?
+                   <tbody>
+                   {/* <AIPDataGrid onRowsSelectionHandler={() => { }} columns={jsonData.UserColumns} rows={jsonData.UserRows} /> */}
+                        {/* {   membersData.length ?
                             membersData.map(member=>(
                                 <><tr className="memberRowData">
                                     <td style={{paddingLeft: "8px"}}>{member.name}</td>
@@ -240,15 +316,34 @@ export const Tenant = () => {
                                     <td align="right"><ActionButton>RESET PASSWORD</ActionButton></td>
                                 </tr>
                                 </>
-                            )):<div>No members to display</div>
-                        }
+                                
+                            )):
+                            
+                            // <div>No members to display</div>
+                        } */}
                                                                                                                              
                     </tbody>                                
-                </Table> */}
+                </Table>
                 
                 </div>
 
                 <div className="memberTableWrapper">
+                {value === 0 && (
+        <div>
+          {/* Render your table or content for "USERS" tab here */}
+          <h2 style={{ fontSize: "20px", marginBottom: "10px" }}>Users</h2>
+          <AIPDataGrid onRowsSelectionHandler={() => { }} columns={jsonData.UserColumns} rows={jsonData.UserRows} />
+          {/* You can render your table component here */}
+        </div>
+      )}
+       {value === 2 && (
+        <div>
+          {/* Render your table or content for "USERS" tab here */}
+          <h2 style={{ fontSize: "20px", marginBottom: "10px" }}>Features</h2>
+          <AIPDataGrid onRowsSelectionHandler={() => { }} columns={jsonData.UserColumns} rows={jsonData.UserRows} />
+          {/* You can render your table component here */}
+        </div>
+      )}
                 {/* <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
                 <ActionButton
                     variant="outlined"
@@ -326,6 +421,7 @@ export const Tenant = () => {
                         :
                         <MyUrl domain_hint={accounts[0].idTokenClaims.idp} login_hint={accounts[0].idTokenClaims.email ?? accounts[0].idTokenClaims.signInName} tenant={accounts[0].idTokenClaims.appTenantName} />
             } */}
+              
             {loading && <div className="spinnerWrapper"><Spinner/></div>}
         </>
     );

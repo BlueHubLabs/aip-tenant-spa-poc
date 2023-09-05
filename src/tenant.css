@@ -90,9 +90,11 @@
     
 }
 .memberTableWrapper{
-    width: 69%;
+    width: 118%;
     text-align: left;
     height: 55vh;
+    margin-top: -150px;
+    /* position: relative; */
     /* overflow: auto; */
   
 }
@@ -147,10 +149,15 @@ td:last-child{
     width: 60%; /* Adjust the width as needed */
     margin-left: 500px; /* Adjust the right margin as needed */
     position: absolute;
+    ;
 }
 
+.tabLabel {
+    margin-bottom: 10px; 
+  }
+ 
   
-  .tabItem {
+ .tabItem {
     position: relative; /* Add relative positioning */
     background-color: white;
     padding: 10px 20px;

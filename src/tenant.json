@@ -1,0 +1,120 @@
+{
+    "UserColumns": [
+    
+        {
+    
+            "id": 1,
+    
+            "field": "USERNAME",
+    
+            "headerName": "USERNAME",
+    
+            "width": 160
+    
+        },
+    
+        {
+    
+            "id": 2,
+    
+            "field": "ROLE",
+    
+            "headerName": "ROLE",
+    
+            "width": 160
+    
+        },
+        {
+    
+            "id": 3,
+    
+            "field": "EMAILADDRESS",
+    
+            "headerName": "EMAIL ADDRESS",
+    
+            "width": 160
+    
+        },
+    
+        {
+    
+            "id": 4,
+    
+            "field": "ROLESASSIGNED",
+    
+            "headerName": "ROLES ASSIGNED",
+    
+            "width": 160
+    
+        }
+    ],
+     "UserRows": [
+    
+        {
+    
+            "id": 1,
+    
+            "USERNAME": "gitess",
+    
+            "ROLE": "Fund Manager",
+
+            "EMAILADDRESS": "gitess@gmail.com",
+    
+            "ROLES ASSIGNED": "-"
+    
+        },
+        {
+    
+            "id": 2,
+    
+            "USERNAME": "Seshu",
+    
+            "ROLE": "Investor",
+
+            "EMAILADDRESS": "seshu@gmail.com",
+    
+            "ROLES ASSIGNED": "-"
+    
+        },
+        {
+    
+            "id": 3,
+    
+            "USERNAME": "Harish",
+    
+            "ROLE": "Legal Compliance Officer",
+
+            "EMAILADDRESS": "harish@gmail.com",
+    
+            "ROLES ASSIGNED": "-"
+    
+        },
+        {
+    
+            "id": 4,
+    
+            "USERNAME": "Pragathi chowdary",
+    
+            "ROLE": "Firm",
+
+            "EMAILADDRESS": "pragathichowdary@gmail.com",
+    
+            "ROLES ASSIGNED": "-"
+    
+        },
+        {
+    
+            "id": 5,
+    
+            "USERNAME": "fatima",
+    
+            "ROLE": "Legal Compliance Officer",
+
+            "EMAILADDRESS": "fatima@gmail.com",
+    
+            "ROLES ASSIGNED": "-"
+    
+        }
+    ]
+}
+        
