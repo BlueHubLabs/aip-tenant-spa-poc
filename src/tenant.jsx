@@ -8,7 +8,6 @@ import jsonData from './tenant.json';
 
 
 
-
 import { useMsal } from "@azure/msal-react";
 
 import { ButtonGroup, Button, ToggleButton, ToggleButtonGroup } from "react-bootstrap";
@@ -82,6 +81,124 @@ export const Tenant = () => {
     //     // ...
     //   };
 
+    const [data1, setData1] = useState();
+    const [data2, setData2] = useState();
+    const [data3, setData3] = useState();
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+      const fetchData = async () => {
+        try {
+            const response = await fetch("https://aipbackend.azurewebsites.net/v1/UserRole/GetTenantRoles?tenantID=5ab53943-aada-4db9-9f1f-616ed567396a");
+            if (!response.ok) {
+              throw new Error('Network response was not ok');
+            }
+            else{
+            const json = await response.json();
+            console.log(json);
+            setData1(json);
+            setIsLoading(false);
+            }
+          } catch (error) {
+            console.error('Error fetching data:', error);
+            setIsLoading(false);
+          }
+        
+      };
+  
+      fetchData();
+    }, []);
+
+    const UserRowsData = data1 ? data1.map(user=> ({
+
+        id: user.roleId,
+    
+        "ROLENAME": user.roleName,
+    
+        "DESCRIPTION": user.description,
+    
+       
+     
+    
+      })) : [];
+
+
+      useEffect(() => {
+        const fetchFeatureData = async () => {
+          try {
+              const response = await fetch("https://aipbackend.azurewebsites.net/v1/UserRole/GetTenantFeatures?tenantID=5ab53943-aada-4db9-9f1f-616ed567396a");
+              if (!response.ok) {
+                throw new Error('Network response was not ok');
+              }
+              else{
+              const json = await response.json();
+              console.log(json);
+              setData2(json);
+              setIsLoading(false);
+              }
+            } catch (error) {
+              console.error('Error fetching data:', error);
+              setIsLoading(false);
+            }
+          
+        };
+    
+        fetchFeatureData();
+      }, []);
+
+      const FeatureRowsData = data2 ? data2.map(user=> ({
+
+        // id: user.sortOrder,
+    id:user.applicationFeatureId,
+        "TITLE": user.title,
+    
+        
+    
+       
+     
+    
+      })) : [];
+
+      useEffect(() => {
+        const fetchFeatureData = async () => {
+          try {
+              const response = await fetch("https://aipbackend.azurewebsites.net/v1/UserRole/GetTenantUserDetails?tenantID=5ab53943-aada-4db9-9f1f-616ed567396a");
+              if (!response.ok) {
+                throw new Error('Network response was not ok');
+              }
+              else{
+              const json = await response.json();
+              console.log(json);
+              setData3(json);
+              setIsLoading(false);
+              }
+            } catch (error) {
+              console.error('Error fetching data:', error);
+              setIsLoading(false);
+            }
+          
+        };
+    
+        fetchFeatureData();
+      }, []);
+
+      const UsersRowsData = data3 ? data3.map(user=> ({
+
+        // id: user.sortOrder,
+        id:user.userId,
+        "USERNAME": user.userFullName,
+        "ROLENAME" : user.userRoleName,
+        "EMAILADDRESS": user.userEmailAddress,
+    
+        
+    
+       
+     
+    
+      })) : [];
+    
+     
+  
     const handleSwitchTenant = (tenant) =>{
         setLoading(true);
         instance.loginRedirect({ 
@@ -159,7 +276,8 @@ export const Tenant = () => {
     const handleTabChange = (event, newValue) => {
         setValue(newValue);
       };
-    
+
+   
     return (
         <> 
           
@@ -179,9 +297,10 @@ export const Tenant = () => {
 
 
         
-        <Tab label="USERS" className="tabLabel"  style={{ marginRight: '250px' }}/>
-        <Tab label="ROLES" className="tabLabel" style={{ marginRight: '250px' }}/>
-        <Tab label="FEATURES" className="tabLabel" />
+        <Tab label="USERS" className="tabLabel"  style={{ marginRight: '120px' }}/>
+        <Tab label="ROLES" className="tabLabel" style={{ marginRight: '120px' }}/>
+        <Tab label="FEATURES" className="tabLabel" style={{ marginRight: '120px' }} />
+        <Tab label="ROLE FEATURES" className="tabLabel"  />
 
       </Tabs>
       
@@ -332,15 +451,26 @@ export const Tenant = () => {
         <div>
           {/* Render your table or content for "USERS" tab here */}
           <h2 style={{ fontSize: "20px", marginBottom: "10px" }}>Users</h2>
-          <AIPDataGrid onRowsSelectionHandler={() => { }} columns={jsonData.UserColumns} rows={jsonData.UserRows} />
+          <AIPDataGrid onRowsSelectionHandler={() => { }} columns={jsonData.UsersColumns} rows={UsersRowsData} />
           {/* You can render your table component here */}
         </div>
       )}
+      {value === 1 && (
+        <div>
+          {/* Render your table or content for "USERS" tab here */}
+          <h2 style={{ fontSize: "20px", marginBottom: "10px" }}>Roles</h2>
+          <AIPDataGrid onRowsSelectionHandler={() => { }} columns={jsonData.UserColumns} rows={UserRowsData} />
+          {/* You can render your table component here */}
+        </div>
+      )}
+                
+         
+              
        {value === 2 && (
         <div>
           {/* Render your table or content for "USERS" tab here */}
           <h2 style={{ fontSize: "20px", marginBottom: "10px" }}>Features</h2>
-          <AIPDataGrid onRowsSelectionHandler={() => { }} columns={jsonData.UserColumns} rows={jsonData.UserRows} />
+          <AIPDataGrid onRowsSelectionHandler={() => { }} columns={jsonData.FeatureColumns} rows={FeatureRowsData} />
           {/* You can render your table component here */}
         </div>
       )}

@@ -5,11 +5,11 @@
     
             "id": 1,
     
-            "field": "USERNAME",
+            "field": "ROLENAME",
     
-            "headerName": "USERNAME",
+            "headerName": "ROLENAME",
     
-            "width": 160
+            "width": 460
     
         },
     
@@ -17,36 +17,14 @@
     
             "id": 2,
     
-            "field": "ROLE",
+            "field": "DESCRIPTION",
     
-            "headerName": "ROLE",
-    
-            "width": 160
-    
-        },
-        {
-    
-            "id": 3,
-    
-            "field": "EMAILADDRESS",
-    
-            "headerName": "EMAIL ADDRESS",
-    
-            "width": 160
-    
-        },
-    
-        {
-    
-            "id": 4,
-    
-            "field": "ROLESASSIGNED",
-    
-            "headerName": "ROLES ASSIGNED",
+            "headerName": "DESCRIPTION",
     
             "width": 160
     
         }
+        
     ],
      "UserRows": [
     
@@ -54,67 +32,121 @@
     
             "id": 1,
     
-            "USERNAME": "gitess",
+            "ROLENAME": "gitess",
     
-            "ROLE": "Fund Manager",
+            "DESCRIPTION": "Fund Manager"
 
-            "EMAILADDRESS": "gitess@gmail.com",
-    
-            "ROLES ASSIGNED": "-"
-    
         },
         {
     
             "id": 2,
     
-            "USERNAME": "Seshu",
+            "ROLENAME": "Seshu",
     
-            "ROLE": "Investor",
+            "DESCRIPTION": "Investor"
 
-            "EMAILADDRESS": "seshu@gmail.com",
-    
-            "ROLES ASSIGNED": "-"
-    
         },
         {
     
             "id": 3,
     
-            "USERNAME": "Harish",
+            "ROLENAME": "Harish",
     
-            "ROLE": "Legal Compliance Officer",
+            "DESCRIPTION": "Legal Compliance Officer"
 
-            "EMAILADDRESS": "harish@gmail.com",
-    
-            "ROLES ASSIGNED": "-"
-    
-        },
+           },
         {
     
             "id": 4,
     
-            "USERNAME": "Pragathi chowdary",
+            "ROLENAME": "Pragathi chowdary",
     
-            "ROLE": "Firm",
+            "DESCRIPTION": "Firm"
 
-            "EMAILADDRESS": "pragathichowdary@gmail.com",
-    
-            "ROLES ASSIGNED": "-"
-    
-        },
+    },
         {
     
             "id": 5,
     
-            "USERNAME": "fatima",
+            "ROLENAME": "fatima",
     
-            "ROLE": "Legal Compliance Officer",
+            "DESCRIPTION": "Legal Compliance Officer"
 
-            "EMAILADDRESS": "fatima@gmail.com",
+    }
+    ],
     
-            "ROLES ASSIGNED": "-"
+        "FeatureColumns": [
+        {
+        
+                "id": 1,
+        
+                "field": "TITLE",
+        
+                "headerName": "TITLE",
+        
+                "width": 430
+        
+            }
+        ],
+        "FeatureRows": [
+     {
+        
+                "id": 1,
+        
+                "TITLE": "Fund Manager"
+        
+              
+    }
+        ],
+        "UsersColumns": [
     
-        }
-    ]
+            {
+        
+                "id": 1,
+        
+                "field": "USERNAME",
+        
+                "headerName": "USER NAME",
+        
+                "width": 250
+        
+            },
+            {
+        
+                "id": 2,
+        
+                "field": "ROLENAME",
+        
+                "headerName": "ROLE NAME",
+        
+                "width": 250
+        
+            },
+            {
+        
+                "id": 3,
+        
+                "field": "EMAILADDRESS",
+        
+                "headerName": "EMAIL ADDRESS",
+        
+                "width": 150
+        
+            }
+        ],
+        "UsersRows": [
+            {
+               
+                       "id": 1,
+               
+                       "USERNAME" : "pragathi",
+
+                       "ROLENAME"  : "investor",
+               
+                       "EMAILADDRESS" : "pragathi@gmail.com"
+           }
+        ]
+            
+
 }
         
