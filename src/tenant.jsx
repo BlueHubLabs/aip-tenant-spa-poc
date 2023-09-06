@@ -4,14 +4,15 @@ import axios from 'axios';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import AIPDataGrid from './AIPDataGrid';
+import { DataGrid } from "@mui/x-data-grid";
 import jsonData from './tenant.json';
-
-
+import TreeView from '@mui/lab/TreeView';
+import TreeItem from '@mui/lab/TreeItem';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 
 import { useMsal } from "@azure/msal-react";
-
 import { ButtonGroup, Button, ToggleButton, ToggleButtonGroup } from "react-bootstrap";
-
 import { b2cPolicies, deployment, loginRequest } from "./authConfig";
 import { useEffect } from "react";
 import ActionButton from '@mui/material/Button';
@@ -196,8 +197,51 @@ export const Tenant = () => {
      
     
       })) : [];
+
+      const [roleFeatures, setRoleFeatures] = useState([]); // Initialize with an empty array
+
+      useEffect(() => {
+        const fetchRoleFeatures = async () => {
+          try {
+            const response = await fetch("https://aipbackend.azurewebsites.net/v1/UserRole/GetTenantRoleFeatures?tenantID=5ab53943-aada-4db9-9f1f-616ed567396a");
+            if (!response.ok) {
+              throw new Error('Network response was not ok');
+            } else {
+              const json = await response.json();
+              console.log(json);
+              console.log("rolefeatures");
+              setRoleFeatures(json); // Set the state with the fetched data
+            }
+          } catch (error) {
+            console.error('Error fetching data:', error);
+            setIsLoading(false);
+          }
+        };
+      
+        fetchRoleFeatures();
+      }, []);
     
-     
+  const columns = [
+    { field: 'roleName', headerName: 'Role Name', flex: 1 },
+    { field: 'applicationFeatureName', headerName: 'Feature Name', flex: 1 },
+    { field: 'hasReadAccess', headerName: 'Read Access', flex: 1 },
+    { field: 'hasWriteAccess', headerName: 'Write Access', flex: 1 },
+    { field: 'hasUpdateAccess', headerName: 'Update Access', flex: 1 },
+    { field: 'hasDeleteAccess', headerName: 'Delete Access', flex: 1 },
+  ];
+
+  // Transform the data to match the structure for the TreeView
+  const transformedData = roleFeatures.map((item) => ({
+    id: item.applicationFeatureRoleAccessId,
+    roleName: item.roleName,
+    applicationFeatureName: item.applicationFeatureName,
+    hasReadAccess: item.hasReadAccess,
+    hasWriteAccess: item.hasWriteAccess,
+    hasUpdateAccess: item.hasUpdateAccess,
+    hasDeleteAccess: item.hasDeleteAccess,
+  }));
+  const roleNames = Array.from(new Set(transformedData.map((item) => item.roleName)));
+
   
     const handleSwitchTenant = (tenant) =>{
         setLoading(true);
@@ -474,6 +518,28 @@ export const Tenant = () => {
           {/* You can render your table component here */}
         </div>
       )}
+{value === 3 && (
+ <div>
+ {value === 3 && (
+   <TreeView
+     defaultCollapseIcon={<ExpandMoreIcon />}
+     defaultExpandIcon={<ChevronRightIcon />}
+   >
+   </TreeView>
+ )}
+
+ {value === 3 && (
+   <DataGrid
+     rows={transformedData}
+     columns={columns}
+     pageSize={10}
+     rowsPerPageOptions={[10, 25, 50]}
+   />
+ )}
+</div>
+)}
+
+      
                 {/* <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
                 <ActionButton
                     variant="outlined"
