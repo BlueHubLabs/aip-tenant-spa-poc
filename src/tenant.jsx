@@ -1,11 +1,18 @@
 import React, { useState } from "react";
 
 import axios from 'axios';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import AIPDataGrid from './AIPDataGrid';
+import { DataGrid } from "@mui/x-data-grid";
+import jsonData from './tenant.json';
+import TreeView from '@mui/lab/TreeView';
+import TreeItem from '@mui/lab/TreeItem';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 
 import { useMsal } from "@azure/msal-react";
-
 import { ButtonGroup, Button, ToggleButton, ToggleButtonGroup } from "react-bootstrap";
-
 import { b2cPolicies, deployment, loginRequest } from "./authConfig";
 import { useEffect } from "react";
 import ActionButton from '@mui/material/Button';
@@ -20,6 +27,13 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Spinner from "./spinner";
+
+
+
+
+
+  
+    
 
 const membersData = [
     {
@@ -47,8 +61,14 @@ const membersData = [
 export const Tenant = () => {
     const { instance, accounts } = useMsal();
     const [loading, setLoading] = useState(true);
+
     const [membersData, setMembers] = useState([]);
     const [isInvite, setIsInvite] = useState(false);
+    const [value, setValue] = useState(0);
+
+    const handleChange = (event, newValue) => {
+        setValue(newValue);
+    };
     
     useEffect(()=>{
         if(accounts && accounts.length && accounts[0].idTokenClaims){
@@ -58,8 +78,171 @@ export const Tenant = () => {
         }
     }, [accounts[0].idTokenClaims]);
 
+    // const handleUsersTabClick = async () => {
+    //     // ...
+    //   };
+
+    const [data1, setData1] = useState();
+    const [data2, setData2] = useState();
+    const [data3, setData3] = useState();
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+      const fetchData = async () => {
+        try {
+            const response = await fetch("https://aipbackend.azurewebsites.net/v1/UserRole/GetTenantRoles?tenantID=5ab53943-aada-4db9-9f1f-616ed567396a");
+            if (!response.ok) {
+              throw new Error('Network response was not ok');
+            }
+            else{
+            const json = await response.json();
+            console.log(json);
+            setData1(json);
+            setIsLoading(false);
+            }
+          } catch (error) {
+            console.error('Error fetching data:', error);
+            setIsLoading(false);
+          }
+        
+      };
+  
+      fetchData();
+    }, []);
+
+    const UserRowsData = data1 ? data1.map(user=> ({
+
+        id: user.roleId,
+    
+        "ROLENAME": user.roleName,
+    
+        "DESCRIPTION": user.description,
+    
+       
+     
+    
+      })) : [];
 
 
+      useEffect(() => {
+        const fetchFeatureData = async () => {
+          try {
+              const response = await fetch("https://aipbackend.azurewebsites.net/v1/UserRole/GetTenantFeatures?tenantID=5ab53943-aada-4db9-9f1f-616ed567396a");
+              if (!response.ok) {
+                throw new Error('Network response was not ok');
+              }
+              else{
+              const json = await response.json();
+              console.log(json);
+              setData2(json);
+              setIsLoading(false);
+              }
+            } catch (error) {
+              console.error('Error fetching data:', error);
+              setIsLoading(false);
+            }
+          
+        };
+    
+        fetchFeatureData();
+      }, []);
+
+      const FeatureRowsData = data2 ? data2.map(user=> ({
+
+        // id: user.sortOrder,
+    id:user.applicationFeatureId,
+        "TITLE": user.title,
+    
+        
+    
+       
+     
+    
+      })) : [];
+
+      useEffect(() => {
+        const fetchFeatureData = async () => {
+          try {
+              const response = await fetch("https://aipbackend.azurewebsites.net/v1/UserRole/GetTenantUserDetails?tenantID=5ab53943-aada-4db9-9f1f-616ed567396a");
+              if (!response.ok) {
+                throw new Error('Network response was not ok');
+              }
+              else{
+              const json = await response.json();
+              console.log(json);
+              setData3(json);
+              setIsLoading(false);
+              }
+            } catch (error) {
+              console.error('Error fetching data:', error);
+              setIsLoading(false);
+            }
+          
+        };
+    
+        fetchFeatureData();
+      }, []);
+
+      const UsersRowsData = data3 ? data3.map(user=> ({
+
+        // id: user.sortOrder,
+        id:user.userId,
+        "USERNAME": user.userFullName,
+        "ROLENAME" : user.userRoleName,
+        "EMAILADDRESS": user.userEmailAddress,
+    
+        
+    
+       
+     
+    
+      })) : [];
+
+      const [roleFeatures, setRoleFeatures] = useState([]); // Initialize with an empty array
+
+      useEffect(() => {
+        const fetchRoleFeatures = async () => {
+          try {
+            const response = await fetch("https://aipbackend.azurewebsites.net/v1/UserRole/GetTenantRoleFeatures?tenantID=5ab53943-aada-4db9-9f1f-616ed567396a");
+            if (!response.ok) {
+              throw new Error('Network response was not ok');
+            } else {
+              const json = await response.json();
+              console.log(json);
+              console.log("rolefeatures");
+              setRoleFeatures(json); // Set the state with the fetched data
+            }
+          } catch (error) {
+            console.error('Error fetching data:', error);
+            setIsLoading(false);
+          }
+        };
+      
+        fetchRoleFeatures();
+      }, []);
+    
+  const columns = [
+    { field: 'roleName', headerName: 'Role Name', flex: 1 },
+    { field: 'applicationFeatureName', headerName: 'Feature Name', flex: 1 },
+    { field: 'hasReadAccess', headerName: 'Read Access', flex: 1 },
+    { field: 'hasWriteAccess', headerName: 'Write Access', flex: 1 },
+    { field: 'hasUpdateAccess', headerName: 'Update Access', flex: 1 },
+    { field: 'hasDeleteAccess', headerName: 'Delete Access', flex: 1 },
+  ];
+
+  // Transform the data to match the structure for the TreeView
+  const transformedData = roleFeatures.map((item) => ({
+    id: item.applicationFeatureRoleAccessId,
+    roleName: item.roleName,
+    applicationFeatureName: item.applicationFeatureName,
+    hasReadAccess: item.hasReadAccess,
+    hasWriteAccess: item.hasWriteAccess,
+    hasUpdateAccess: item.hasUpdateAccess,
+    hasDeleteAccess: item.hasDeleteAccess,
+  }));
+  const roleNames = Array.from(new Set(transformedData.map((item) => item.roleName)));
+
+  
     const handleSwitchTenant = (tenant) =>{
         setLoading(true);
         instance.loginRedirect({ 
@@ -107,11 +290,127 @@ export const Tenant = () => {
     useEffect(()=>{
         getMemberAccessToken();
     },[]);
+    // const [tab1Content, setTab1Content] = useState(null);
+    const [usersTabContent, setUsersTabContent] = useState(null);
     
+    const loadUsersTabContent = async () => {
+        try {
+            const dummyData = "This is the content for the USERS tab.";
+            setUsersTabContent(dummyData);
+          } catch (error) {
+            console.error('Error loading content for USERS tab:', error);
+          }
+        };
+
+     const handleUsersTabClick = () => {
+            loadUsersTabContent();
+          };
+
+    // const loadTab1Content = async () => {
+    //     try {
+    //       // Fetch and set content for Tab 1
+    //       const response = await fetch('your-api-endpoint-for-tab1-content');
+    //       const data = await response.json();
+    //       setTab1Content(data);
+    //     } catch (error) {
+    //       console.error('Error loading content for Tab 1:', error);
+    //     }
+    //   };
+
+    const handleTabChange = (event, newValue) => {
+        setValue(newValue);
+      };
+
+   
     return (
         <> 
-            {!isInvite && <><div className="addActionsWrapper">
-                <ActionButton
+          
+           
+       
+            
+            
+         
+            {!isInvite && <>
+            {/* <div className="addActionsWrapper"> */}
+       
+            <div className="tabsContainer" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+            <Tabs value={value} onChange={handleTabChange}   >
+        {/* Define your tab labels here */}
+        
+        
+
+
+        
+        <Tab label="USERS" className="tabLabel"  style={{ marginRight: '120px' }}/>
+        <Tab label="ROLES" className="tabLabel" style={{ marginRight: '120px' }}/>
+        <Tab label="FEATURES" className="tabLabel" style={{ marginRight: '120px' }} />
+        <Tab label="ROLE FEATURES" className="tabLabel"  />
+
+      </Tabs>
+      
+      
+     
+     
+                 {/* <Tab
+                    className={`tabItem ${value === 0 ? 'active' : ''}`}
+                    label={
+                        <div className="tabLabelContainer" onClick={handleUsersTabClick}>
+                            
+                            <img src="https://www.thesslstore.com/blog/wp-content/uploads/2017/05/circle-with-i-1.png" alt="Icon" className="tabIcon" />
+                            <span>USERS</span>
+                            
+                            </div>
+                         
+                         }
+                         
+                        
+                    onClick={() => handleChange(null, 0)}
+                /> */}
+                
+                {/* <AIPDataGrid onRowsSelectionHandler={() => { }} columns={jsonData.UserColumns} rows={jsonData.UserRows} /> */}
+                {/* <Tab
+                    className={`tabItem ${value === 1 ? 'active' : ''}`}
+                    label={
+                        <div className="tabLabelContainer">
+                            <img src="https://www.nicepng.com/png/detail/423-4238489_rep…rrow-chart-business-graph-stock-data-comments.png" alt="Icon" className="tabIcon" />
+                            <span>ROLES</span>
+                        </div>
+                    }
+                    onClick={() => handleChange(null, 1)}
+                /> */}
+                {/* <Tab
+                    className={`tabItem ${value === 2 ? 'active' : ''}`}
+                    label={
+                        <div className="tabLabelContainer">
+                            <img src="https://cdn-icons-png.flaticon.com/512/5431/5431304.png" alt="Icon" className="tabIcon" />
+                            <span>FEATURES</span>
+                        </div>
+                    }
+                    onClick={() => handleChange(null, 2)}
+                /> */}
+                 
+                 </div>
+                 {/* {value === 0 && tab1Content && ( */}
+  {/* <div>
+    <h2>Tab 1 Content</h2>
+    <AIPDataGrid onRowsSelectionHandler={() => { }} columns={jsonData.UserColumns} rows={jsonData.UserRows} />
+
+  </div>
+)} */}
+                
+                 
+                {/* <Tab className={`tabItem ${value === 0 ? 'active' : ''}`} label="USERS" onClick={() => handleChange(null, 0)} />
+                <Tab className={`tabItem ${value === 1 ? 'active' : ''}`} label="ROLES" onClick={() => handleChange(null, 1)} />
+                <Tab className={`tabItem ${value === 2 ? 'active' : ''}`} label="FEATURES" onClick={() => handleChange(null, 2)} /> */}
+            
+            {/* <div className="tabsContainer">
+                <Tabs value={value} onChange={handleChange} centered>
+                    <Tab className="tabItem" label="USERS" />
+                    <Tab className="tabItem" label="ROLES" />
+                    <Tab className="tabItem" label="FEATURES" />
+                </Tabs>
+            </div> */}
+                {/* <ActionButton
                     variant="outlined"
                     startIcon={<ControlPointOutlinedIcon />}
                     sx={{
@@ -124,8 +423,8 @@ export const Tenant = () => {
                             authority:b2cPolicies.authorities.newTenant.authority,
                             scopes: loginRequest.scopes                           
                         }).catch((error) => console.log(error))}
-                    >ADD TENANT</ActionButton>
-                <ActionButton
+                    >ADD TENANT</ActionButton> */}
+                {/* <ActionButton
                     variant="outlined"
                     startIcon={<ControlPointOutlinedIcon />}
                     sx={{
@@ -134,35 +433,44 @@ export const Tenant = () => {
                         border: '1px solid #0A1A27'
                     }}
                     onClick={()=> setIsInvite(true)}
-                    >ADD USER</ActionButton>
-            </div>
+                    >ADD USER</ActionButton> */}
+            {/* </div> */}
             <div className="tenantsInfoWrapperParent">
             <div className="tenantsInfoWrapper">
                 <div className="tenantListCont">
-                    <div className="headerTitle">TETANT LIST</div>
+                    <div className="headerTitle">TENANT LIST</div>
                     {!loading && <div className="tenantsWrapper">{accounts[0].idTokenClaims.allTenants.map( tenant=>(
                         <div 
                             className={`tenantItem ${(accounts[0].idTokenClaims.appTenantName === tenant) && 'selectedTenant'}`}
                             onClick={() => handleSwitchTenant(tenant)}>{tenant}</div>
                     ))}</div>}
+                
                 </div>
                 </div>
                 <div className="tenantsInfoWrapperContent">
-        
+               
 
                 <div className="memberTableWrapper">
-                <h2 style={{ fontSize: "20px", marginBottom: "10px" }}>Users</h2>
+               
+                {/* <Tabs value={value} onChange={handleChange} centered>
+                <Tab label="Item One" />
+                <Tab label="Item Two" />
+                <Tab label="Item Three" />
+                </Tabs> */}
+                {/* <h2 style={{ fontSize: "20px", marginBottom: "10px" }}>Users</h2> */}
+                {/* <AIPDataGrid onRowsSelectionHandler={() => { }} columns={jsonData.UserColumns} rows={jsonData.UserRows} /> */}
                 <Table>
-                    <thead>
+                    {/* <thead>
                         <tr key="ix">
                             <th style={{paddingLeft: "8px"}}><span>USERNAME</span><ArrowDropDownOutlinedIcon /></th>
                             <th><span>ROLE</span><ArrowDropDownOutlinedIcon /></th>
-                            <th><span>INVITED</span><ArrowDropDownOutlinedIcon /></th>
+                            <th><span>ROLE ASSIGNED</span><ArrowDropDownOutlinedIcon /></th>
                             <th></th>
                         </tr>
-                    </thead>    
+                    </thead>     */}
                    <tbody>
-                        {   membersData.length ?
+                   {/* <AIPDataGrid onRowsSelectionHandler={() => { }} columns={jsonData.UserColumns} rows={jsonData.UserRows} /> */}
+                        {/* {   membersData.length ?
                             membersData.map(member=>(
                                 <><tr className="memberRowData">
                                     <td style={{paddingLeft: "8px"}}>{member.name}</td>
@@ -171,14 +479,67 @@ export const Tenant = () => {
                                     <td align="right"><ActionButton>RESET PASSWORD</ActionButton></td>
                                 </tr>
                                 </>
-                            )):<div>No members to display</div>
-                        }
+                                
+                            )):
+                            
+                            // <div>No members to display</div>
+                        } */}
                                                                                                                              
                     </tbody>                                
                 </Table>
+                
                 </div>
 
                 <div className="memberTableWrapper">
+                {value === 0 && (
+        <div>
+          {/* Render your table or content for "USERS" tab here */}
+          <h2 style={{ fontSize: "20px", marginBottom: "10px" }}>Users</h2>
+          <AIPDataGrid onRowsSelectionHandler={() => { }} columns={jsonData.UsersColumns} rows={UsersRowsData} />
+          {/* You can render your table component here */}
+        </div>
+      )}
+      {value === 1 && (
+        <div>
+          {/* Render your table or content for "USERS" tab here */}
+          <h2 style={{ fontSize: "20px", marginBottom: "10px" }}>Roles</h2>
+          <AIPDataGrid onRowsSelectionHandler={() => { }} columns={jsonData.UserColumns} rows={UserRowsData} />
+          {/* You can render your table component here */}
+        </div>
+      )}
+                
+         
+              
+       {value === 2 && (
+        <div>
+          {/* Render your table or content for "USERS" tab here */}
+          <h2 style={{ fontSize: "20px", marginBottom: "10px" }}>Features</h2>
+          <AIPDataGrid onRowsSelectionHandler={() => { }} columns={jsonData.FeatureColumns} rows={FeatureRowsData} />
+          {/* You can render your table component here */}
+        </div>
+      )}
+{value === 3 && (
+ <div>
+ {value === 3 && (
+   <TreeView
+     defaultCollapseIcon={<ExpandMoreIcon />}
+     defaultExpandIcon={<ChevronRightIcon />}
+   >
+   </TreeView>
+ )}
+
+ {value === 3 && (
+   <DataGrid
+     rows={transformedData}
+     columns={columns}
+     pageSize={10}
+     rowsPerPageOptions={[10, 25, 50]}
+   />
+ )}
+</div>
+)}
+
+      
                 {/* <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
                 <ActionButton
                     variant="outlined"
@@ -190,8 +551,8 @@ export const Tenant = () => {
                     }}
                     onClick={()=> setIsInvite(true)}
                     >ADD NEW GROUP</ActionButton> </div> */}
-              <h2 style={{ fontSize: "20px", marginBottom: "10px" }}>Roles</h2>
-              <Table>
+              {/* <h2 style={{ fontSize: "20px", marginBottom: "10px" }}>Roles</h2> */}
+              {/* <Table>
                   <thead>
                       <tr key="ix">
                           <th style={{paddingLeft: "8px"}}><span>ROLE</span><ArrowDropDownOutlinedIcon /></th>
@@ -203,28 +564,28 @@ export const Tenant = () => {
                           <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>ACTION</span></th>
                           <th></th>
                       </tr>
-                  </thead>    
-                 <tbody>
+                  </thead>     */}
+                 {/* <tbody>
                       {   membersData.length ?
                           membersData.map(member=>(
                               <><tr className="memberRowData">
                                   {/* <td style={{paddingLeft: "8px"}}>{member.name}</td> */}
-                                  <td>{member.roles[0] === "Tenant.admin" ? 'Fund Manager' : 'Investor'}</td>
+                                  {/* <td>{member.roles[0] === "Tenant.admin" ? 'Fund Manager' : 'Investor'}</td>
                                   <td>{member.roles[0] === "Tenant.admin" ? '' : 'Service, Fund, Subscription'}</td>
                                   <td>{member.roles[0] === "Tenant.admin" ? '' : <input type="checkbox" />}</td>
                                   <td>{member.roles[0] === "Tenant.admin" ? '' : <input type="checkbox" />}</td>
                                   <td>{member.roles[0] === "Tenant.admin" ? '' : <input type="checkbox" />}</td>
                                   <td>{member.roles[0] === "Tenant.admin" ? '' : <input type="checkbox" />}</td>
-                                  <td>{member.roles[0] === "Tenant.admin" ? '' : <a href="/edit">Edit</a>}</td>
+                                  <td>{member.roles[0] === "Tenant.admin" ? '' : <a href="/edit">Edit</a>}</td> */}
                                   {/* <td>Yes</td> */}
-                                  {/* <td align="right"><ActionButton>ASSIGN ROLES</ActionButton></td> */}
+                                  {/* <td align="right"><ActionButton>ASSIGN ROLES</ActionButton></td>
                               </tr>
                               </>
                           )):<div>No members to display</div>
-                      }
+                      } */}
                                                                                                                            
-                  </tbody>                                
-              </Table>
+                  {/* </tbody>                                 *} */}
+              {/* </Table> */}
               </div>    
             
             </div> </div></> }
@@ -256,6 +617,7 @@ export const Tenant = () => {
                         :
                         <MyUrl domain_hint={accounts[0].idTokenClaims.idp} login_hint={accounts[0].idTokenClaims.email ?? accounts[0].idTokenClaims.signInName} tenant={accounts[0].idTokenClaims.appTenantName} />
             } */}
+              
             {loading && <div className="spinnerWrapper"><Spinner/></div>}
         </>
     );
