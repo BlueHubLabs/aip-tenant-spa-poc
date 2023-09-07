@@ -29,12 +29,13 @@ import Paper from '@mui/material/Paper';
 import Spinner from "./spinner";
 import { Padding } from "@mui/icons-material";
 
-
-
-
-
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import TextField from '@mui/material/TextField';
+import DialogActions from '@mui/material/DialogActions';
+import { Autocomplete } from "@mui/material";
   
-    
 
 const membersData = [
     {
@@ -82,6 +83,7 @@ export const Tenant = () => {
     // const handleUsersTabClick = async () => {
     //     // ...
     //   };
+    
 
     const [data1, setData1] = useState();
     const [data2, setData2] = useState();
@@ -165,11 +167,6 @@ export const Tenant = () => {
         // id: user.sortOrder,
     id:user.applicationFeatureId,
         "TITLE": user.title,
-    
-        
-    
-       
-     
     
       })) : [];
 
@@ -323,7 +320,35 @@ export const Tenant = () => {
     const handleTabChange = (event, newValue) => {
         setValue(newValue);
       };
-
+      const [isDialogOpen, setIsDialogOpen] = useState(false);
+      const [name, setName] = useState('');
+      const [description, setDescription] = useState('');
+      const [firstname, setFirstName] = useState('');
+      const [lastname, setLastName] = useState('');
+      const [emailaddress, setEmailAddress] = useState('');
+      const openDialog = () => {
+        setIsDialogOpen(true);
+      };
+    
+      const closeDialog = () => {
+        setIsDialogOpen(false);
+      };
+    
+      const handleNameChange = (event) => {
+        setName(event.target.value);
+      };
+    
+      const handleDescriptionChange = (event) => {
+        setDescription(event.target.value);
+      };
+    
+      const handleSubmit = () => {
+        // Handle submission logic here
+        console.log('Name:', name);
+        console.log('Description:', description);
+        // Close the dialog
+        closeDialog();
+      };
    
     return (
         <> 
@@ -366,24 +391,88 @@ export const Tenant = () => {
                 {/* <div  style={{ marginRight: '10px', marginLeft:'Auto' }}> */}
                     <h2 style={{ fontSize: "20px", margin: " 5px" }}>Users</h2>
                     <div  style={{ marginRight: '10px', marginLeft:'Auto' }}>
-                    {/* <div style={{ marginLeft: 'auto' }}> */}
-                        <ActionButton
-                                    variant="outlined"
-                                    startIcon={<ControlPointOutlinedIcon />}
-                                    sx={{
-                                        // margin: '0px 10px',
-                                        color: '#0A1A27',
-                                        border: '1px solid #0A1A27',
-                                    
-                                    }}
-                                    onClick={()=>
-                                        instance.loginRedirect({ 
-                                            authority:b2cPolicies.authorities.newTenant.authority,
-                                            scopes: loginRequest.scopes                           
-                                        }).catch((error) => console.log(error))}
-                                    >ADD USERS
-                        </ActionButton>
-                    {/* </div> */}
+                    <div>
+      <ActionButton
+        variant="outlined"
+        startIcon={<ControlPointOutlinedIcon />}
+        sx={{
+          color: '#0A1A27',
+          border: '1px solid #0A1A27',
+        }}
+        onClick={openDialog}
+      >
+        ADD USERS
+      </ActionButton>
+      <Dialog open={isDialogOpen} onClose={closeDialog}>
+        <DialogTitle>Add Users</DialogTitle>
+        <DialogContent>
+          <TextField
+            label="First Name"
+            variant="outlined"
+            halfWidth
+            value={firstname}
+            onChange={handleNameChange}
+            sx={{
+               marginBottom:7,
+               marginTop:1,
+               marginRight:3,
+               height:30
+
+              }}
+          />
+          <TextField
+           label="Last Name"
+           variant="outlined"
+           halfWidth
+           value={lastname}
+           onChange={handleNameChange}
+           sx={{
+            marginBottom:7,
+            marginTop:1,
+            height:30
+
+           }}
+          />
+          <TextField
+           label="Email Address"
+           variant="outlined"
+           fullWidth
+           value={emailaddress}
+           onChange={handleNameChange}
+           sx={{
+            marginBottom:7,
+            marginTop:1,
+            height:30
+
+           }}
+          />
+          <Autocomplete
+            disablePortal
+            fullWidth
+            id="combo-box-demo"
+            options={data1?.map((option) => option.roleName)}
+            renderInput={
+                (params) => <TextField {...params} label="Role" />
+            }
+            sx={{
+                marginBottom:7,
+                marginTop:1,
+                height:30
+    
+               }}
+            />
+          
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={closeDialog} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={handleSubmit} color="primary">
+            Submit
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </div>
                 </div>
                 </div>
             <AIPDataGrid onRowsSelectionHandler={() => { }} columns={jsonData.UsersColumns} rows={UsersRowsData} />
@@ -402,29 +491,64 @@ export const Tenant = () => {
                 </Tabs>
             </div>
             <div className="divContent" > 
-          <div className="divContentHeaderHolder">
-          <h2 style={{ fontSize: "20px", marginBottom: "10px" }}>Roles</h2>
+          <div className="divContentHeaderHolder" >
+          <h2 style={{ fontSize: "20px", margin: "5px" }}>Roles</h2>
           <div style={{ marginRight: '10px', marginLeft:'Auto' }}>
-          <ActionButton
-                    variant="outlined"
-                    startIcon={<ControlPointOutlinedIcon />}
-                    sx={{
-                        // margin: '0px 10px',
-                        color: '#0A1A27',
-                        border: '1px solid #0A1A27',
-                      
-                    }}
-                    onClick={()=>
-                        instance.loginRedirect({ 
-                            authority:b2cPolicies.authorities.newTenant.authority,
-                            scopes: loginRequest.scopes                           
-                        }).catch((error) => console.log(error))}
-                    >ADD ROLES</ActionButton></div></div>
-         
+          <div>
+      <ActionButton
+        variant="outlined"
+        startIcon={<ControlPointOutlinedIcon />}
+        sx={{
+          color: '#0A1A27',
+          border: '1px solid #0A1A27',
+        }}
+        onClick={openDialog}
+      >
+        ADD ROLES
+      </ActionButton>
+      <Dialog open={isDialogOpen} onClose={closeDialog}>
+        <DialogTitle>Add Role</DialogTitle>
+        <DialogContent>
+          <TextField
+            label="Name"
+            variant="outlined"
+            fullWidth
+            value={name}
+            onChange={handleNameChange}
+            sx={{
+               marginBottom:7,
+               marginTop:1,
+               height:30
+
+              }}
+          />
+          <TextField
+            label="Description"
+            variant="outlined"
+            fullWidth
+            value={description}
+            multiline
+            rows={4}
+            onChange={handleDescriptionChange}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={closeDialog} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={handleSubmit} color="primary">
+            Submit
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </div>
+         </div></div>
+                    
+                     
           <AIPDataGrid onRowsSelectionHandler={() => { }} columns={jsonData.UserColumns} rows={UserRowsData} />
           {/* You can render your table component here */}
         </div>
-        </div>
+         </div>
       )}
                 
          
@@ -441,23 +565,44 @@ export const Tenant = () => {
             </div>
             <div className="divContent" > 
           <div className="divContentHeaderHolder">
-          <h2 style={{ fontSize: "20px", marginBottom: "10px" }}>Features</h2>
+          <h2 style={{ fontSize: "20px", margin: "5px" }}>Features</h2>
           <div style={{ marginRight: '10px', marginLeft:'Auto' }}>
-          <ActionButton
-                    variant="outlined"
-                    startIcon={<ControlPointOutlinedIcon />}
-                    sx={{
-                        // margin: '0px 10px',
-                        color: '#0A1A27',
-                        border: '1px solid #0A1A27',
-                      
-                    }}
-                    onClick={()=>
-                        instance.loginRedirect({ 
-                            authority:b2cPolicies.authorities.newTenant.authority,
-                            scopes: loginRequest.scopes                           
-                        }).catch((error) => console.log(error))}
-                    >ADD FEATURES</ActionButton></div></div>
+          <div>
+      <ActionButton
+        variant="outlined"
+        startIcon={<ControlPointOutlinedIcon />}
+        sx={{
+          color: '#0A1A27',
+          border: '1px solid #0A1A27',
+        }}
+        onClick={openDialog}
+      >
+        ADD FEATURES
+      </ActionButton>
+      <Dialog open={isDialogOpen} onClose={closeDialog}>
+        <DialogTitle>Add Feature</DialogTitle>
+        <DialogContent>
+          <TextField
+            label="Name"
+            variant="outlined"
+            fullWidth
+            value={name}
+            onChange={handleNameChange}
+            
+          />
+          
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={closeDialog} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={handleSubmit} color="primary">
+            Submit
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </div>
+    </div></div>
           <AIPDataGrid onRowsSelectionHandler={() => { }} columns={jsonData.FeatureColumns} rows={FeatureRowsData} />
           {/* You can render your table component here */}
         </div>
@@ -475,7 +620,7 @@ export const Tenant = () => {
             </div>
             <div className="divContent" > 
           <div className="divContentHeaderHolder">
-          <h2 style={{ fontSize: "20px", marginBottom: "10px" }}>Role Features</h2>
+          <h2 style={{ fontSize: "20px", margin: "5px" }}>Role Features</h2>
           <div style={{ marginRight: '10px', marginLeft:'Auto' }}>
           <ActionButton
                     variant="outlined"
