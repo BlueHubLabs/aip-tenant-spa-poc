@@ -162,7 +162,7 @@ td:last-child{
 
 .tabLabel {
     margin-bottom: 10px; 
-    margin-left: 115px !important;
+    margin-left: 60px !important;
   }
  
   
@@ -210,4 +210,8 @@ td:last-child{
   
   .saveButtonLeft{
     margin-right: 70px;
+  }
+  .saveButtonRight{
+    margin: 5px;
+    float: right;
   }

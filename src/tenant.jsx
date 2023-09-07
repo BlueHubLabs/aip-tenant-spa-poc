@@ -7,11 +7,22 @@ import AIPDataGrid from './AIPDataGrid';
 import { DataGrid } from "@mui/x-data-grid";
 import jsonData from './tenant.json';
 import TreeView from '@mui/lab/TreeView';
-
-
+import {
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+  Typography,
+  IconButton,
+  Input,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+} from '@mui/material';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import SaveIcon from '@mui/icons-material/Save'; // Import the Save icon
 import TreeItem from '@mui/lab/TreeItem';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import Checkbox from '@mui/material/Checkbox';
 import { useMsal } from "@azure/msal-react";
@@ -141,6 +152,60 @@ export const Tenant = () => {
     
       })) : [];
 
+//4th tab declarables 
+
+const [primaryColor, setPrimaryColor] = useState('');
+  const [secondaryColor, setSecondaryColor] = useState('');
+  const [iconColor, setIconColor] = useState('');
+  const [topNavBarLogoHeading, setTopNavBarLogoHeading] = useState('');
+  const [topNavBarPrimaryColor, setTopNavBarPrimaryColor] = useState('');
+  const [topNavBarIconColor, setTopNavBarIconColor] = useState('');
+  const [logoImage, setLogoImage] = useState(null);
+  const [headerPrimaryColor, setHeaderPrimaryColor] = useState('');
+  const [headerFont, setHeaderFont] = useState('');
+  const [backgroundColorRecommendations, setBackgroundColorRecommendations] = useState('');
+
+
+  const handlePrimaryColorChange = (e) => {
+    setPrimaryColor(e.target.value);
+  };
+
+  const handleSecondaryColorChange = (e) => {
+    setSecondaryColor(e.target.value);
+  };
+
+  const handleIconColorChange = (e) => {
+    setIconColor(e.target.value);
+  };
+  const handleLogoHeadingChange = (e) => {
+    setTopNavBarLogoHeading(e.target.value);
+  };
+
+  const handleTopNavBarPrimaryColorChange = (e) => {
+    setTopNavBarPrimaryColor(e.target.value);
+  };
+
+  const handleTopNavBarIconColorChange = (e) => {
+    setTopNavBarIconColor(e.target.value);
+  };
+
+  const handleLogoUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      // Handle the uploaded file, for example, you can set it in the state.
+      setLogoImage(file);
+    }
+  };
+   const handleHeaderPrimaryColorChange = (e) => {
+    setHeaderPrimaryColor(e.target.value);
+  };
+
+  const handleHeaderFontChange = (e) => {
+    setHeaderFont(e.target.value);
+  };
+  const handleBackgroundColorRecommendationsChange = (e) => {
+    setBackgroundColorRecommendations(e.target.value);
+  };
 
       useEffect(() => {
         const fetchFeatureData = async () => {
@@ -457,6 +522,7 @@ export const Tenant = () => {
                     <Tab label="ROLES" className="tabLabel"    />
                     <Tab label="FEATURES" className="tabLabel" />
                     <Tab label="ROLE FEATURES" className="tabLabel"  />
+                    <Tab label="Site Settings" className="tabLabel" />
                 </Tabs>
             </div>
             <div className="divContent" >
@@ -561,6 +627,7 @@ export const Tenant = () => {
                     <Tab label="ROLES" className="tabLabel"    />
                     <Tab label="FEATURES" className="tabLabel" />
                     <Tab label="ROLE FEATURES" className="tabLabel"  />
+                    <Tab label="Site Settings" className="tabLabel" />
                 </Tabs>
             </div>
             <div className="divContent" > 
@@ -634,6 +701,7 @@ export const Tenant = () => {
                     <Tab label="ROLES" className="tabLabel"    />
                     <Tab label="FEATURES" className="tabLabel" />
                     <Tab label="ROLE FEATURES" className="tabLabel"  />
+                    <Tab label="Site Settings" className="tabLabel" />
                 </Tabs>
             </div>
             <div className="divContent" > 
@@ -689,27 +757,13 @@ export const Tenant = () => {
                     <Tab label="ROLES" className="tabLabel"    />
                     <Tab label="FEATURES" className="tabLabel" />
                     <Tab label="ROLE FEATURES" className="tabLabel"  />
+                    <Tab label="Site Settings" className="tabLabel" />
                 </Tabs>
             </div>
             <div className="divContent" > 
           <div className="divContentHeaderHolder">
           <h2 style={{ fontSize: "20px", margin: "5px" }}>Role Features</h2>
-          <div style={{ marginRight: '10px', marginLeft:'Auto' }}>
-          <ActionButton
-                    variant="outlined"
-                    startIcon={<ControlPointOutlinedIcon />}
-                    sx={{
-                        // margin: '0px 10px',
-                        color: '#0A1A27',
-                        border: '1px solid #0A1A27',
-                      
-                    }}
-                    onClick={()=>
-                        instance.loginRedirect({ 
-                            authority:b2cPolicies.authorities.newTenant.authority,
-                            scopes: loginRequest.scopes                           
-                        }).catch((error) => console.log(error))}
-                    >ADD Role FEATURES</ActionButton></div></div> 
+          </div> 
  {value === 3 && (
    <TreeView
      defaultCollapseIcon={<ExpandMoreIcon />}
@@ -755,6 +809,172 @@ export const Tenant = () => {
 </div>
 </div> 
 )}
+{value === 4 && (
+ <div>
+   <div className="tabsContainer" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+                <Tabs value={value} onChange={handleTabChange}>
+                    <Tab label="USERS" className="tabLabel"    />
+                    <Tab label="ROLES" className="tabLabel"    />
+                    <Tab label="FEATURES" className="tabLabel" />
+                    <Tab label="ROLE FEATURES" className="tabLabel"  />
+                    <Tab label="Site Settings" className="tabLabel" />
+                </Tabs>
+            </div>
+            <div className="divContent" > 
+          <div className="divContentHeaderHolder">
+            <h2 style={{ fontSize: "20px", margin: "5px" }}>Site Settings</h2>
+          </div>
+          
+ 
+<div style={{marginTop:'15px'}} >
+      
+
+      {value === 4 && (
+        
+        <div style={{ height: 650, width: '94%', marginTop: '15px' }}>
+            
+            <div style={{ backgroundColor: '#f0f0f0', padding: '20px' }}>
+            <Accordion>
+        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+          <Typography>Main Navigation</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <div>
+            <TextField
+              label="Primary Color"
+              variant="outlined"
+              fullWidth
+              margin="normal"
+              value={primaryColor}
+              onChange={handlePrimaryColorChange}
+            />
+            <TextField
+              label="Secondary Color"
+              variant="outlined"
+              fullWidth
+              margin="normal"
+              value={secondaryColor}
+              onChange={handleSecondaryColorChange}
+            />
+            <TextField
+              label="Icon Color"
+              variant="outlined"
+              fullWidth
+              margin="normal"
+              value={iconColor}
+              onChange={handleIconColorChange}
+            />
+             <button type="button" class="btn btn-primary float-top saveButtonRight">Save</button>
+
+          </div>
+        </AccordionDetails>
+      </Accordion>
+
+      <Accordion>
+        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+          <Typography>Top Nav Bar</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <div>
+           Logo :
+            <input
+              accept="image/png"
+              style={{ display: 'none' }}
+              id="logo-upload-input"
+              type="file"
+              onChange={handleLogoUpload}
+            />
+            <label htmlFor="logo-upload-input">
+              <IconButton color="primary" component="span">
+                <CloudUploadIcon />
+              </IconButton>
+            </label>
+            <TextField
+              label="Primary Color(Recommended Contrast)"
+              variant="outlined"
+              fullWidth
+              margin="normal"
+              value={topNavBarPrimaryColor}
+              onChange={handleTopNavBarPrimaryColorChange}
+            />
+            <TextField
+              label="Icon Colors"
+              variant="outlined"
+              fullWidth
+              margin="normal"
+              value={topNavBarIconColor}
+              onChange={handleTopNavBarIconColorChange}
+            />
+             <button type="button" class="btn btn-primary float-top saveButtonRight">Save</button>
+          </div>
+        </AccordionDetails>
+      </Accordion>
+
+      <Accordion>
+        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+          <Typography>Header</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <div>
+            <TextField
+              label="Primary Color (Radial Gradient)"
+              variant="outlined"
+              fullWidth
+              margin="normal"
+              value={headerPrimaryColor}
+              onChange={handleHeaderPrimaryColorChange}
+            />
+            <FormControl variant="outlined" fullWidth margin="normal">
+              <InputLabel htmlFor="header-font">Fonts</InputLabel>
+              <Select
+                label="Fonts"
+                value={headerFont}
+                onChange={handleHeaderFontChange}
+                inputProps={{
+                  name: 'headerFont',
+                  id: 'header-font',
+                }}
+              >
+                <MenuItem value="Arial">Arial</MenuItem>
+                <MenuItem value="Helvetica">Helvetica</MenuItem>
+                <MenuItem value="Times New Roman">Times New Roman</MenuItem>
+                {/* Add more font options as needed */}
+              </Select>
+            </FormControl>
+            <button type="button" class="btn btn-primary float-top saveButtonRight">Save</button>
+          </div>
+        </AccordionDetails>
+      </Accordion>
+      <Accordion>
+        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+          <Typography>Background Color</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <div>
+            <TextField
+              label="Recommended Light Colors"
+              variant="outlined"
+              fullWidth
+              margin="normal"
+              value={backgroundColorRecommendations}
+              onChange={handleBackgroundColorRecommendationsChange}
+            />
+             <button type="button" class="btn btn-primary float-top saveButtonRight">Save</button>
+          </div>
+        </AccordionDetails>
+      </Accordion>
+    </div>
+        </div>
+        
+      )}
+      
+     
+    </div>
+
+</div>
+</div> 
+)}
+
 
       
                 {/* <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
