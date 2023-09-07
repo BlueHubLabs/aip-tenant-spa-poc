@@ -46,19 +46,14 @@
 }
 .tenantsInfoWrapper
 {
-    margin: 0px 5%;
-    margin-left: 10px;
-    width: 800px;
- 
+    margin: 5px;
+    width: 30%;
 }
 .tenantsInfoWrapperContent
 {
-    margin: 0px 5%;
-    margin-left: 10px;
-    display: flex;
-    margin-top: 10px;
+    margin: 5px;
     flex-direction: column;
-    width: 1200px;
+    width: 70%;
 }
 .tenantsWrapper{
     background-color: #D2DAE0;
@@ -90,10 +85,10 @@
     
 }
 .memberTableWrapper{
-    width: 118%;
+    width: 110%;
     text-align: left;
     height: 55vh;
-    margin-top: -150px;
+    /* margin-top: -150px; */
     /* position: relative; */
     /* overflow: auto; */
   
@@ -131,6 +126,19 @@
     z-index: 9;
 }
 
+.divContent{
+    border: 2px solid #D2DAE0;
+    border-radius: 5px;
+    width: 98%;
+}
+
+.divContentHeaderHolder{
+    display: flex;
+    align-items: center;
+    background-color: rgb(210, 218, 224);
+    padding: 5px;
+}
+
 td:first-child{
   border-radius: 10px 0 0 10px;
 }
@@ -140,20 +148,21 @@ td:last-child{
 }
 .tabsContainer {
     background-color: lightgrey;
-    display: flex;
+    /* display: flex;
     justify-content: flex-end;
-    align-items: center;
-    overflow: hidden;
+    align-items: center; */
+    /* overflow: hidden; */
     border-radius: 20px;
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);
-    width: 60%; /* Adjust the width as needed */
-    margin-left: 500px; /* Adjust the right margin as needed */
-    position: absolute;
-    ;
+    width: 98%; /* Adjust the width as needed */
+    /* margin-left: 300px; Adjust the right margin as needed */
+    /* position: absolute; */
+    margin-bottom: 15px;
 }
 
 .tabLabel {
     margin-bottom: 10px; 
+    margin-left: 115px !important;
   }
  
   
