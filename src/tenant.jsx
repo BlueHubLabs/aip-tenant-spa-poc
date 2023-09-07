@@ -7,10 +7,13 @@ import AIPDataGrid from './AIPDataGrid';
 import { DataGrid } from "@mui/x-data-grid";
 import jsonData from './tenant.json';
 import TreeView from '@mui/lab/TreeView';
+import TextField from '@mui/material/TextField';
+
+import SaveIcon from '@mui/icons-material/Save'; // Import the Save icon
 import TreeItem from '@mui/lab/TreeItem';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-
+import Checkbox from '@mui/material/Checkbox';
 import { useMsal } from "@azure/msal-react";
 import { ButtonGroup, Button, ToggleButton, ToggleButtonGroup } from "react-bootstrap";
 import { b2cPolicies, deployment, loginRequest } from "./authConfig";
@@ -231,15 +234,63 @@ export const Tenant = () => {
         fetchRoleFeatures();
       }, []);
     
-  const columns = [
-    { field: 'roleName', headerName: 'Role Name', flex: 1 },
-    { field: 'applicationFeatureName', headerName: 'Feature Name', flex: 1 },
-    { field: 'hasReadAccess', headerName: 'Read Access', flex: 1 },
-    { field: 'hasWriteAccess', headerName: 'Write Access', flex: 1 },
-    { field: 'hasUpdateAccess', headerName: 'Update Access', flex: 1 },
-    { field: 'hasDeleteAccess', headerName: 'Delete Access', flex: 1 },
-  ];
-
+      const columns = [
+        { field: 'roleName', headerName: 'Role Name', flex: 1 },
+        { field: 'applicationFeatureName', headerName: 'Feature Name', flex: 1 },
+        {
+          field: 'hasWriteAccess',
+          headerName: 'Create',
+          flex: 1,
+          renderCell: (params) => {
+            return (
+              <Checkbox
+                checked={params.value}
+               
+              />
+            );
+          },
+        },
+        {
+          field: 'hasReadAccess',
+          headerName: 'Read',
+          flex: 1,
+          renderCell: (params) => {
+            return (
+              <Checkbox
+                checked={params.value}
+              
+              />
+            );
+          },
+        },
+        {
+          field: 'hasUpdateAccess',
+          headerName: 'Update',
+          flex: 1,
+          renderCell: (params) => {
+            return (
+              <Checkbox
+                checked={params.value}
+               
+              />
+            );
+          },
+        },
+        {
+          field: 'hasDeleteAccess',
+          headerName: 'Delete',
+          flex: 1,
+          renderCell: (params) => {
+            return (
+              <Checkbox
+                checked={params.value}
+               
+              />
+            );
+          },
+        },
+      ];
+      
   // Transform the data to match the structure for the TreeView
   const transformedData = roleFeatures.map((item) => ({
     id: item.applicationFeatureRoleAccessId,
@@ -250,6 +301,28 @@ export const Tenant = () => {
     hasUpdateAccess: item.hasUpdateAccess,
     hasDeleteAccess: item.hasDeleteAccess,
   }));
+    const [searchQuery, setSearchQuery] = useState('');
+  const [filteredData, setFilteredData] = useState([]);
+
+  // Your data source (transformedData) and columns should already be defined.
+
+  // Function to handle changes in the search input
+  const handleSearchInputChange = (event) => {
+    const query = event.target.value;
+    setSearchQuery(query);
+
+    // Filter the data based on the search query
+    const filteredResults = transformedData.filter((item) => {
+        // Implement your filtering logic here
+        // For example, you can check if the item's roleName or applicationFeatureName contains the search query
+        return (
+          item.roleName.toLowerCase().includes(query.toLowerCase()) 
+        
+        );
+      });
+
+    setFilteredData(filteredResults);
+  };
   const roleNames = Array.from(new Set(transformedData.map((item) => item.roleName)));
 
 
@@ -644,15 +717,41 @@ export const Tenant = () => {
    >
    </TreeView>
  )}
+ 
+<div style={{marginTop:'15px'}} >
+      <TextField
+        label="Filter by Role"
+        variant="outlined"
+        value={searchQuery}
+        onChange={handleSearchInputChange}
+        sx={{
+            "& .MuiInputBase-root": {
+                height: 50
+            }
+        }}
+      />
+      <button type="button" class="btn btn-primary float-right saveButtonLeft">Save</button>
 
- {value === 3 && (
-   <DataGrid
-     rows={transformedData}
-     columns={columns}
-     pageSize={10}
-     rowsPerPageOptions={[10, 25, 50]}
-   />
- )}
+      {value === 3 && (
+        
+        <div style={{ height: 650, width: '94%', marginTop: '15px' }}>
+            
+          <DataGrid
+            rows={filteredData.length > 0 ? filteredData : transformedData}
+            
+            columns={columns}
+            hideFooterPagination
+    hideFooterSelectedRowCount // Set pagination prop to false to hide pagination
+    disableColumnSelector
+
+          />
+        </div>
+        
+      )}
+      
+     
+    </div>
+
 </div>
 </div> 
 )}
