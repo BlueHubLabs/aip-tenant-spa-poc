@@ -1,39 +1,585 @@
-/*
- * Copyright (c) Microsoft Corporation. All rights reserved.
- * Licensed under the MIT License.
- */
 import React, { useState } from "react";
 
 import axios from 'axios';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import AIPDataGrid from './AIPDataGrid';
+import { DataGrid } from "@mui/x-data-grid";
+import jsonData from './tenant.json';
+import TreeView from '@mui/lab/TreeView';
+import TreeItem from '@mui/lab/TreeItem';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 
 import { useMsal } from "@azure/msal-react";
-
-import { ButtonGroup, Button, Table, ToggleButton, ToggleButtonGroup } from "react-bootstrap";
-
-import { b2cPolicies, deployment } from "./authConfig";
+import { ButtonGroup, Button, ToggleButton, ToggleButtonGroup } from "react-bootstrap";
+import { b2cPolicies, deployment, loginRequest } from "./authConfig";
 import { useEffect } from "react";
+import ActionButton from '@mui/material/Button';
+import ControlPointOutlinedIcon from '@mui/icons-material/ControlPointOutlined';
+import './tenant.css';
+import ArrowDropDownOutlinedIcon from '@mui/icons-material/ArrowDropDownOutlined';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+import Spinner from "./spinner";
+import { Padding } from "@mui/icons-material";
+
+
+
+
+
+  
+    
+
+const membersData = [
+    {
+        userName: 'User1',
+        role: 'Fund Manager',
+        invited: true
+    },
+    {
+        userName: 'User2',
+        role: 'Fund Manager',
+        invited: true
+    },
+    {
+        userName: 'User3',
+        role: 'Fund Manager',
+        invited: false
+    },
+    {
+        userName: 'User4',
+        role: 'Fund Manager',
+        invited: true
+    }
+]
 
 export const Tenant = () => {
-    const [nowShowing, setState] = useState("claims");
     const { instance, accounts } = useMsal();
-    let options = [["claims", "Claims"], ["members", "Members"], ["invitation", "New"], ["myurl", "My url"]].filter(role).map((v) =>
-        <Button key={v[0]} onClick={() => setState(v[0])}>{v[1]}</Button>
-    );
-    function role(option) {
-        if (option[0] === "invitation")
-            if (accounts[0].idTokenClaims.roles.includes("Tenant.admin")) return true; else return false;
-        //if(option[0] === "myurl")
-        //    if (accounts[0].idTokenClaims.idp != 'local') return true; else return false;            
-        return true;
+    const [loading, setLoading] = useState(true);
+
+    const [membersData, setMembers] = useState([]);
+    const [isInvite, setIsInvite] = useState(false);
+    const [value, setValue] = useState(0);
+
+    const handleChange = (event, newValue) => {
+        setValue(newValue);
+    };
+    
+    useEffect(()=>{
+        if(accounts && accounts.length && accounts[0].idTokenClaims){
+            setLoading(false);
+        } else{
+            setLoading(true);
+        }
+    }, [accounts[0].idTokenClaims]);
+
+    // const handleUsersTabClick = async () => {
+    //     // ...
+    //   };
+
+    const [data1, setData1] = useState();
+    const [data2, setData2] = useState();
+    const [data3, setData3] = useState();
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+      const fetchData = async () => {
+        try {
+            const response = await fetch("https://aipbackend.azurewebsites.net/v1/UserRole/GetTenantRoles?tenantID=5ab53943-aada-4db9-9f1f-616ed567396a");
+            if (!response.ok) {
+              throw new Error('Network response was not ok');
+            }
+            else{
+            const json = await response.json();
+            console.log(json);
+            setData1(json);
+            setIsLoading(false);
+            }
+          } catch (error) {
+            console.error('Error fetching data:', error);
+            setIsLoading(false);
+          }
+        
+      };
+  
+      fetchData();
+    }, []);
+
+    const UserRowsData = data1 ? data1.map(user=> ({
+
+        id: user.roleId,
+    
+        "ROLENAME": user.roleName,
+    
+        "DESCRIPTION": user.description,
+    
+       
+     
+    
+      })) : [];
+
+
+      useEffect(() => {
+        const fetchFeatureData = async () => {
+          try {
+              const response = await fetch("https://aipbackend.azurewebsites.net/v1/UserRole/GetTenantFeatures?tenantID=5ab53943-aada-4db9-9f1f-616ed567396a");
+              if (!response.ok) {
+                throw new Error('Network response was not ok');
+              }
+              else{
+              const json = await response.json();
+              console.log(json);
+              setData2(json);
+              setIsLoading(false);
+              }
+            } catch (error) {
+              console.error('Error fetching data:', error);
+              setIsLoading(false);
+            }
+          
+        };
+    
+        fetchFeatureData();
+      }, []);
+
+      const FeatureRowsData = data2 ? data2.map(user=> ({
+
+        // id: user.sortOrder,
+    id:user.applicationFeatureId,
+        "TITLE": user.title,
+    
+        
+    
+       
+     
+    
+      })) : [];
+
+      useEffect(() => {
+        const fetchFeatureData = async () => {
+          try {
+              const response = await fetch("https://aipbackend.azurewebsites.net/v1/UserRole/GetTenantUserDetails?tenantID=5ab53943-aada-4db9-9f1f-616ed567396a");
+              if (!response.ok) {
+                throw new Error('Network response was not ok');
+              }
+              else{
+              const json = await response.json();
+              console.log(json);
+              setData3(json);
+              setIsLoading(false);
+              }
+            } catch (error) {
+              console.error('Error fetching data:', error);
+              setIsLoading(false);
+            }
+          
+        };
+    
+        fetchFeatureData();
+      }, []);
+
+      const UsersRowsData = data3 ? data3.map(user=> ({
+
+        // id: user.sortOrder,
+        id:user.userId,
+        "USERNAME": user.userFullName,
+        "ROLENAME" : user.userRoleName,
+        "EMAILADDRESS": user.userEmailAddress,
+    
+        
+    
+       
+     
+    
+      })) : [];
+
+      const [roleFeatures, setRoleFeatures] = useState([]); // Initialize with an empty array
+
+      useEffect(() => {
+        const fetchRoleFeatures = async () => {
+          try {
+            const response = await fetch("https://aipbackend.azurewebsites.net/v1/UserRole/GetTenantRoleFeatures?tenantID=5ab53943-aada-4db9-9f1f-616ed567396a");
+            if (!response.ok) {
+              throw new Error('Network response was not ok');
+            } else {
+              const json = await response.json();
+              console.log(json);
+              console.log("rolefeatures");
+              setRoleFeatures(json); // Set the state with the fetched data
+            }
+          } catch (error) {
+            console.error('Error fetching data:', error);
+            setIsLoading(false);
+          }
+        };
+      
+        fetchRoleFeatures();
+      }, []);
+    
+  const columns = [
+    { field: 'roleName', headerName: 'Role Name', flex: 1 },
+    { field: 'applicationFeatureName', headerName: 'Feature Name', flex: 1 },
+    { field: 'hasReadAccess', headerName: 'Read Access', flex: 1 },
+    { field: 'hasWriteAccess', headerName: 'Write Access', flex: 1 },
+    { field: 'hasUpdateAccess', headerName: 'Update Access', flex: 1 },
+    { field: 'hasDeleteAccess', headerName: 'Delete Access', flex: 1 },
+  ];
+
+  // Transform the data to match the structure for the TreeView
+  const transformedData = roleFeatures.map((item) => ({
+    id: item.applicationFeatureRoleAccessId,
+    roleName: item.roleName,
+    applicationFeatureName: item.applicationFeatureName,
+    hasReadAccess: item.hasReadAccess,
+    hasWriteAccess: item.hasWriteAccess,
+    hasUpdateAccess: item.hasUpdateAccess,
+    hasDeleteAccess: item.hasDeleteAccess,
+  }));
+  const roleNames = Array.from(new Set(transformedData.map((item) => item.roleName)));
+
+  
+    const handleSwitchTenant = (tenant) =>{
+        setLoading(true);
+        instance.loginRedirect({ 
+            authority:b2cPolicies.authorities.signIn.authority,
+            scopes: ["openid", "profile", `https://${deployment.b2cTenantName}.onmicrosoft.com/mtrest/User.Invite`, `https://${deployment.b2cTenantName}.onmicrosoft.com/mtrest/User.ReadAll`],                    
+            account: accounts[0],
+            extraQueryParameters: { tenant: tenant }
+        }).then(()=>getMemberAccessToken());
     }
+
+    const getMembers = (accessToken) => {
+        console.log("Starting getMembers");
+        axios.get(
+            `${deployment.restUrl}tenant/oauth2/members`,
+            { headers: { 'Authorization': `Bearer ${accessToken}` } }
+        )
+            .then(response => {
+                console.log(`${response.data} members received`);
+                setMembers(response.data)
+            })
+            .catch(error => console.log(error));
+    }
+
+    const getMemberAccessToken = () => {
+        let request = {
+            authority: `https://${deployment.b2cTenantName}.b2clogin.com/${deployment.b2cTenantId}/${accounts[0].idTokenClaims.acr}`,
+            scopes: ["openid", "profile", `https://${deployment.b2cTenantName}.onmicrosoft.com/mtrest/User.Invite`, `https://${deployment.b2cTenantName}.onmicrosoft.com/mtrest/User.ReadAll`],
+            account: accounts[0],
+            extraQueryParameters: { tenant: accounts[0].idTokenClaims.appTenantName }
+        };
+        instance.acquireTokenSilent(request).then(function (accessTokenResponse) {
+            getMembers(accessTokenResponse.accessToken);
+        }).catch(function (error) {
+            if (error instanceof InteractionRequiredAuthError) {
+                instance.acquireTokenPopup(request).then(function (accessTokenResponse) {
+                    getMembers(accessTokenResponse.accessToken);
+                }).catch(function (error) {
+                    console.log(error);
+                });
+            }
+            console.log(error);
+        });
+    }
+
+    useEffect(()=>{
+        getMemberAccessToken();
+    },[]);
+    // const [tab1Content, setTab1Content] = useState(null);
+    const [usersTabContent, setUsersTabContent] = useState(null);
+    
+    const loadUsersTabContent = async () => {
+        try {
+            const dummyData = "This is the content for the USERS tab.";
+            setUsersTabContent(dummyData);
+          } catch (error) {
+            console.error('Error loading content for USERS tab:', error);
+          }
+        };
+
+     const handleUsersTabClick = () => {
+            loadUsersTabContent();
+          };
+
+    // const loadTab1Content = async () => {
+    //     try {
+    //       // Fetch and set content for Tab 1
+    //       const response = await fetch('your-api-endpoint-for-tab1-content');
+    //       const data = await response.json();
+    //       setTab1Content(data);
+    //     } catch (error) {
+    //       console.error('Error loading content for Tab 1:', error);
+    //     }
+    //   };
+
+    const handleTabChange = (event, newValue) => {
+        setValue(newValue);
+      };
+
+   
     return (
-        <>
-            <div>
-                <ButtonGroup className="mb-2">
-                    {options}
-                </ButtonGroup>
+        <> 
+        {!isInvite && <>
+       
+            
+        <div className="tenantsInfoWrapperParent">
+            <div className="tenantsInfoWrapper">
+                <div className="tenantListCont">
+                    <div>
+                        <div className="tabsContainer" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+                            <Tabs>
+                                <Tab label="List of Tenants"  />
+                            </Tabs>
+                        </div>
+                    </div>
+                        {!loading && 
+                            <div className="tenantsWrapper">{accounts[0].idTokenClaims.allTenants.map( tenant=>(
+                                <div 
+                                    className={`tenantItem ${(accounts[0].idTokenClaims.appTenantName === tenant) && 'selectedTenant'}`}
+                                    onClick={() => handleSwitchTenant(tenant)}>{tenant}</div>
+                                ))}
+                            </div>}
+                </div>
             </div>
-            {nowShowing === "claims" ?
+            <div className="tenantsInfoWrapperContent">
+                <div className="memberTableWrapper">
+                {value === 0 && (
+        <div >
+            <div className="tabsContainer" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+                <Tabs value={value} onChange={handleTabChange}>
+                    <Tab label="USERS" className="tabLabel"    />
+                    <Tab label="ROLES" className="tabLabel"    />
+                    <Tab label="FEATURES" className="tabLabel" />
+                    <Tab label="ROLE FEATURES" className="tabLabel"  />
+                </Tabs>
+            </div>
+            <div className="divContent" >
+            <div className="divContentHeaderHolder">
+                {/* <div  style={{ marginRight: '10px', marginLeft:'Auto' }}> */}
+                    <h2 style={{ fontSize: "20px", margin: " 5px" }}>Users</h2>
+                    <div  style={{ marginRight: '10px', marginLeft:'Auto' }}>
+                    {/* <div style={{ marginLeft: 'auto' }}> */}
+                        <ActionButton
+                                    variant="outlined"
+                                    startIcon={<ControlPointOutlinedIcon />}
+                                    sx={{
+                                        // margin: '0px 10px',
+                                        color: '#0A1A27',
+                                        border: '1px solid #0A1A27',
+                                    
+                                    }}
+                                    onClick={()=>
+                                        instance.loginRedirect({ 
+                                            authority:b2cPolicies.authorities.newTenant.authority,
+                                            scopes: loginRequest.scopes                           
+                                        }).catch((error) => console.log(error))}
+                                    >ADD USERS
+                        </ActionButton>
+                    {/* </div> */}
+                </div>
+                </div>
+            <AIPDataGrid onRowsSelectionHandler={() => { }} columns={jsonData.UsersColumns} rows={UsersRowsData} />
+            {/* You can render your table component here */}
+          </div>
+        </div>
+      )}
+      {value === 1 && (
+        <div>
+         <div className="tabsContainer" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+                <Tabs value={value} onChange={handleTabChange}>
+                    <Tab label="USERS" className="tabLabel"    />
+                    <Tab label="ROLES" className="tabLabel"    />
+                    <Tab label="FEATURES" className="tabLabel" />
+                    <Tab label="ROLE FEATURES" className="tabLabel"  />
+                </Tabs>
+            </div>
+            <div className="divContent" > 
+          <div className="divContentHeaderHolder">
+          <h2 style={{ fontSize: "20px", marginBottom: "10px" }}>Roles</h2>
+          <div style={{ marginRight: '10px', marginLeft:'Auto' }}>
+          <ActionButton
+                    variant="outlined"
+                    startIcon={<ControlPointOutlinedIcon />}
+                    sx={{
+                        // margin: '0px 10px',
+                        color: '#0A1A27',
+                        border: '1px solid #0A1A27',
+                      
+                    }}
+                    onClick={()=>
+                        instance.loginRedirect({ 
+                            authority:b2cPolicies.authorities.newTenant.authority,
+                            scopes: loginRequest.scopes                           
+                        }).catch((error) => console.log(error))}
+                    >ADD ROLES</ActionButton></div></div>
+         
+          <AIPDataGrid onRowsSelectionHandler={() => { }} columns={jsonData.UserColumns} rows={UserRowsData} />
+          {/* You can render your table component here */}
+        </div>
+        </div>
+      )}
+                
+         
+              
+       {value === 2 && (
+        <div>
+         <div className="tabsContainer" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+                <Tabs value={value} onChange={handleTabChange}>
+                    <Tab label="USERS" className="tabLabel"    />
+                    <Tab label="ROLES" className="tabLabel"    />
+                    <Tab label="FEATURES" className="tabLabel" />
+                    <Tab label="ROLE FEATURES" className="tabLabel"  />
+                </Tabs>
+            </div>
+            <div className="divContent" > 
+          <div className="divContentHeaderHolder">
+          <h2 style={{ fontSize: "20px", marginBottom: "10px" }}>Features</h2>
+          <div style={{ marginRight: '10px', marginLeft:'Auto' }}>
+          <ActionButton
+                    variant="outlined"
+                    startIcon={<ControlPointOutlinedIcon />}
+                    sx={{
+                        // margin: '0px 10px',
+                        color: '#0A1A27',
+                        border: '1px solid #0A1A27',
+                      
+                    }}
+                    onClick={()=>
+                        instance.loginRedirect({ 
+                            authority:b2cPolicies.authorities.newTenant.authority,
+                            scopes: loginRequest.scopes                           
+                        }).catch((error) => console.log(error))}
+                    >ADD FEATURES</ActionButton></div></div>
+          <AIPDataGrid onRowsSelectionHandler={() => { }} columns={jsonData.FeatureColumns} rows={FeatureRowsData} />
+          {/* You can render your table component here */}
+        </div>
+        </div>
+      )}
+{value === 3 && (
+ <div>
+   <div className="tabsContainer" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+                <Tabs value={value} onChange={handleTabChange}>
+                    <Tab label="USERS" className="tabLabel"    />
+                    <Tab label="ROLES" className="tabLabel"    />
+                    <Tab label="FEATURES" className="tabLabel" />
+                    <Tab label="ROLE FEATURES" className="tabLabel"  />
+                </Tabs>
+            </div>
+            <div className="divContent" > 
+          <div className="divContentHeaderHolder">
+          <h2 style={{ fontSize: "20px", marginBottom: "10px" }}>Role Features</h2>
+          <div style={{ marginRight: '10px', marginLeft:'Auto' }}>
+          <ActionButton
+                    variant="outlined"
+                    startIcon={<ControlPointOutlinedIcon />}
+                    sx={{
+                        // margin: '0px 10px',
+                        color: '#0A1A27',
+                        border: '1px solid #0A1A27',
+                      
+                    }}
+                    onClick={()=>
+                        instance.loginRedirect({ 
+                            authority:b2cPolicies.authorities.newTenant.authority,
+                            scopes: loginRequest.scopes                           
+                        }).catch((error) => console.log(error))}
+                    >ADD Role FEATURES</ActionButton></div></div> 
+ {value === 3 && (
+   <TreeView
+     defaultCollapseIcon={<ExpandMoreIcon />}
+     defaultExpandIcon={<ChevronRightIcon />}
+   >
+   </TreeView>
+ )}
+
+ {value === 3 && (
+   <DataGrid
+     rows={transformedData}
+     columns={columns}
+     pageSize={10}
+     rowsPerPageOptions={[10, 25, 50]}
+   />
+ )}
+</div>
+</div> 
+)}
+
+      
+                {/* <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                <ActionButton
+                    variant="outlined"
+                    startIcon={<ControlPointOutlinedIcon />}
+                    sx={{
+                        margin: '0px 10px',
+                        color: '#0A1A27',
+                        border: '1px solid #0A1A27'
+                    }}
+                    onClick={()=> setIsInvite(true)}
+                    >ADD NEW GROUP</ActionButton> </div> */}
+              {/* <h2 style={{ fontSize: "20px", marginBottom: "10px" }}>Roles</h2> */}
+              {/* <Table>
+                  <thead>
+                      <tr key="ix">
+                          <th style={{paddingLeft: "8px"}}><span>ROLE</span><ArrowDropDownOutlinedIcon /></th>
+                          <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>FEATURE</span><ArrowDropDownOutlinedIcon /></th>
+                          <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>CREATE</span></th>
+                          <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>READ</span></th>
+                          <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>UPDATE</span></th>
+                          <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>DELETE</span></th>
+                          <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>ACTION</span></th>
+                          <th></th>
+                      </tr>
+                  </thead>     */}
+                 {/* <tbody>
+                      {   membersData.length ?
+                          membersData.map(member=>(
+                              <><tr className="memberRowData">
+                                  {/* <td style={{paddingLeft: "8px"}}>{member.name}</td> */}
+                                  {/* <td>{member.roles[0] === "Tenant.admin" ? 'Fund Manager' : 'Investor'}</td>
+                                  <td>{member.roles[0] === "Tenant.admin" ? '' : 'Service, Fund, Subscription'}</td>
+                                  <td>{member.roles[0] === "Tenant.admin" ? '' : <input type="checkbox" />}</td>
+                                  <td>{member.roles[0] === "Tenant.admin" ? '' : <input type="checkbox" />}</td>
+                                  <td>{member.roles[0] === "Tenant.admin" ? '' : <input type="checkbox" />}</td>
+                                  <td>{member.roles[0] === "Tenant.admin" ? '' : <input type="checkbox" />}</td>
+                                  <td>{member.roles[0] === "Tenant.admin" ? '' : <a href="/edit">Edit</a>}</td> */}
+                                  {/* <td>Yes</td> */}
+                                  {/* <td align="right"><ActionButton>ASSIGN ROLES</ActionButton></td>
+                              </tr>
+                              </>
+                          )):<div>No members to display</div>
+                      } */}
+                                                                                                                           
+                  {/* </tbody>                                 *} */}
+              {/* </Table> */}
+              </div>    
+            
+            </div> </div></> }
+           {/*  <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+            <ActionButton
+                    variant="outlined"
+                    startIcon={<ControlPointOutlinedIcon />}
+                    sx={{
+                        margin: '0px 10px',
+                        color: '#0A1A27',
+                        border: '1px solid #0A1A27'
+                    }}
+                    onClick={()=>
+                        instance.loginRedirect({ 
+                            authority:b2cPolicies.authorities.newTenant.authority,
+                            scopes: loginRequest.scopes                           
+                        }).catch((error) => console.log(error))}
+                    >ADD NEW GROUP</ActionButton></div> */}
+              {/*   <div style={{ display: 'flex', justifyContent: 'flex-end' }}> */}
+           
+                {/* </div>  */} 
+            {isInvite && <InviteMember />}
+            {/* {nowShowing === "claims" ?
                 <IdTokenContent />
                 : (nowShowing === "members") ?
                     <Members instance={instance} account={accounts[0]} />
@@ -41,21 +587,27 @@ export const Tenant = () => {
                         <InviteMember />
                         :
                         <MyUrl domain_hint={accounts[0].idTokenClaims.idp} login_hint={accounts[0].idTokenClaims.email ?? accounts[0].idTokenClaims.signInName} tenant={accounts[0].idTokenClaims.appTenantName} />
-            }
+            } */}
+              
+            {loading && <div className="spinnerWrapper"><Spinner/></div>}
         </>
     );
-}
-
-const IdTokenContent = () => {
-    const { accounts } = useMsal();
-    const [idTokenClaims, setIdTokenClaims] = useState(accounts[0].idTokenClaims);
-    return (
-        <>
-            <IdTokenClaims idTokenClaims={idTokenClaims} />
-        </>
-    );
+     
 };
+<div className="memberTableWrapper">
+                {/* <h2 style={{ fontSize: "20px", marginBottom: "10px" }}>Users</h2> */}
+                <Table>
+                    <thead>
+                        <tr key="ix">
+                            <th style={{paddingLeft: "8px"}}><span>USERNAME</span><ArrowDropDownOutlinedIcon /></th>
+                            <th><span>ROLE</span><ArrowDropDownOutlinedIcon /></th>
+                            <th><span>INVITED</span><ArrowDropDownOutlinedIcon /></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                </Table>
 
+</div>
 const IdTokenClaims = (props) => {  
     return (
         <>
@@ -115,7 +667,7 @@ const InviteMember = () => {
                     checked={isAdmin}
                     value="0"
                     onChange={(e) => { setIsAdmin(e.currentTarget.checked); setInvitation(""); }} >
-                    Is co-admin?
+                    Is fund manager?
                 </ToggleButton>
                 <br />
                 <div><Button onClick={() => {
@@ -288,4 +840,3 @@ const MyUrl = (props) => {
         </>
     )
 }
-

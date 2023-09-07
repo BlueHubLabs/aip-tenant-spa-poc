@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import { PublicClientApplication } from "@azure/msal-browser";
 
 import App from "./App.jsx";
-import { msalConfig } from "./authConfig";
+import { msalConfig } from "./authConfig.js";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./styles/index.css";

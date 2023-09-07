@@ -1,0 +1,59 @@
+.navbarBrandHeaderWrapper{
+    margin: 8px 0px;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+.navbarBrandHeader{
+    display: flex;
+    align-items: center;
+}
+
+.managementTitle{
+    padding: 50px 0px;
+}
+
+.headerBrandName{
+    font-size: 14px;
+    font-weight: 500;
+}
+.userInfoWrapper{
+    display: flex;
+}
+.iconWrapper{
+    margin-right: 5px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+.infoCont{
+    position: absolute;
+    top: 70px;
+    right: 10px;
+    border-radius: 4px;
+    background-color: white;
+    width: 250px;
+    padding: 20px 10px;
+    z-index: 9;
+    box-shadow: 0px 3px 6px #00000029;
+}
+.signedInEmail{
+    font-size: x-small;
+    color: #0A1A27;
+    opacity: 0.6;
+}
+.infoCont hr{
+    background: #EAF0F7;
+    height: 2px;
+    border: none;
+}
+.usermManagementContent{
+    background-color: #EAF0F7;
+    height: calc(200vh - 67px);
+}
+.spinnerWrapper{
+    position: absolute;
+    width: 100%;
+    top: 0;
+    left: 0;
+}
