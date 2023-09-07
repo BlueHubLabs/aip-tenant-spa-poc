@@ -24,7 +24,7 @@
     "react-router-dom": "^6.15.0"
   },
   "devDependencies": {
-    "react-scripts": "4.0.1"
+    "react-scripts": "^4.0.1"
   },
   "scripts": {
     "start": "react-scripts --openssl-legacy-provider start",
