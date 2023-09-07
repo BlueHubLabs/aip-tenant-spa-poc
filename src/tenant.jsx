@@ -91,10 +91,22 @@ export const Tenant = () => {
     const [data3, setData3] = useState();
     const [isLoading, setIsLoading] = useState(true);
 
+   const [tenant, setTenant] =  useState("5ab53943-aada-4db9-9f1f-616ed567396a");
+   const handleSwitchTenant = (tenant) =>{
+       setTenant(tenant);
+       setLoading(true);
+       instance.loginRedirect({ 
+           authority:b2cPolicies.authorities.signIn.authority,
+           scopes: ["openid", "profile", `https://${deployment.b2cTenantName}.onmicrosoft.com/mtrest/User.Invite`, `https://${deployment.b2cTenantName}.onmicrosoft.com/mtrest/User.ReadAll`],                    
+           account: accounts[0],
+           extraQueryParameters: { tenant: tenant }
+       }).then(()=>getMemberAccessToken());
+   }
+
     useEffect(() => {
       const fetchData = async () => {
         try {
-            const response = await fetch("https://aipbackend.azurewebsites.net/v1/UserRole/GetTenantRoles?tenantID=5ab53943-aada-4db9-9f1f-616ed567396a");
+            const response = await fetch(`https://aipbackend.azurewebsites.net/v1/UserRole/GetTenantRoles?tenantID=${tenant}`);
             if (!response.ok) {
               throw new Error('Network response was not ok');
             }
@@ -131,7 +143,7 @@ export const Tenant = () => {
       useEffect(() => {
         const fetchFeatureData = async () => {
           try {
-              const response = await fetch("https://aipbackend.azurewebsites.net/v1/UserRole/GetTenantFeatures?tenantID=5ab53943-aada-4db9-9f1f-616ed567396a");
+              const response = await fetch(`https://aipbackend.azurewebsites.net/v1/UserRole/GetTenantFeatures?tenantID=${tenant}`);
               if (!response.ok) {
                 throw new Error('Network response was not ok');
               }
@@ -167,7 +179,7 @@ export const Tenant = () => {
       useEffect(() => {
         const fetchFeatureData = async () => {
           try {
-              const response = await fetch("https://aipbackend.azurewebsites.net/v1/UserRole/GetTenantUserDetails?tenantID=5ab53943-aada-4db9-9f1f-616ed567396a");
+              const response = await fetch(`https://aipbackend.azurewebsites.net/v1/UserRole/GetTenantUserDetails?tenantID=${tenant}`);
               if (!response.ok) {
                 throw new Error('Network response was not ok');
               }
@@ -207,7 +219,7 @@ export const Tenant = () => {
       useEffect(() => {
         const fetchRoleFeatures = async () => {
           try {
-            const response = await fetch("https://aipbackend.azurewebsites.net/v1/UserRole/GetTenantRoleFeatures?tenantID=5ab53943-aada-4db9-9f1f-616ed567396a");
+            const response = await fetch(`https://aipbackend.azurewebsites.net/v1/UserRole/GetTenantRoleFeatures?tenantID=${tenant}`);
             if (!response.ok) {
               throw new Error('Network response was not ok');
             } else {
@@ -316,16 +328,6 @@ export const Tenant = () => {
   };
   const roleNames = Array.from(new Set(transformedData.map((item) => item.roleName)));
 
-  
-    const handleSwitchTenant = (tenant) =>{
-        setLoading(true);
-        instance.loginRedirect({ 
-            authority:b2cPolicies.authorities.signIn.authority,
-            scopes: ["openid", "profile", `https://${deployment.b2cTenantName}.onmicrosoft.com/mtrest/User.Invite`, `https://${deployment.b2cTenantName}.onmicrosoft.com/mtrest/User.ReadAll`],                    
-            account: accounts[0],
-            extraQueryParameters: { tenant: tenant }
-        }).then(()=>getMemberAccessToken());
-    }
 
     const getMembers = (accessToken) => {
         console.log("Starting getMembers");
