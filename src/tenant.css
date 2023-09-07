@@ -208,3 +208,6 @@ td:last-child{
     margin-right: 8px; /* Add some spacing between the icon and label */
   }
   
+  .saveButtonLeft{
+    margin-right: 70px;
+  }
