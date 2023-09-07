@@ -27,6 +27,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Spinner from "./spinner";
+import { Padding } from "@mui/icons-material";
 
 
 
@@ -324,187 +325,103 @@ export const Tenant = () => {
    
     return (
         <> 
-          
-           
+        {!isInvite && <>
        
             
-            
-         
-            {!isInvite && <>
-            {/* <div className="addActionsWrapper"> */}
-       
+        <div className="tenantsInfoWrapperParent">
+            <div className="tenantsInfoWrapper">
+                <div className="tenantListCont">
+                    <div>
+                        <div className="tabsContainer" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+                            <Tabs>
+                                <Tab label="List of Tenants"  />
+                            </Tabs>
+                        </div>
+                    </div>
+                        {!loading && 
+                            <div className="tenantsWrapper">{accounts[0].idTokenClaims.allTenants.map( tenant=>(
+                                <div 
+                                    className={`tenantItem ${(accounts[0].idTokenClaims.appTenantName === tenant) && 'selectedTenant'}`}
+                                    onClick={() => handleSwitchTenant(tenant)}>{tenant}</div>
+                                ))}
+                            </div>}
+                </div>
+            </div>
+            <div className="tenantsInfoWrapperContent">
+                <div className="memberTableWrapper">
+                {value === 0 && (
+        <div >
             <div className="tabsContainer" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
-            <Tabs value={value} onChange={handleTabChange}   >
-        {/* Define your tab labels here */}
-        
-        
-
-
-        
-        <Tab label="USERS" className="tabLabel"  style={{ marginRight: '120px' }}/>
-        <Tab label="ROLES" className="tabLabel" style={{ marginRight: '120px' }}/>
-        <Tab label="FEATURES" className="tabLabel" style={{ marginRight: '120px' }} />
-        <Tab label="ROLE FEATURES" className="tabLabel"  />
-
-      </Tabs>
-      
-      
-     
-     
-                 {/* <Tab
-                    className={`tabItem ${value === 0 ? 'active' : ''}`}
-                    label={
-                        <div className="tabLabelContainer" onClick={handleUsersTabClick}>
-                            
-                            <img src="https://www.thesslstore.com/blog/wp-content/uploads/2017/05/circle-with-i-1.png" alt="Icon" className="tabIcon" />
-                            <span>USERS</span>
-                            
-                            </div>
-                         
-                         }
-                         
-                        
-                    onClick={() => handleChange(null, 0)}
-                /> */}
-                
-                {/* <AIPDataGrid onRowsSelectionHandler={() => { }} columns={jsonData.UserColumns} rows={jsonData.UserRows} /> */}
-                {/* <Tab
-                    className={`tabItem ${value === 1 ? 'active' : ''}`}
-                    label={
-                        <div className="tabLabelContainer">
-                            <img src="https://www.nicepng.com/png/detail/423-4238489_rep…rrow-chart-business-graph-stock-data-comments.png" alt="Icon" className="tabIcon" />
-                            <span>ROLES</span>
-                        </div>
-                    }
-                    onClick={() => handleChange(null, 1)}
-                /> */}
-                {/* <Tab
-                    className={`tabItem ${value === 2 ? 'active' : ''}`}
-                    label={
-                        <div className="tabLabelContainer">
-                            <img src="https://cdn-icons-png.flaticon.com/512/5431/5431304.png" alt="Icon" className="tabIcon" />
-                            <span>FEATURES</span>
-                        </div>
-                    }
-                    onClick={() => handleChange(null, 2)}
-                /> */}
-                 
-                 </div>
-                 {/* {value === 0 && tab1Content && ( */}
-  {/* <div>
-    <h2>Tab 1 Content</h2>
-    <AIPDataGrid onRowsSelectionHandler={() => { }} columns={jsonData.UserColumns} rows={jsonData.UserRows} />
-
-  </div>
-)} */}
-                
-                 
-                {/* <Tab className={`tabItem ${value === 0 ? 'active' : ''}`} label="USERS" onClick={() => handleChange(null, 0)} />
-                <Tab className={`tabItem ${value === 1 ? 'active' : ''}`} label="ROLES" onClick={() => handleChange(null, 1)} />
-                <Tab className={`tabItem ${value === 2 ? 'active' : ''}`} label="FEATURES" onClick={() => handleChange(null, 2)} /> */}
-            
-            {/* <div className="tabsContainer">
-                <Tabs value={value} onChange={handleChange} centered>
-                    <Tab className="tabItem" label="USERS" />
-                    <Tab className="tabItem" label="ROLES" />
-                    <Tab className="tabItem" label="FEATURES" />
+                <Tabs value={value} onChange={handleTabChange}>
+                    <Tab label="USERS" className="tabLabel"    />
+                    <Tab label="ROLES" className="tabLabel"    />
+                    <Tab label="FEATURES" className="tabLabel" />
+                    <Tab label="ROLE FEATURES" className="tabLabel"  />
                 </Tabs>
-            </div> */}
-                {/* <ActionButton
+            </div>
+            <div className="divContent" >
+            <div className="divContentHeaderHolder">
+                {/* <div  style={{ marginRight: '10px', marginLeft:'Auto' }}> */}
+                    <h2 style={{ fontSize: "20px", margin: " 5px" }}>Users</h2>
+                    <div  style={{ marginRight: '10px', marginLeft:'Auto' }}>
+                    {/* <div style={{ marginLeft: 'auto' }}> */}
+                        <ActionButton
+                                    variant="outlined"
+                                    startIcon={<ControlPointOutlinedIcon />}
+                                    sx={{
+                                        // margin: '0px 10px',
+                                        color: '#0A1A27',
+                                        border: '1px solid #0A1A27',
+                                    
+                                    }}
+                                    onClick={()=>
+                                        instance.loginRedirect({ 
+                                            authority:b2cPolicies.authorities.newTenant.authority,
+                                            scopes: loginRequest.scopes                           
+                                        }).catch((error) => console.log(error))}
+                                    >ADD USERS
+                        </ActionButton>
+                    {/* </div> */}
+                </div>
+                </div>
+            <AIPDataGrid onRowsSelectionHandler={() => { }} columns={jsonData.UsersColumns} rows={UsersRowsData} />
+            {/* You can render your table component here */}
+          </div>
+        </div>
+      )}
+      {value === 1 && (
+        <div>
+         <div className="tabsContainer" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+                <Tabs value={value} onChange={handleTabChange}>
+                    <Tab label="USERS" className="tabLabel"    />
+                    <Tab label="ROLES" className="tabLabel"    />
+                    <Tab label="FEATURES" className="tabLabel" />
+                    <Tab label="ROLE FEATURES" className="tabLabel"  />
+                </Tabs>
+            </div>
+            <div className="divContent" > 
+          <div className="divContentHeaderHolder">
+          <h2 style={{ fontSize: "20px", marginBottom: "10px" }}>Roles</h2>
+          <div style={{ marginRight: '10px', marginLeft:'Auto' }}>
+          <ActionButton
                     variant="outlined"
                     startIcon={<ControlPointOutlinedIcon />}
                     sx={{
-                        margin: '0px 10px',
+                        // margin: '0px 10px',
                         color: '#0A1A27',
-                        border: '1px solid #0A1A27'
+                        border: '1px solid #0A1A27',
+                      
                     }}
                     onClick={()=>
                         instance.loginRedirect({ 
                             authority:b2cPolicies.authorities.newTenant.authority,
                             scopes: loginRequest.scopes                           
                         }).catch((error) => console.log(error))}
-                    >ADD TENANT</ActionButton> */}
-                {/* <ActionButton
-                    variant="outlined"
-                    startIcon={<ControlPointOutlinedIcon />}
-                    sx={{
-                        margin: '0px 10px',
-                        color: '#0A1A27',
-                        border: '1px solid #0A1A27'
-                    }}
-                    onClick={()=> setIsInvite(true)}
-                    >ADD USER</ActionButton> */}
-            {/* </div> */}
-            <div className="tenantsInfoWrapperParent">
-            <div className="tenantsInfoWrapper">
-                <div className="tenantListCont">
-                    <div className="headerTitle">TENANT LIST</div>
-                    {!loading && <div className="tenantsWrapper">{accounts[0].idTokenClaims.allTenants.map( tenant=>(
-                        <div 
-                            className={`tenantItem ${(accounts[0].idTokenClaims.appTenantName === tenant) && 'selectedTenant'}`}
-                            onClick={() => handleSwitchTenant(tenant)}>{tenant}</div>
-                    ))}</div>}
-                
-                </div>
-                </div>
-                <div className="tenantsInfoWrapperContent">
-               
-
-                <div className="memberTableWrapper">
-               
-                {/* <Tabs value={value} onChange={handleChange} centered>
-                <Tab label="Item One" />
-                <Tab label="Item Two" />
-                <Tab label="Item Three" />
-                </Tabs> */}
-                {/* <h2 style={{ fontSize: "20px", marginBottom: "10px" }}>Users</h2> */}
-                {/* <AIPDataGrid onRowsSelectionHandler={() => { }} columns={jsonData.UserColumns} rows={jsonData.UserRows} /> */}
-                <Table>
-                    {/* <thead>
-                        <tr key="ix">
-                            <th style={{paddingLeft: "8px"}}><span>USERNAME</span><ArrowDropDownOutlinedIcon /></th>
-                            <th><span>ROLE</span><ArrowDropDownOutlinedIcon /></th>
-                            <th><span>ROLE ASSIGNED</span><ArrowDropDownOutlinedIcon /></th>
-                            <th></th>
-                        </tr>
-                    </thead>     */}
-                   <tbody>
-                   {/* <AIPDataGrid onRowsSelectionHandler={() => { }} columns={jsonData.UserColumns} rows={jsonData.UserRows} /> */}
-                        {/* {   membersData.length ?
-                            membersData.map(member=>(
-                                <><tr className="memberRowData">
-                                    <td style={{paddingLeft: "8px"}}>{member.name}</td>
-                                    <td>{member.roles[0] === "Tenant.admin" ? 'Fund Manager' : 'Investor'}</td>
-                                    <td>Yes</td>
-                                    <td align="right"><ActionButton>RESET PASSWORD</ActionButton></td>
-                                </tr>
-                                </>
-                                
-                            )):
-                            
-                            // <div>No members to display</div>
-                        } */}
-                                                                                                                             
-                    </tbody>                                
-                </Table>
-                
-                </div>
-
-                <div className="memberTableWrapper">
-                {value === 0 && (
-        <div>
-          {/* Render your table or content for "USERS" tab here */}
-          <h2 style={{ fontSize: "20px", marginBottom: "10px" }}>Users</h2>
-          <AIPDataGrid onRowsSelectionHandler={() => { }} columns={jsonData.UsersColumns} rows={UsersRowsData} />
-          {/* You can render your table component here */}
-        </div>
-      )}
-      {value === 1 && (
-        <div>
-          {/* Render your table or content for "USERS" tab here */}
-          <h2 style={{ fontSize: "20px", marginBottom: "10px" }}>Roles</h2>
+                    >ADD ROLES</ActionButton></div></div>
+         
           <AIPDataGrid onRowsSelectionHandler={() => { }} columns={jsonData.UserColumns} rows={UserRowsData} />
           {/* You can render your table component here */}
+        </div>
         </div>
       )}
                 
@@ -512,14 +429,67 @@ export const Tenant = () => {
               
        {value === 2 && (
         <div>
-          {/* Render your table or content for "USERS" tab here */}
+         <div className="tabsContainer" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+                <Tabs value={value} onChange={handleTabChange}>
+                    <Tab label="USERS" className="tabLabel"    />
+                    <Tab label="ROLES" className="tabLabel"    />
+                    <Tab label="FEATURES" className="tabLabel" />
+                    <Tab label="ROLE FEATURES" className="tabLabel"  />
+                </Tabs>
+            </div>
+            <div className="divContent" > 
+          <div className="divContentHeaderHolder">
           <h2 style={{ fontSize: "20px", marginBottom: "10px" }}>Features</h2>
+          <div style={{ marginRight: '10px', marginLeft:'Auto' }}>
+          <ActionButton
+                    variant="outlined"
+                    startIcon={<ControlPointOutlinedIcon />}
+                    sx={{
+                        // margin: '0px 10px',
+                        color: '#0A1A27',
+                        border: '1px solid #0A1A27',
+                      
+                    }}
+                    onClick={()=>
+                        instance.loginRedirect({ 
+                            authority:b2cPolicies.authorities.newTenant.authority,
+                            scopes: loginRequest.scopes                           
+                        }).catch((error) => console.log(error))}
+                    >ADD FEATURES</ActionButton></div></div>
           <AIPDataGrid onRowsSelectionHandler={() => { }} columns={jsonData.FeatureColumns} rows={FeatureRowsData} />
           {/* You can render your table component here */}
+        </div>
         </div>
       )}
 {value === 3 && (
  <div>
+   <div className="tabsContainer" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+                <Tabs value={value} onChange={handleTabChange}>
+                    <Tab label="USERS" className="tabLabel"    />
+                    <Tab label="ROLES" className="tabLabel"    />
+                    <Tab label="FEATURES" className="tabLabel" />
+                    <Tab label="ROLE FEATURES" className="tabLabel"  />
+                </Tabs>
+            </div>
+            <div className="divContent" > 
+          <div className="divContentHeaderHolder">
+          <h2 style={{ fontSize: "20px", marginBottom: "10px" }}>Role Features</h2>
+          <div style={{ marginRight: '10px', marginLeft:'Auto' }}>
+          <ActionButton
+                    variant="outlined"
+                    startIcon={<ControlPointOutlinedIcon />}
+                    sx={{
+                        // margin: '0px 10px',
+                        color: '#0A1A27',
+                        border: '1px solid #0A1A27',
+                      
+                    }}
+                    onClick={()=>
+                        instance.loginRedirect({ 
+                            authority:b2cPolicies.authorities.newTenant.authority,
+                            scopes: loginRequest.scopes                           
+                        }).catch((error) => console.log(error))}
+                    >ADD Role FEATURES</ActionButton></div></div> 
  {value === 3 && (
    <TreeView
      defaultCollapseIcon={<ExpandMoreIcon />}
@@ -537,6 +507,7 @@ export const Tenant = () => {
    />
  )}
 </div>
+</div> 
 )}
 
       
@@ -624,7 +595,7 @@ export const Tenant = () => {
      
 };
 <div className="memberTableWrapper">
-                <h2 style={{ fontSize: "20px", marginBottom: "10px" }}>Users</h2>
+                {/* <h2 style={{ fontSize: "20px", marginBottom: "10px" }}>Users</h2> */}
                 <Table>
                     <thead>
                         <tr key="ix">
