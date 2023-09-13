@@ -78,16 +78,24 @@ export const Tenant = () => {
   const { instance, accounts } = useMsal();
   const [loading, setLoading] = useState(true);
 
+  
   const [membersData, setMembers] = useState([]);
   const [isInvite, setIsInvite] = useState(false);
   const [value, setValue] = useState(0);
-
+  const[selectedTenantGUID, setSelectedTenantGUID] = useState("5ab53943-aada-4db9-9f1f-616ed567396a");
+  
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
   useEffect(() => {
+    debugger;
     if (accounts && accounts.length && accounts[0].idTokenClaims) {
+      
+      console.log("selected tenant value : " );
+      console.log(accounts[0].idTokenClaims.appTenantId);
+      setSelectedTenantGUID(accounts[0].idTokenClaims.appTenantId);
+      
       setLoading(false);
     } else {
       setLoading(true);
@@ -107,22 +115,24 @@ export const Tenant = () => {
  
   const [isLoading, setIsLoading] = useState(true);
 
-  const [tenant, setTenant] = useState("5ab53943-aada-4db9-9f1f-616ed567396a");
+  
+
   const handleSwitchTenant = (tenant) => {
-    setTenant(tenant);
-    setLoading(true);
+     (true);
     instance.loginRedirect({
       authority: b2cPolicies.authorities.signIn.authority,
       scopes: ["openid", "profile", `https://${deployment.b2cTenantName}.onmicrosoft.com/mtrest/User.Invite`, `https://${deployment.b2cTenantName}.onmicrosoft.com/mtrest/User.ReadAll`],
       account: accounts[0],
       extraQueryParameters: { tenant: tenant }
     }).then(() => getMemberAccessToken());
+    
+    // fetchTenantUserData();
   }
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchRoleData = async () => {
       try {
-        const response = await fetch(`https://aipbackend.azurewebsites.net/v1/UserRole/GetTenantRoles?tenantID=${tenant}`);
+        const response = await fetch(`https://aipbackend.azurewebsites.net/v1/UserRole/GetTenantRoles?tenantID=${accounts[0].idTokenClaims.appTenantId}`);
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
@@ -139,7 +149,7 @@ export const Tenant = () => {
 
     };
 
-    fetchData();
+    fetchRoleData();
   }, []);
 
   const UserRowsData = data1 ? data1.map(user => ({
@@ -216,7 +226,7 @@ export const Tenant = () => {
   useEffect(() => {
     const fetchFeatureData = async () => {
       try {
-        const response = await fetch(`https://aipbackend.azurewebsites.net/v1/UserRole/GetTenantFeatures?tenantID=${tenant}`);
+        const response = await fetch(`https://aipbackend.azurewebsites.net/v1/UserRole/GetTenantFeatures?tenantID=${accounts[0].idTokenClaims.appTenantId}`);
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
@@ -245,9 +255,9 @@ export const Tenant = () => {
   })) : [];
 
   useEffect(() => {
-    const fetchFeatureData = async () => {
+    const fetchTenantUserData = async () => {
       try {
-        const response = await fetch(`https://aipbackend.azurewebsites.net/v1/UserRole/GetTenantUserDetails?tenantID=${tenant}`);
+        const response = await fetch(`https://aipbackend.azurewebsites.net/v1/UserRole/GetTenantUserDetails?tenantID=${accounts[0].idTokenClaims.appTenantId}`);
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
@@ -264,7 +274,7 @@ export const Tenant = () => {
 
     };
 
-    fetchFeatureData();
+    fetchTenantUserData();
   }, []);
 
   const UsersRowsData = data3 ? data3.map(user => ({
@@ -287,7 +297,7 @@ export const Tenant = () => {
   useEffect(() => {
     const fetchRoleFeatures = async () => {
       try {
-        const response = await fetch(`https://aipbackend.azurewebsites.net/v1/UserRole/GetTenantRoleFeatures?tenantID=${tenant}`);
+        const response = await fetch(`https://aipbackend.azurewebsites.net/v1/UserRole/GetTenantRoleFeatures?tenantID=${accounts[0].idTokenClaims.appTenantId}`);
         if (!response.ok) {
           throw new Error('Network response was not ok');
         } else {
