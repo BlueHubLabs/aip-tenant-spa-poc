@@ -503,81 +503,133 @@ export const Tenant = () => {
   const handleRoleDescriptionChange = (event) => {
     setRoleDescription(event.target.value);
   };
-  const handleSubmit = () => {
- 
+  
+  
+  const saveNewRole = async() => {
 
-  const handleSubmit = () => {
-    // Handle submission logic here
-
-    const CreateTenantRole = async () => {
-      try {
-        const url = `https://aipbackend.azurewebsites.net/v1/UserRole/CreateTenantRole?roleName=${roleName}&description=${roleDescription}&tenantID=5ab53943-aada-4db9-9f1f-616ed567396a`;
-        debugger;
-        const response = await fetch(url, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          }
-        });
-        debugger;
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        } else {
-          const json = await response.json();
-          console.log(json);
-          setData1(json);
-          setIsLoading(false);
+    try {
+      const url = `https://aipbackend.azurewebsites.net/v1/UserRole/CreateTenantRole?roleName=${roleName}&description=${roleDescription}&tenantID=${selectedTenantGUID}`;
+      debugger;
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
         }
-      } catch (error) {
-        console.error('Error fetching data:', error);
+      });
+      debugger;
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      } else {
+        const json = await response.json();
+        console.log(json);
+        setData1(json);
         setIsLoading(false);
       }
-    };
-
-    CreateTenantRole();
-    [];
-    // Close the dialog
-   
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      setIsLoading(false);
+    }
     
     closeDialog();
   };
-
   
- 
 
-    const CreateTenantFeature = async () => {
+  const saveNewFeature = async () => {
+
+    try {
+      const url = `https://aipbackend.azurewebsites.net/v1/UserRole/CreateTenantFeature?FeatureName=${featureName}&description=${featureName}&tenantID=5ab53943-aada-4db9-9f1f-616ed567396a`;
+      debugger;
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      });
+      debugger;
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      } else {
+        const json = await response.json();
+        console.log(json);
+        setData2(json);
+        setIsLoading(false);
+      }
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      setIsLoading(false);
+    }
+
+    closeDialog();
+
+  };
+
+
+    
+    const CreateTenantUser = async () => {
+
       try {
-        const url = `https://aipbackend.azurewebsites.net/v1/UserRole/CreateTenantFeature?FeatureName=${featureName}&description=${featureName}&tenantID=5ab53943-aada-4db9-9f1f-616ed567396a`;
-        debugger;
+  
+        const url = `https://aipbackend.azurewebsites.net/v1/User/CreateTenantUser?tenantID=${selectedTenantGUID}`;
+        // Define the data to be sent in the request body
+  
+        const requestBody = {
+          userId: 0,
+          firstName: userFirstName,
+          lastName: userLastName,
+          emailAddress: userEmailAddress,
+          password: "",
+          userRoleId: 5,
+          isActive: true,
+          softDelete: false,
+          trustedContact: "Alice",
+          taxFillingContact: "Bob",
+          annualPreTaxIncome: "75000",
+          numberOfDependents: 2,
+          employerStatus: "Employed",
+          employer: "XYZ Corporation",
+          occupation: "Software Engineer",
+          spouseAnnualPreTaxIncome: "60000",
+          spouseHasIIAAccount: "Yes",
+          federalTaxBracket: "25",
+          householdInvestableAssets: "100000",
+          phoneNo: "123-456-7890",
+          addressLine1: "123 Main Street",
+          addressLine2: "Apt 4B",
+          zipCode: "12345",
+          createdBy: "AdminUser",
+          createdDate: "2023-09-13T09:15:00.371Z",
+          updatedBy: "AdminUser",
+          updatedDate: "2023-09-13T09:15:00.371Z",
+          tenantName: "TenantXYZ",
+          tenantURL: "https://tenantxyz.com",
+          tenantGUID: selectedTenantGUID,
+          fundCount: 5,
+          isUserProfileExists: true,
+          profileIcon: "user123.png",
+        };
+        
         const response = await fetch(url, {
           method: 'POST',
           headers: {
-            'Content-Type': 'application/json',
-          }
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(requestBody), // Convert the request body to JSON
         });
-        debugger;
+  
+       debugger;
         if (!response.ok) {
           throw new Error('Network response was not ok');
-        } else {
+        } 
+        else {
           const json = await response.json();
           console.log(json);
-          setData2(json);
-          setIsLoading(false);
+          setData3(json);
+          // Handle the response data as needed
         }
       } catch (error) {
         console.error('Error fetching data:', error);
-        setIsLoading(false);
       }
     };
-
-    CreateTenantFeature();
-    [];
-    closeDialog();
-  }; 
-    
-
-
- 
 
 
   return (
@@ -698,7 +750,9 @@ export const Tenant = () => {
                               <Button onClick={closeDialog} color="primary">
                                 Cancel
                               </Button>
-                              <Button onClick={handleSubmit} color="primary">
+                              <Button 
+                              // onClick={createNewUser} 
+                              color="primary">
                                 Submit
                               </Button>
                             </DialogActions>
@@ -767,7 +821,7 @@ export const Tenant = () => {
                               <Button onClick={closeDialog} color="primary">
                                 Cancel
                               </Button>
-                              <Button onClick={handleSubmit} color="primary">
+                              <Button onClick={saveNewRole} color="primary">
                                 Submit
                               </Button>
                             </DialogActions>
@@ -829,7 +883,7 @@ export const Tenant = () => {
                               <Button onClick={closeDialog} color="primary">
                                 Cancel
                               </Button>
-                              <Button onClick={handleSubmit} color="primary">
+                              <Button onClick={saveNewFeature} color="primary">
                                 Submit
                               </Button>
                             </DialogActions>
