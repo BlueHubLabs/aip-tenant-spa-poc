@@ -49,6 +49,7 @@ import DialogContent from '@mui/material/DialogContent';
 import TextField from '@mui/material/TextField';
 import DialogActions from '@mui/material/DialogActions';
 import { Autocomplete } from "@mui/material";
+import userprofilestyles from "./userprofile1.module.css";
 
 
 const membersData = [
@@ -113,8 +114,37 @@ export const Tenant = () => {
   const [CreateTenantRole, setCreateTenantRole] = useState();
   const [createTenantFeature, setCreateTenantFeature] = useState();
   const [createTenantUser, setCreateTenantUser] = useState();
+  const [isEditing, setIsEditing] = useState(false);
+  const [isSaveEnabled, setIsSaveEnabled] = useState(false); 
+
+  const onClickEditButton = () => {
+    // Implement the logic you want to execute when the "Edit" button is clicked
+    setIsSaveEnabled(true); // For example, enable saving
+  };
+  const onClickSaveButton = () => {
+    // Implement the logic you want to execute when the "Save" button is clicked
+    setIsSaveEnabled(false); // For example, disable saving after saving
+  };
+  const onCancelClick = () => {
+    // Implement the logic you want to execute when the "Cancel" button is clicked
+    setIsSaveEnabled(false); // For example, disable saving when canceling
+  };
+ 
+  const handleEditClick = () => {
+    setIsEditing(!isEditing); // Toggle edit mode
+  };
+
+  const handleCancelClick = () => {
+    setIsEditing(false); // Exit edit mode without saving
+  };
+
+  const handleSaveClick = () => {
+    // Handle save action here, e.g., save changes to the server
+    setIsEditing(false); // Exit edit mode after saving
+  };
  
   const [isLoading, setIsLoading] = useState(true);
+ 
 
   
 
@@ -280,7 +310,7 @@ export const Tenant = () => {
 
   const UsersRowsData = data3 ? data3.map(user => ({
 
-    // id: user.sortOrder,
+   
     id: user.userId,
     "USERNAME": user.userFullName,
     "ROLENAME": user.userRoleName,
@@ -293,7 +323,7 @@ export const Tenant = () => {
 
   })) : [];
 
-  const [roleFeatures, setRoleFeatures] = useState([]); // Initialize with an empty array
+  const [roleFeatures, setRoleFeatures] = useState([]); 
 
   useEffect(() => {
     const fetchRoleFeatures = async () => {
@@ -315,6 +345,7 @@ export const Tenant = () => {
 
     fetchRoleFeatures();
   }, []);
+ 
 
   const columns = [
     { field: 'roleName', headerName: 'Role Name', flex: 1 },
@@ -326,8 +357,8 @@ export const Tenant = () => {
       renderCell: (params) => {
         return (
           <Checkbox
-            checked={params.value}
-
+            defaultChecked={params.value}
+            readOnly={false}
           />
         );
       },
@@ -339,7 +370,10 @@ export const Tenant = () => {
       renderCell: (params) => {
         return (
           <Checkbox
-            checked={params.value}
+            // checked={params.value}
+            // readOnly={false}
+            defaultChecked={params.value}
+            readOnly={false}
 
           />
         );
@@ -352,8 +386,10 @@ export const Tenant = () => {
       renderCell: (params) => {
         return (
           <Checkbox
-            checked={params.value}
-
+            // checked={params.value}
+            // readOnly={false}
+            defaultChecked={params.value}
+            readOnly={false}
           />
         );
       },
@@ -365,8 +401,11 @@ export const Tenant = () => {
       renderCell: (params) => {
         return (
           <Checkbox
-            checked={params.value}
-
+            // checked={params.value}
+            // readOnly={false}
+            defaultChecked={params.value}
+            readOnly={false}
+            
           />
         );
       },
@@ -587,7 +626,7 @@ export const Tenant = () => {
       try {
   
         const url = `https://aipbackend.azurewebsites.net/v1/User/CreateTenantUser?tenantID=${selectedTenantGUID}`;
-        // Define the data to be sent in the request body
+        
   
         const requestBody = {
           userId: 0,
@@ -630,7 +669,7 @@ export const Tenant = () => {
           headers: {
             'Content-Type': 'application/json'
           },
-          body: JSON.stringify(requestBody), // Convert the request body to JSON
+          body: JSON.stringify(requestBody), 
         });
   
        debugger;
@@ -641,7 +680,7 @@ export const Tenant = () => {
           const json = await response.json();
           console.log(json);
           setData3(json);
-          // Handle the response data as needed
+          
         }
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -921,55 +960,86 @@ export const Tenant = () => {
                       <Tab label="Site Settings" className="tabLabel" />
                     </Tabs>
                   </div>
-                  <div className="divContent" >
-                    <div className="divContentHeaderHolder">
-                      <h2 style={{ fontSize: "20px", margin: "5px" }}>Role Features</h2>
-                    </div>
-                    {value === 3 && (
-                      <TreeView
-                        defaultCollapseIcon={<ExpandMoreIcon />}
-                        defaultExpandIcon={<ChevronRightIcon />}
-                      >
-                      </TreeView>
-                    )}
+                  <div>
+  {isSaveEnabled ? (
+    <div className={userprofilestyles.EditandSaveButton} onClick={onClickSaveButton}>
+      <div className={userprofilestyles.EditandSaveButtonChild} />
+      <div className={userprofilestyles.Edit}>Save</div>
+      <img
+        className={userprofilestyles.EditandSaveButtonIcon}
+        alt=""
+        src="/UserProfile/save-fill0-wght400-grad0-opsz48.svg"
+      />
+    </div>
+  ) : (
+    <div className={userprofilestyles.EditandSaveButton} onClick={onClickEditButton}>
+      <div className={userprofilestyles.EditandSaveButtonChild} />
+      <div className={userprofilestyles.Edit}>Edit</div>
+      <img
+        className={userprofilestyles.EditandSaveButtonIcon}
+        alt=""
+        src="/UserProfile/edit-fill0-wght400-grad0-opsz48-1.svg"
+      />
+    </div>
+  )}
 
-                    <div style={{ marginTop: '15px' }} >
-                      <TextField
-                        label="Filter by Role"
-                        variant="outlined"
-                        value={searchQuery}
-                        onChange={handleSearchInputChange}
-                        sx={{
-                          "& .MuiInputBase-root": {
-                            height: 50
-                          }
-                        }}
-                      />
-                      <button type="button" class="btn btn-primary float-right saveButtonLeft">Save</button>
+  {isSaveEnabled && (
+    <div className={userprofilestyles.cancel} onClick={onCancelClick}>
+      <div className={userprofilestyles.cancelChild} />
+      <div className={userprofilestyles.canceltext}>Cancel</div>
+    </div>
+  )}
 
-                      {value === 3 && (
+  {/* Add the rest of the code below */}
+  <div className="divContent">
+    <div className="divContentHeaderHolder">
+      <h2 style={{ fontSize: "20px", margin: "5px" }}>Role Features</h2>
+    </div>
 
-                        <div style={{ height: 650, width: '94%', marginTop: '15px' }}>
+    {value === 3 && (
+      <TreeView
+        defaultCollapseIcon={<ExpandMoreIcon />}
+        defaultExpandIcon={<ChevronRightIcon />}
+      >
+        {/* ... TreeView content ... */}
+      </TreeView>
+    )}
 
-                          <DataGrid
-                            rows={filteredData.length > 0 ? filteredData : transformedData}
+    <div style={{ marginTop: "15px" }}>
+      <TextField
+        label="Filter by Role"
+        variant="outlined"
+        value={searchQuery}
+        onChange={handleSearchInputChange}
+        sx={{
+          "& .MuiInputBase-root": {
+            height: 50,
+          },
+        }}
+      />
+      {/* <button type="button" class="btn btn-primary float-right saveButtonLeft">Save</button> */}
+      <div></div>
 
-                            columns={columns}
-                            hideFooterPagination
-                            hideFooterSelectedRowCount // Set pagination prop to false to hide pagination
-                            disableColumnSelector
-
-                          />
-                        </div>
-
-                      )}
-
-
-                    </div>
-
-                  </div>
-                </div>
+      {value === 3 && (
+        <div style={{ height: 650, width: "94%", marginTop: "15px" }}>
+          <DataGrid
+            rows={filteredData.length > 0 ? filteredData : transformedData}
+            columns={columns}
+            hideFooterPagination
+            hideFooterSelectedRowCount // Set pagination prop to false to hide pagination
+            
+          />
+        </div>
+      )}
+    </div>
+    </div>
+</div>
+</div>
               )}
+
+
+              
+              
               {value === 4 && (
                 <div>
                   <div className="tabsContainer" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
