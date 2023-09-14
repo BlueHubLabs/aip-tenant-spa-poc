@@ -112,6 +112,7 @@ export const Tenant = () => {
   const [data3, setData3] = useState();
   const [CreateTenantRole, setCreateTenantRole] = useState();
   const [createTenantFeature, setCreateTenantFeature] = useState();
+  const [createTenantUser, setCreateTenantUser] = useState();
  
   const [isLoading, setIsLoading] = useState(true);
 
@@ -475,6 +476,9 @@ export const Tenant = () => {
   const [firstname, setFirstName] = useState('');
   const [lastname, setLastName] = useState('');
   const [emailaddress, setEmailAddress] = useState('');
+  const [userFirstName, setUserFirstName] = useState('');
+  const [userLastName, setUserLastName] = useState('');
+  const [userEmailAddress, setUserEmailAddress] = useState('');
   const openDialog = () => {
     setIsDialogOpen(true);
   };
@@ -502,6 +506,19 @@ export const Tenant = () => {
   };
   const handleRoleDescriptionChange = (event) => {
     setRoleDescription(event.target.value);
+  };
+  const handleUserFirstNameChange = (event) => {
+    setUserFirstName(event.target.value);
+  };
+  const handleUserLastNameChange = (event) => {
+    setUserLastName(event.target.value);
+  };
+  const handleUserEmailAddressChange = (event) => {
+    setUserEmailAddress(event.target.value);
+  };
+  const createNewUser = () => {
+    
+    closeDialog();
   };
   
   
@@ -565,7 +582,7 @@ export const Tenant = () => {
 
 
     
-    const CreateTenantUser = async () => {
+    const saveNewUser = async () => {
 
       try {
   
@@ -690,11 +707,11 @@ export const Tenant = () => {
                             <DialogTitle>Add Users</DialogTitle>
                             <DialogContent>
                               <TextField
-                                label="First Name"
+                                label="User First Name"
                                 variant="outlined"
                                 halfWidth
-                                value={firstname}
-                                onChange={handleNameChange}
+                                value={userFirstName}
+                                onChange={handleUserFirstNameChange}
                                 sx={{
                                   marginBottom: 7,
                                   marginTop: 1,
@@ -704,11 +721,11 @@ export const Tenant = () => {
                                 }}
                               />
                               <TextField
-                                label="Last Name"
+                                label="User Last Name"
                                 variant="outlined"
                                 halfWidth
-                                value={lastname}
-                                onChange={handleNameChange}
+                                value={userLastName}
+                                onChange={handleUserLastNameChange}
                                 sx={{
                                   marginBottom: 7,
                                   marginTop: 1,
@@ -717,11 +734,11 @@ export const Tenant = () => {
                                 }}
                               />
                               <TextField
-                                label="Email Address"
+                                label="User Email Address"
                                 variant="outlined"
                                 fullWidth
-                                value={emailaddress}
-                                onChange={handleNameChange}
+                                value={userEmailAddress}
+                                onChange={handleUserEmailAddressChange}
                                 sx={{
                                   marginBottom: 7,
                                   marginTop: 1,
@@ -750,9 +767,7 @@ export const Tenant = () => {
                               <Button onClick={closeDialog} color="primary">
                                 Cancel
                               </Button>
-                              <Button 
-                              // onClick={createNewUser} 
-                              color="primary">
+                              <Button  onClick={saveNewUser} color="primary">
                                 Submit
                               </Button>
                             </DialogActions>
