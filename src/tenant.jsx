@@ -517,6 +517,7 @@ export const Tenant = () => {
   const [emailaddress, setEmailAddress] = useState('');
   const [userFirstName, setUserFirstName] = useState('');
   const [userLastName, setUserLastName] = useState('');
+  // const [isTenantAdmin, setIsTenantAdmin] = useState('');
   const [userEmailAddress, setUserEmailAddress] = useState('');
   const openDialog = () => {
     setIsDialogOpen(true);
@@ -555,6 +556,7 @@ export const Tenant = () => {
   const handleUserEmailAddressChange = (event) => {
     setUserEmailAddress(event.target.value);
   };
+  
   const createNewUser = () => {
     
     closeDialog();
@@ -800,7 +802,11 @@ export const Tenant = () => {
 
                                 }}
                               />
-
+                            
+                            <label for="checkbox" class="checkbox-label">
+                            <input type="checkbox" id="checkbox" name="checkbox_name" value="checkbox_value" class="checkbox-input"/>
+                            <span class="checkbox-text">Is Tenant Admin</span>
+                            </label>
                             </DialogContent>
                             <DialogActions>
                               <Button onClick={closeDialog} color="primary">
@@ -907,7 +913,7 @@ export const Tenant = () => {
                   <div className="divContent" >
                     <div className="divContentHeaderHolder">
                       <h2 style={{ fontSize: "20px", margin: "5px" }}>Features</h2>
-                      <div style={{ marginRight: '10px', marginLeft: 'Auto' }}>
+                      <div style={{ marginRight: '10px', marginLeft: 'Auto', display: 'none' }}>
                         <div>
                           <ActionButton
                             variant="outlined"

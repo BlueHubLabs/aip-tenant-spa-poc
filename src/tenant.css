@@ -195,3 +195,21 @@ td:last-child{
     background-color: blue;
     color: white;
   }
+  
+
+.checkbox-label {
+    display: flex;
+    align-items: center; 
+  }
+  
+  .checkbox-input {
+    width: 30px; 
+    height: 25px; 
+    margin-right: 10px; 
+  }
+  
+  .checkbox-text {
+    font-size: 18px; 
+  }
+  
+  
