@@ -51,6 +51,8 @@ import DialogActions from '@mui/material/DialogActions';
 import { Autocomplete } from "@mui/material";
 import userprofilestyles from "./userprofile1.module.css";
 
+import TextInput from './TextInput'
+
 
 const membersData = [
   {
@@ -517,6 +519,9 @@ export const Tenant = () => {
   const [emailaddress, setEmailAddress] = useState('');
   const [userFirstName, setUserFirstName] = useState('');
   const [userLastName, setUserLastName] = useState('');
+  const [userRoleId, setUserRoleId] = useState(0);
+
+
   // const [isTenantAdmin, setIsTenantAdmin] = useState('');
   const [userEmailAddress, setUserEmailAddress] = useState('');
   const openDialog = () => {
@@ -555,6 +560,17 @@ export const Tenant = () => {
   };
   const handleUserEmailAddressChange = (event) => {
     setUserEmailAddress(event.target.value);
+  };
+ 
+ 
+const [roleValue,setRoleValue] = useState();
+
+  // const onChangeDropdown = (value) => {
+  //   debugger
+  //   setRoleValue(value);
+  // };
+  const onChangeDropdown = (selectedValue) => {
+    setUserRoleId(selectedValue); // Update the state with the selected value
   };
   
   const createNewUser = () => {
@@ -636,7 +652,7 @@ export const Tenant = () => {
           lastName: userLastName,
           emailAddress: userEmailAddress,
           password: "",
-          userRoleId: 5,
+          userRoleId: userRoleId ,
           isActive: true,
           softDelete: false,
           trustedContact: "Alice",
@@ -658,10 +674,10 @@ export const Tenant = () => {
           createdDate: "2023-09-13T09:15:00.371Z",
           updatedBy: "AdminUser",
           updatedDate: "2023-09-13T09:15:00.371Z",
-          tenantName: "TenantXYZ",
+          tenantName: "",
           tenantURL: "https://tenantxyz.com",
           tenantGUID: selectedTenantGUID,
-          fundCount: 5,
+          fundCount: userRoleId,
           isUserProfileExists: true,
           profileIcon: "user123.png",
         };
@@ -786,14 +802,27 @@ export const Tenant = () => {
                                   height: 30
 
                                 }}
+                               
                               />
-                              <Autocomplete
+                              <TextInput
+                              variant="outlined"
+                              fullWidth
+                              type="select"
+                              label="Role"
+                              options={data1?.map(option => ({ label: option.roleName, value: option.roleId }))}
+                              onChange={onChangeDropdown} 
+                              selectedValue={userRoleId} 
+                              style={{ height: '80px' }}
+                              
+                             />
+                             {/* <Autocomplete
                                 disablePortal
                                 fullWidth
                                 id="combo-box-demo"
-                                options={data1?.map((option) => option.roleName)}
+                                options={data1?.map(option => ({ label: option.roleName, value: option.roleId }))}
+                                onChange={onChangeDropdown}
                                 renderInput={
-                                  (params) => <TextField {...params} label="Role" />
+                                  (params) => <TextField  {...params} label="Role" />
                                 }
                                 sx={{
                                   marginBottom: 7,
@@ -801,7 +830,7 @@ export const Tenant = () => {
                                   height: 30
 
                                 }}
-                              />
+                              /> */}
                             
                             <label for="checkbox" class="checkbox-label">
                             <input type="checkbox" id="checkbox" name="checkbox_name" value="checkbox_value" class="checkbox-input"/>
@@ -821,7 +850,7 @@ export const Tenant = () => {
                       </div>
                     </div>
                     <AIPDataGrid onRowsSelectionHandler={() => { }} columns={jsonData.UsersColumns} rows={UsersRowsData} />
-                    {/* You can render your table component here */}
+                   
                   </div>
                 </div>
               )}
@@ -891,15 +920,11 @@ export const Tenant = () => {
 
 
                     <AIPDataGrid onRowsSelectionHandler={() => { }} columns={jsonData.UserColumns} rows={UserRowsData} />
-                    {/* rows={UserRowsData} /> */}
-                    {/* You can render your table component here */}
+                    
+                    </div>
                   </div>
-                </div>
-              )}
-
-
-
-              {value === 2 && (
+                )}
+{value === 2 && (
                 <div>
                   <div className="tabsContainer" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
                     <Tabs value={value} onChange={handleTabChange}>
@@ -935,11 +960,9 @@ export const Tenant = () => {
                                 fullWidth
                                 value={featureName}
                                 onChange={handleFeatureNameChange}
-
                               />
-
-                            </DialogContent>
-                            <DialogActions>
+                        </DialogContent>
+                         <DialogActions>
                               <Button onClick={closeDialog} color="primary">
                                 Cancel
                               </Button>
@@ -951,7 +974,7 @@ export const Tenant = () => {
                         </div>
                       </div></div>
                     <AIPDataGrid onRowsSelectionHandler={() => { }} columns={jsonData.FeatureColumns} rows={FeatureRowsData} />
-                    {/* You can render your table component here */}
+                   
                   </div>
                 </div>
               )}
@@ -996,7 +1019,7 @@ export const Tenant = () => {
     </div>
   )}
 
-  {/* Add the rest of the code below */}
+ 
   <div className="divContent">
     <div className="divContentHeaderHolder">
       <h2 style={{ fontSize: "20px", margin: "5px" }}>Role Features</h2>
@@ -1007,7 +1030,7 @@ export const Tenant = () => {
         defaultCollapseIcon={<ExpandMoreIcon />}
         defaultExpandIcon={<ChevronRightIcon />}
       >
-        {/* ... TreeView content ... */}
+        
       </TreeView>
     )}
 
@@ -1023,7 +1046,7 @@ export const Tenant = () => {
           },
         }}
       />
-      {/* <button type="button" class="btn btn-primary float-right saveButtonLeft">Save</button> */}
+      
       <div></div>
 
       {value === 3 && (
@@ -1032,7 +1055,7 @@ export const Tenant = () => {
             rows={filteredData.length > 0 ? filteredData : transformedData}
             columns={columns}
             hideFooterPagination
-            hideFooterSelectedRowCount // Set pagination prop to false to hide pagination
+            hideFooterSelectedRowCount 
             
           />
         </div>
@@ -1175,7 +1198,7 @@ export const Tenant = () => {
                                       <MenuItem value="Arial">Arial</MenuItem>
                                       <MenuItem value="Helvetica">Helvetica</MenuItem>
                                       <MenuItem value="Times New Roman">Times New Roman</MenuItem>
-                                      {/* Add more font options as needed */}
+                                     
                                     </Select>
                                   </FormControl>
                                   <button type="button" class="btn btn-primary float-top saveButtonRight">Save</button>
