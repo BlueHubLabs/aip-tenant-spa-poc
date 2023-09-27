@@ -80,9 +80,9 @@
         
                 "id": 1,
         
-                "field": "TITLE",
+                "field": "FEATURENAME",
         
-                "headerName": "TITLE",
+                "headerName": "FEATURENAME",
         
                 "width": 430
         

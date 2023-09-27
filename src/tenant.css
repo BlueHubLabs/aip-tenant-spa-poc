@@ -2,16 +2,7 @@
     width: 100%;
     text-align: left;
 }
-/* .headerTitle{
-    color: #808080;
-    font-size: 12px;
-    font-weight: 500;
-    border-radius: 20px;
-    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);
-    background-color: lightgrey;
-    width: 30%;
-    font-size: 14px;
-} */
+
 .headerTitle {
     position: absolute;
     color: #808080;
@@ -27,19 +18,12 @@
     width: 12%;
     font-size: 14px;
 }
-/* .tenantsInfoWrapperParent{
-    margin: 0px 5%;
-    display: flex;
-    justify-content: space-between;
-    margin-top: 30px;
-    flex-direction: column;
-} */
+
 .tenantsInfoWrapperParent
 {
     margin: 0px 5%;
     margin-left: 10px;
     display: flex;
-   /*  justify-content: space-between; */
     margin-top: 30px;
     flex-direction: row;
     width: auto;
@@ -88,9 +72,7 @@
     width: 110%;
     text-align: left;
     height: 55vh;
-    /* margin-top: -150px; */
-    /* position: relative; */
-    /* overflow: auto; */
+   
   
 }
 .memberTableWrapper1{
@@ -148,15 +130,10 @@ td:last-child{
 }
 .tabsContainer {
     background-color: lightgrey;
-    /* display: flex;
-    justify-content: flex-end;
-    align-items: center; */
-    /* overflow: hidden; */
+   
     border-radius: 20px;
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);
-    width: 98%; /* Adjust the width as needed */
-    /* margin-left: 300px; Adjust the right margin as needed */
-    /* position: absolute; */
+    width: 98%;  
     margin-bottom: 15px;
 }
 
@@ -167,7 +144,7 @@ td:last-child{
  
   
  .tabItem {
-    position: relative; /* Add relative positioning */
+    position: relative; 
     background-color: white;
     padding: 10px 20px;
     border: none;
@@ -182,30 +159,28 @@ td:last-child{
   }
   
   .tabItem::before {
-    content: ""; /* Add content for the pseudo-element */
+    content: ""; 
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     width: 24px;
     height: 24px;
-    /* background-image: url("path-to-your-image/circle-with-i.png"); */
-    background-size: cover;
+   background-size: cover;
   }
   .tabLabelContainer {
     display: absolute;
     align-items: center;
     border-radius:40px;
-    /* border-radius: var(--br-181xl); */
-    cursor: pointer;
+   cursor: pointer;
     width: 254px;
     left: -46px;
   }
   
   .tabIcon {
-    width: 24px; /* Adjust the width and height as needed */
+    width: 24px; 
     height: 24px;
-    margin-right: 8px; /* Add some spacing between the icon and label */
+    margin-right: 8px; 
   }
   
   .saveButtonLeft{
@@ -215,3 +190,34 @@ td:last-child{
     margin: 5px;
     float: right;
   }
+  .editButton {
+    margin-right: 10px;
+    background-color: blue;
+    color: white;
+  }
+  
+
+.checkbox-label {
+    display: flex;
+    align-items: center; 
+  }
+  
+  .checkbox-input {
+    width: 30px; 
+    height: 25px; 
+    margin-right: 10px; 
+    margin-top: 10px;
+  }
+  
+  .checkbox-text {
+    font-size: 18px; 
+    margin-top: 10px;
+  }
+
+  .customTextInput{
+    height: 60px !important;
+  }
+
+.customTextInput {
+  height: 60px !important;
+}
