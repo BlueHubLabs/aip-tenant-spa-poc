@@ -430,6 +430,8 @@ export const Tenant = () => {
   // Your data source (transformedData) and columns should already be defined.
 
   // Function to handle changes in the search input
+
+  
   const handleSearchInputChange = (event) => {
     const query = event.target.value;
     setSearchQuery(query);
@@ -502,6 +504,8 @@ export const Tenant = () => {
     loadUsersTabContent();
   };
 
+  
+
 
 
   const handleTabChange = (event, newValue) => {
@@ -520,6 +524,7 @@ export const Tenant = () => {
   const [userFirstName, setUserFirstName] = useState('');
   const [userLastName, setUserLastName] = useState('');
   const [userRoleId, setUserRoleId] = useState(0);
+  
 
 
   // const [isTenantAdmin, setIsTenantAdmin] = useState('');
@@ -530,6 +535,7 @@ export const Tenant = () => {
 
   const closeDialog = () => {
     setIsDialogOpen(false);
+  
   };
 
   const handleNameChange = (event) => {
@@ -560,6 +566,7 @@ export const Tenant = () => {
   };
   const handleUserEmailAddressChange = (event) => {
     setUserEmailAddress(event.target.value);
+    
   };
  
  
@@ -572,6 +579,75 @@ const [roleValue,setRoleValue] = useState();
   const onChangeDropdown = (selectedValue) => {
     setUserRoleId(selectedValue); // Update the state with the selected value
   };
+  const handleSaveAndSubmit = () => {
+ // Reset any previous error messages
+ saveNewUser(); // Call the saveNewUser function
+ setFormSubmitted(true);
+ setNameError("");
+ setEmailError("");
+ setPasswordError("");
+ setLastNameError("");
+
+ // Perform form validation
+ let hasErrors = false; // Flag to track if there are validation errors
+
+ if (userFirstName==='') {
+   setNameError("Please enter User First Name");
+   hasErrors = true;
+ }
+
+ if (userLastName==='') {
+   setNameError("Please enter User Last Name");
+   hasErrors = true;
+ }
+
+ if (userEmailAddress==='') {
+   setEmailError("Please enter User Email Address");
+   hasErrors = true;
+ }
+
+ if (userRoleId==='') {
+   setPasswordError("Please select a Role");
+   hasErrors = true;
+ }
+
+ // Check if any validation errors occurred
+ if (hasErrors) {
+   // Validation failed, do not proceed with form submission
+   return;
+ }
+    debugger;
+    
+  };
+
+  const [formSubmitted, setFormSubmitted] = useState(false);
+
+  const [nameError, setNameError] = useState('');
+  const [emailError, setEmailError] = useState('');
+  const [passwordError, setPasswordError] = useState('');
+  const [lastNameError, setLastNameError] = useState("");
+  const handleSubmit = async () => {
+  
+    // Continue with form submission or other actions here
+    // For example, make an API request
+    try {
+      const response = await submitForm(
+        userFirstName,
+        userLastName,
+        userEmailAddress,
+        userRoleId,
+        name // Pass the "name" field to your submitForm function
+      );
+      // Handle the response as needed
+    } catch (error) {
+      // Handle API request error
+      console.error("API request failed:", error);
+    }
+  };
+  
+
+  
+  
   
   const createNewUser = () => {
     
@@ -763,39 +839,93 @@ const [roleValue,setRoleValue] = useState();
                           <Dialog open={isDialogOpen} onClose={closeDialog}>
                             <DialogTitle>Add Users</DialogTitle>
                             <DialogContent>
+                           
+                                
+                            {/* {formSubmitted && !userFirstName && (
+                                <p style={{ color: "red" }}>Please enter User First Name</p>
+                              )}
+                              
                               <TextField
                                 label="User First Name"
                                 variant="outlined"
                                 halfWidth
                                 value={userFirstName}
-                                onChange={handleUserFirstNameChange}
+                                onChange={(e) => setUserFirstName(e.target.value)}
                                 sx={{
                                   marginBottom: 7,
                                   marginTop: 1,
-                                  marginRight: 3,
-                                  height: 30
+                                  height: 30,
+                                  marginRight: 2,
 
                                 }}
                               />
-                              <TextField
+                               
+                               {formSubmitted && !userLastName && (
+                                <p style={{ color: "red" }}>Please enter User Last Name</p>
+                              )}
+                               <TextField
                                 label="User Last Name"
                                 variant="outlined"
                                 halfWidth
                                 value={userLastName}
-                                onChange={handleUserLastNameChange}
-                                sx={{
+                                // onChange={handleUserLastNameChange}
+                                onChange={(e) => setUserLastName(e.target.value)}
+                              sx={{
                                   marginBottom: 7,
                                   marginTop: 1,
                                   height: 30
 
                                 }}
                               />
+                              */}
+                              <div style={{ display: "flex", flexDirection: "row" }}>
+                                  <div style={{ marginRight: "16px" }}>
+                                    {formSubmitted && !userFirstName && (
+                                      <p style={{ color: "red" }}>Please enter User First Name</p>
+                                    )}
+                                    <TextField
+                                      label="User First Name"
+                                      variant="outlined"
+                                      halfWidth
+                                      value={userFirstName}
+                                      onChange={(e) => setUserFirstName(e.target.value)}
+                                      sx={{
+                                        marginBottom: 7,
+                                        marginTop: 1,
+                                        height: 30,
+                                      }}
+                                    />
+                                  </div>
+
+                                  <div>
+                                    {formSubmitted && !userLastName && (
+                                      <p style={{ color: "red" }}>Please enter User Last Name</p>
+                                    )}
+                                    <TextField
+                                      label="User Last Name"
+                                      variant="outlined"
+                                      halfWidth
+                                      value={userLastName}
+                                      onChange={(e) => setUserLastName(e.target.value)}
+                                      sx={{
+                                        marginBottom: 7,
+                                        marginTop: 1,
+                                        height: 30,
+                                      }}
+                                    />
+                                  </div>
+                                </div>
+                                {formSubmitted && !userEmailAddress && (
+                                      <p style={{ color: "red" }}>Please enter User Email Address </p>
+                                    )}
+
                               <TextField
                                 label="User Email Address"
                                 variant="outlined"
                                 fullWidth
                                 value={userEmailAddress}
-                                onChange={handleUserEmailAddressChange}
+                                // onChange={handleUserEmailAddressChange}
+                                onChange={(e) => setUserEmailAddress(e.target.value)}
                                 sx={{
                                   marginBottom: 7,
                                   marginTop: 1,
@@ -813,8 +943,7 @@ const [roleValue,setRoleValue] = useState();
                               onChange={onChangeDropdown} 
                               selectedValue={userRoleId} 
                               style={{ height: '80px' }}
-                              
-                             />
+                           />
                              {/* <Autocomplete
                                 disablePortal
                                 fullWidth
@@ -831,6 +960,7 @@ const [roleValue,setRoleValue] = useState();
 
                                 }}
                               /> */}
+                             
                             
                             <label for="checkbox" class="checkbox-label">
                             <input type="checkbox" id="checkbox" name="checkbox_name" value="checkbox_value" class="checkbox-input"/>
@@ -841,11 +971,19 @@ const [roleValue,setRoleValue] = useState();
                               <Button onClick={closeDialog} color="primary">
                                 Cancel
                               </Button>
-                              <Button  onClick={saveNewUser} color="primary">
+                              {/* <Button  onClick={saveNewUser} color="primary" >
+                               Submit
+                              </Button> */}
+                              <Button onClick={handleSaveAndSubmit}  color="primary">
                                 Submit
-                              </Button>
+                               </Button>
+                               {/* <Button onClick={() => setFormSubmitted(true)} color="primary">
+                                  Submit
+                                </Button> */}
+
+                               
                             </DialogActions>
-                          </Dialog>
+                           </Dialog>
                         </div>
                       </div>
                     </div>
