@@ -20,85 +20,133 @@ import {
   MenuItem,
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import SaveIcon from '@mui/icons-material/Save'; // Import the Save icon
-import TreeItem from '@mui/lab/TreeItem';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import Checkbox from '@mui/material/Checkbox';
 import { useMsal } from "@azure/msal-react";
-import { ButtonGroup, Button, ToggleButton, ToggleButtonGroup } from "react-bootstrap";
-import { b2cPolicies, deployment, loginRequest } from "./authConfig";
+import { Button, ToggleButton } from "react-bootstrap";
+import { b2cPolicies, deployment } from "./authConfig";
 import { useEffect } from "react";
 import ActionButton from '@mui/material/Button';
 import ControlPointOutlinedIcon from '@mui/icons-material/ControlPointOutlined';
 import './tenant.css';
 import ArrowDropDownOutlinedIcon from '@mui/icons-material/ArrowDropDownOutlined';
 import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
 import Spinner from "./spinner";
-import { Padding } from "@mui/icons-material";
-
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import TextField from '@mui/material/TextField';
 import DialogActions from '@mui/material/DialogActions';
-import { Autocomplete } from "@mui/material";
 import userprofilestyles from "./userprofile1.module.css";
-
 import TextInput from './TextInput'
 
-
-const membersData = [
-  {
-    userName: 'User1',
-    role: 'Fund Manager',
-    invited: true
-  },
-  {
-    userName: 'User2',
-    role: 'Fund Manager',
-    invited: true
-  },
-  {
-    userName: 'User3',
-    role: 'Fund Manager',
-    invited: false
-  },
-  {
-    userName: 'User4',
-    role: 'Fund Manager',
-    invited: true
-  }
-]
-
 export const Tenant = () => {
+  // const apiURL = "https://localhost:8080" //Local
+  const apiURL = "https://aipbackend.azurewebsites.net" //Dev
+  // const apiURL = "https://aipdemoapi.azurewebsites.net" //QA
   const { instance, accounts } = useMsal();
   const [loading, setLoading] = useState(true);
 
-  
+
   const [membersData, setMembers] = useState([]);
   const [isInvite, setIsInvite] = useState(false);
   const [value, setValue] = useState(0);
-  const[selectedTenantGUID, setSelectedTenantGUID] = useState("5ab53943-aada-4db9-9f1f-616ed567396a");
+  const [selectedTenantGUID, setSelectedTenantGUID] = useState("5ab53943-aada-4db9-9f1f-616ed567396a");
+
+  /* This portion is for Adding tenant user */
+  /*
   
+  Process : 
+  1) Constants 
+  2) Events
+  3) Service Calls
+  
+  */
+  const [tenantDialogOpen, setTenantDialogOpen] = useState(false);
+  const [tenantName, setTenantName] = useState('');
+  const [tenantDescription, setTenantDescription] = useState('');
+  const [tenantData, setTenantData] = useState([]);
+
+  const openTenantDialog = () => {
+    setTenantDialogOpen(true);
+  }
+
+  const closeTenantDialog= () => {
+    setTenantDialogOpen(false);
+  };
+  
+  const handleTenantNameChange = (event) => {
+    setTenantName(event.target.value);
+  };
+  const handleTenantDescriptionChange = (event) => {
+    setTenantDescription(event.target.value);
+  };
+  
+  const saveTenantDetails = async () => {
+    try {
+
+      const url = `${apiURL}/v1/Tenant/CreateTenantDetails`;
+
+      const requestBody = {
+        displayName: tenantName,
+        mailNickname: tenantName,
+        description: tenantDescription,
+        mailEnabled: false,
+        securityEnabled: true
+      };
+
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(requestBody),
+      });
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      else {
+        const json = await response.json();
+        console.log(json);
+
+      }
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+
+  useEffect(()=>{
+    const fetchData = async () => {
+      try {
+        const url = `${apiURL}/v1/Tenant/GetTenantDetails`;
+        const response = await fetch(url);
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        } else {
+          const json = await response.json();
+          setTenantData(json);
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+    fetchData();
+  },[]);
+  /* This portion is for Adding tenant user */
+
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
   useEffect(() => {
-    debugger;
     if (accounts && accounts.length && accounts[0].idTokenClaims) {
-      
-      console.log("selected tenant value : " );
+
+      console.log("selected tenant value : ");
       console.log(accounts[0].idTokenClaims.appTenantId);
       setSelectedTenantGUID(accounts[0].idTokenClaims.appTenantId);
-      
+
       setLoading(false);
     } else {
       setLoading(true);
@@ -117,7 +165,7 @@ export const Tenant = () => {
   const [createTenantFeature, setCreateTenantFeature] = useState();
   const [createTenantUser, setCreateTenantUser] = useState();
   const [isEditing, setIsEditing] = useState(false);
-  const [isSaveEnabled, setIsSaveEnabled] = useState(false); 
+  const [isSaveEnabled, setIsSaveEnabled] = useState(false);
 
   const onClickEditButton = () => {
     // Implement the logic you want to execute when the "Edit" button is clicked
@@ -131,7 +179,7 @@ export const Tenant = () => {
     // Implement the logic you want to execute when the "Cancel" button is clicked
     setIsSaveEnabled(false); // For example, disable saving when canceling
   };
- 
+
   const handleEditClick = () => {
     setIsEditing(!isEditing); // Toggle edit mode
   };
@@ -144,28 +192,28 @@ export const Tenant = () => {
     // Handle save action here, e.g., save changes to the server
     setIsEditing(false); // Exit edit mode after saving
   };
- 
-  const [isLoading, setIsLoading] = useState(true);
- 
 
-  
+  const [isLoading, setIsLoading] = useState(true);
+
+
+
 
   const handleSwitchTenant = (tenant) => {
-     (true);
+    (true);
     instance.loginRedirect({
       authority: b2cPolicies.authorities.signIn.authority,
       scopes: ["openid", "profile", `https://${deployment.b2cTenantName}.onmicrosoft.com/mtrest/User.Invite`, `https://${deployment.b2cTenantName}.onmicrosoft.com/mtrest/User.ReadAll`],
       account: accounts[0],
       extraQueryParameters: { tenant: tenant }
     }).then(() => getMemberAccessToken());
-    
+
     // fetchTenantUserData();
   }
 
   useEffect(() => {
     const fetchRoleData = async () => {
       try {
-        const response = await fetch(`https://aipbackend.azurewebsites.net/v1/UserRole/GetTenantRoles?tenantID=${accounts[0].idTokenClaims.appTenantId}`);
+        const response = await fetch(`${apiURL}/v1/UserRole/GetTenantRoles?tenantID=${accounts[0].idTokenClaims.appTenantId}`);
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
@@ -182,7 +230,7 @@ export const Tenant = () => {
 
     };
 
-    fetchRoleData();
+    // fetchRoleData();
   }, []);
 
   const UserRowsData = data1 ? data1.map(user => ({
@@ -259,7 +307,7 @@ export const Tenant = () => {
   useEffect(() => {
     const fetchFeatureData = async () => {
       try {
-        const response = await fetch(`https://aipbackend.azurewebsites.net/v1/UserRole/GetTenantFeatures?tenantID=${accounts[0].idTokenClaims.appTenantId}`);
+        const response = await fetch(`${apiURL}/v1/UserRole/GetTenantFeatures?tenantID=${accounts[0].idTokenClaims.appTenantId}`);
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
@@ -276,7 +324,7 @@ export const Tenant = () => {
 
     };
 
-    fetchFeatureData();
+    // fetchFeatureData();
   }, []);
 
   const FeatureRowsData = data2 ? data2.map(user => ({
@@ -290,7 +338,7 @@ export const Tenant = () => {
   useEffect(() => {
     const fetchTenantUserData = async () => {
       try {
-        const response = await fetch(`https://aipbackend.azurewebsites.net/v1/UserRole/GetTenantUserDetails?tenantID=${accounts[0].idTokenClaims.appTenantId}`);
+        const response = await fetch(`${apiURL}/v1/UserRole/GetTenantUserDetails?tenantID=${tenantData[0]?.id}`);
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
@@ -312,25 +360,20 @@ export const Tenant = () => {
 
   const UsersRowsData = data3 ? data3.map(user => ({
 
-   
+
     id: user.userId,
     "USERNAME": user.userFullName,
     "ROLENAME": user.userRoleName,
     "EMAILADDRESS": user.userEmailAddress,
 
-
-
-
-
-
   })) : [];
 
-  const [roleFeatures, setRoleFeatures] = useState([]); 
+  const [roleFeatures, setRoleFeatures] = useState([]);
 
   useEffect(() => {
     const fetchRoleFeatures = async () => {
       try {
-        const response = await fetch(`https://aipbackend.azurewebsites.net/v1/UserRole/GetTenantRoleFeatures?tenantID=${accounts[0].idTokenClaims.appTenantId}`);
+        const response = await fetch(`${apiURL}/v1/UserRole/GetTenantRoleFeatures?tenantID=${accounts[0].idTokenClaims.appTenantId}`);
         if (!response.ok) {
           throw new Error('Network response was not ok');
         } else {
@@ -345,9 +388,9 @@ export const Tenant = () => {
       }
     };
 
-    fetchRoleFeatures();
+    // fetchRoleFeatures();
   }, []);
- 
+
 
   const columns = [
     { field: 'roleName', headerName: 'Role Name', flex: 1 },
@@ -407,7 +450,7 @@ export const Tenant = () => {
             // readOnly={false}
             defaultChecked={params.value}
             readOnly={false}
-            
+
           />
         );
       },
@@ -485,6 +528,7 @@ export const Tenant = () => {
 
   useEffect(() => {
     getMemberAccessToken();
+    getMemberAccessToken();
   }, []);
   // const [tab1Content, setTab1Content] = useState(null);
   const [usersTabContent, setUsersTabContent] = useState(null);
@@ -561,9 +605,9 @@ export const Tenant = () => {
   const handleUserEmailAddressChange = (event) => {
     setUserEmailAddress(event.target.value);
   };
- 
- 
-const [roleValue,setRoleValue] = useState();
+
+
+  const [roleValue, setRoleValue] = useState();
 
   // const onChangeDropdown = (value) => {
   //   debugger
@@ -572,17 +616,17 @@ const [roleValue,setRoleValue] = useState();
   const onChangeDropdown = (selectedValue) => {
     setUserRoleId(selectedValue); // Update the state with the selected value
   };
-  
+
   const createNewUser = () => {
-    
+
     closeDialog();
   };
-  
-  
-  const saveNewRole = async() => {
+
+
+  const saveNewRole = async () => {
 
     try {
-      const url = `https://aipbackend.azurewebsites.net/v1/UserRole/CreateTenantRole?roleName=${roleName}&description=${roleDescription}&tenantID=${selectedTenantGUID}`;
+      const url = `${apiURL}/v1/UserRole/CreateTenantRole?roleName=${roleName}&description=${roleDescription}&tenantID=${selectedTenantGUID}`;
       debugger;
       const response = await fetch(url, {
         method: 'POST',
@@ -603,15 +647,14 @@ const [roleValue,setRoleValue] = useState();
       console.error('Error fetching data:', error);
       setIsLoading(false);
     }
-    
+
     closeDialog();
   };
-  
 
   const saveNewFeature = async () => {
 
     try {
-      const url = `https://aipbackend.azurewebsites.net/v1/UserRole/CreateTenantFeature?FeatureName=${featureName}&description=${featureName}&tenantID=5ab53943-aada-4db9-9f1f-616ed567396a`;
+      const url = `${apiURL}/v1/UserRole/CreateTenantFeature?FeatureName=${featureName}&description=${featureName}&tenantID=5ab53943-aada-4db9-9f1f-616ed567396a`;
       debugger;
       const response = await fetch(url, {
         method: 'POST',
@@ -637,74 +680,73 @@ const [roleValue,setRoleValue] = useState();
 
   };
 
+  const saveNewUser = async () => {
 
-    
-    const saveNewUser = async () => {
+    try {
 
-      try {
-  
-        const url = `https://aipbackend.azurewebsites.net/v1/User/CreateTenantUser?tenantID=${selectedTenantGUID}`;
-        
-  
-        const requestBody = {
-          userId: 0,
-          firstName: userFirstName,
-          lastName: userLastName,
-          emailAddress: userEmailAddress,
-          password: "",
-          userRoleId: userRoleId ,
-          isActive: true,
-          softDelete: false,
-          trustedContact: "Alice",
-          taxFillingContact: "Bob",
-          annualPreTaxIncome: "75000",
-          numberOfDependents: 2,
-          employerStatus: "Employed",
-          employer: "XYZ Corporation",
-          occupation: "Software Engineer",
-          spouseAnnualPreTaxIncome: "60000",
-          spouseHasIIAAccount: "Yes",
-          federalTaxBracket: "25",
-          householdInvestableAssets: "100000",
-          phoneNo: "123-456-7890",
-          addressLine1: "123 Main Street",
-          addressLine2: "Apt 4B",
-          zipCode: "12345",
-          createdBy: "AdminUser",
-          createdDate: "2023-09-13T09:15:00.371Z",
-          updatedBy: "AdminUser",
-          updatedDate: "2023-09-13T09:15:00.371Z",
-          tenantName: "",
-          tenantURL: "https://tenantxyz.com",
-          tenantGUID: selectedTenantGUID,
-          fundCount: userRoleId,
-          isUserProfileExists: true,
-          profileIcon: "user123.png",
-        };
-        
-        const response = await fetch(url, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(requestBody), 
-        });
-  
-       debugger;
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        } 
-        else {
-          const json = await response.json();
-          console.log(json);
-          setData3(json);
-          
-        }
-      } catch (error) {
-        console.error('Error fetching data:', error);
+      const url = `${apiURL}/v1/User/CreateTenantUser?tenantID=${selectedTenantGUID}`;
+
+
+      const requestBody = {
+        userId: 0,
+        firstName: userFirstName,
+        lastName: userLastName,
+        emailAddress: userEmailAddress,
+        password: "",
+        userRoleId: userRoleId,
+        isActive: true,
+        softDelete: false,
+        trustedContact: "Alice",
+        taxFillingContact: "Bob",
+        annualPreTaxIncome: "75000",
+        numberOfDependents: 2,
+        employerStatus: "Employed",
+        employer: "XYZ Corporation",
+        occupation: "Software Engineer",
+        spouseAnnualPreTaxIncome: "60000",
+        spouseHasIIAAccount: "Yes",
+        federalTaxBracket: "25",
+        householdInvestableAssets: "100000",
+        phoneNo: "123-456-7890",
+        addressLine1: "123 Main Street",
+        addressLine2: "Apt 4B",
+        zipCode: "12345",
+        createdBy: "AdminUser",
+        createdDate: "2023-09-13T09:15:00.371Z",
+        updatedBy: "AdminUser",
+        updatedDate: "2023-09-13T09:15:00.371Z",
+        tenantName: "",
+        tenantURL: "https://tenantxyz.com",
+        tenantGUID: selectedTenantGUID,
+        fundCount: userRoleId,
+        isUserProfileExists: true,
+        profileIcon: "user123.png",
+      };
+
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(requestBody),
+      });
+
+      debugger;
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
       }
-    };
+      else {
+        const json = await response.json();
+        console.log(json);
+        setData3(json);
 
+      }
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+
+  
 
   return (
     <>
@@ -714,27 +756,79 @@ const [roleValue,setRoleValue] = useState();
         <div className="tenantsInfoWrapperParent">
           <div className="tenantsInfoWrapper">
             <div className="tenantListCont">
-              <div>
+              {/* <div>
                 <div className="tabsContainer" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
                   <Tabs>
                     <Tab label="List of Tenants" />
                   </Tabs>
                 </div>
-              </div>
+              </div> */}
+              <ActionButton
+                variant="outlined"
+                startIcon={<ControlPointOutlinedIcon />}
+                sx={{
+                  color: '#0A1A27',
+                  border: '1px solid #0A1A27',
+                }}
+                onClick={openTenantDialog}
+              >
+                ADD TENANT
+              </ActionButton>
               {!loading &&
-                <div className="tenantsWrapper">{accounts[0].idTokenClaims.allTenants.map(tenant => (
+                <div className="tenantsWrapper">{
+                  tenantData?.map(tenant => (
                   <div
                     className={`tenantItem ${(accounts[0].idTokenClaims.appTenantName === tenant) && 'selectedTenant'}`}
-                    onClick={() => handleSwitchTenant(tenant)}>{tenant}</div>
+                    onClick={() => handleSwitchTenant(tenant)}>{tenant?.displayName}</div>
                 ))}
                 </div>}
+                <Dialog open={tenantDialogOpen} onClose={closeTenantDialog}>
+                            <DialogTitle>Add Users</DialogTitle>
+                            <DialogContent>
+                              <TextField
+                                label="Tenant Name"
+                                variant="outlined"
+                                fullWidth
+                                value={tenantName}
+                                onChange={handleTenantNameChange}
+                                sx={{
+                                  marginBottom: 7,
+                                  marginTop: 1,
+                                  marginRight: 3,
+                                  height: 30
+
+                                }}
+                              />
+                              <TextField
+                                label="Tenant Description"
+                                variant="outlined"
+                                fullWidth
+                                value={tenantDescription}
+                                onChange={handleTenantDescriptionChange}
+                                sx={{
+                                  marginBottom: 7,
+                                  marginTop: 1,
+                                  height: 30
+
+                                }}
+                              />
+                            </DialogContent>
+                            <DialogActions>
+                              <Button onClick={closeTenantDialog} color="primary">
+                                Cancel
+                              </Button>
+                              <Button onClick={saveTenantDetails} color="primary">
+                                Submit
+                              </Button>
+                            </DialogActions>
+                          </Dialog>
             </div>
           </div>
           <div className="tenantsInfoWrapperContent">
             <div className="memberTableWrapper">
               {value === 0 && (
                 <div >
-                  <div className="tabsContainer" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+                  {/* <div className="tabsContainer" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
                     <Tabs value={value} onChange={handleTabChange}>
                       <Tab label="USERS" className="tabLabel" />
                       <Tab label="ROLES" className="tabLabel" />
@@ -742,7 +836,7 @@ const [roleValue,setRoleValue] = useState();
                       <Tab label="ROLE FEATURES" className="tabLabel" />
                       <Tab label="Site Settings" className="tabLabel" />
                     </Tabs>
-                  </div>
+                  </div> */}
                   <div className="divContent" >
                     <div className="divContentHeaderHolder">
                       {/* <div  style={{ marginRight: '10px', marginLeft:'Auto' }}> */}
@@ -802,20 +896,20 @@ const [roleValue,setRoleValue] = useState();
                                   height: 30
 
                                 }}
-                               
+
                               />
                               <TextInput
-                              variant="outlined"
-                              fullWidth
-                              type="select"
-                              label="Role"
-                              options={data1?.map(option => ({ label: option.roleName, value: option.roleId }))}
-                              onChange={onChangeDropdown} 
-                              selectedValue={userRoleId} 
-                              style={{ height: '80px' }}
-                              
-                             />
-                             {/* <Autocomplete
+                                variant="outlined"
+                                fullWidth
+                                type="select"
+                                label="Role"
+                                options={data1?.map(option => ({ label: option.roleName, value: option.roleId }))}
+                                onChange={onChangeDropdown}
+                                selectedValue={userRoleId}
+                                style={{ height: '80px' }}
+
+                              />
+                              {/* <Autocomplete
                                 disablePortal
                                 fullWidth
                                 id="combo-box-demo"
@@ -831,17 +925,17 @@ const [roleValue,setRoleValue] = useState();
 
                                 }}
                               /> */}
-                            
-                            <label for="checkbox" class="checkbox-label">
-                            <input type="checkbox" id="checkbox" name="checkbox_name" value="checkbox_value" class="checkbox-input"/>
-                            <span class="checkbox-text">Is Tenant Admin</span>
-                            </label>
+
+                              <label for="checkbox" class="checkbox-label">
+                                <input type="checkbox" id="checkbox" name="checkbox_name" value="checkbox_value" class="checkbox-input" />
+                                <span class="checkbox-text">Is Tenant Admin</span>
+                              </label>
                             </DialogContent>
                             <DialogActions>
                               <Button onClick={closeDialog} color="primary">
                                 Cancel
                               </Button>
-                              <Button  onClick={saveNewUser} color="primary">
+                              <Button onClick={saveNewUser} color="primary">
                                 Submit
                               </Button>
                             </DialogActions>
@@ -850,7 +944,7 @@ const [roleValue,setRoleValue] = useState();
                       </div>
                     </div>
                     <AIPDataGrid onRowsSelectionHandler={() => { }} columns={jsonData.UsersColumns} rows={UsersRowsData} />
-                   
+
                   </div>
                 </div>
               )}
@@ -920,11 +1014,11 @@ const [roleValue,setRoleValue] = useState();
 
 
                     <AIPDataGrid onRowsSelectionHandler={() => { }} columns={jsonData.UserColumns} rows={UserRowsData} />
-                    
-                    </div>
+
                   </div>
-                )}
-{value === 2 && (
+                </div>
+              )}
+              {value === 2 && (
                 <div>
                   <div className="tabsContainer" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
                     <Tabs value={value} onChange={handleTabChange}>
@@ -961,8 +1055,8 @@ const [roleValue,setRoleValue] = useState();
                                 value={featureName}
                                 onChange={handleFeatureNameChange}
                               />
-                        </DialogContent>
-                         <DialogActions>
+                            </DialogContent>
+                            <DialogActions>
                               <Button onClick={closeDialog} color="primary">
                                 Cancel
                               </Button>
@@ -974,7 +1068,7 @@ const [roleValue,setRoleValue] = useState();
                         </div>
                       </div></div>
                     <AIPDataGrid onRowsSelectionHandler={() => { }} columns={jsonData.FeatureColumns} rows={FeatureRowsData} />
-                   
+
                   </div>
                 </div>
               )}
@@ -990,85 +1084,81 @@ const [roleValue,setRoleValue] = useState();
                     </Tabs>
                   </div>
                   <div>
-  {isSaveEnabled ? (
-    <div className={userprofilestyles.EditandSaveButton} onClick={onClickSaveButton}>
-      <div className={userprofilestyles.EditandSaveButtonChild} />
-      <div className={userprofilestyles.Edit}>Save</div>
-      <img
-        className={userprofilestyles.EditandSaveButtonIcon}
-        alt=""
-        src="/UserProfile/save-fill0-wght400-grad0-opsz48.svg"
-      />
-    </div>
-  ) : (
-    <div className={userprofilestyles.EditandSaveButton} onClick={onClickEditButton}>
-      <div className={userprofilestyles.EditandSaveButtonChild} />
-      <div className={userprofilestyles.Edit}>Edit</div>
-      <img
-        className={userprofilestyles.EditandSaveButtonIcon}
-        alt=""
-        src="/UserProfile/edit-fill0-wght400-grad0-opsz48-1.svg"
-      />
-    </div>
-  )}
+                    {isSaveEnabled ? (
+                      <div className={userprofilestyles.EditandSaveButton} onClick={onClickSaveButton}>
+                        <div className={userprofilestyles.EditandSaveButtonChild} />
+                        <div className={userprofilestyles.Edit}>Save</div>
+                        <img
+                          className={userprofilestyles.EditandSaveButtonIcon}
+                          alt=""
+                          src="/UserProfile/save-fill0-wght400-grad0-opsz48.svg"
+                        />
+                      </div>
+                    ) : (
+                      <div className={userprofilestyles.EditandSaveButton} onClick={onClickEditButton}>
+                        <div className={userprofilestyles.EditandSaveButtonChild} />
+                        <div className={userprofilestyles.Edit}>Edit</div>
+                        <img
+                          className={userprofilestyles.EditandSaveButtonIcon}
+                          alt=""
+                          src="/UserProfile/edit-fill0-wght400-grad0-opsz48-1.svg"
+                        />
+                      </div>
+                    )}
 
-  {isSaveEnabled && (
-    <div className={userprofilestyles.cancel} onClick={onCancelClick}>
-      <div className={userprofilestyles.cancelChild} />
-      <div className={userprofilestyles.canceltext}>Cancel</div>
-    </div>
-  )}
+                    {isSaveEnabled && (
+                      <div className={userprofilestyles.cancel} onClick={onCancelClick}>
+                        <div className={userprofilestyles.cancelChild} />
+                        <div className={userprofilestyles.canceltext}>Cancel</div>
+                      </div>
+                    )}
 
- 
-  <div className="divContent">
-    <div className="divContentHeaderHolder">
-      <h2 style={{ fontSize: "20px", margin: "5px" }}>Role Features</h2>
-    </div>
 
-    {value === 3 && (
-      <TreeView
-        defaultCollapseIcon={<ExpandMoreIcon />}
-        defaultExpandIcon={<ChevronRightIcon />}
-      >
-        
-      </TreeView>
-    )}
+                    <div className="divContent">
+                      <div className="divContentHeaderHolder">
+                        <h2 style={{ fontSize: "20px", margin: "5px" }}>Role Features</h2>
+                      </div>
 
-    <div style={{ marginTop: "15px" }}>
-      <TextField
-        label="Filter by Role"
-        variant="outlined"
-        value={searchQuery}
-        onChange={handleSearchInputChange}
-        sx={{
-          "& .MuiInputBase-root": {
-            height: 50,
-          },
-        }}
-      />
-      
-      <div></div>
+                      {value === 3 && (
+                        <TreeView
+                          defaultCollapseIcon={<ExpandMoreIcon />}
+                          defaultExpandIcon={<ChevronRightIcon />}
+                        >
 
-      {value === 3 && (
-        <div style={{ height: 650, width: "94%", marginTop: "15px" }}>
-          <DataGrid
-            rows={filteredData.length > 0 ? filteredData : transformedData}
-            columns={columns}
-            hideFooterPagination
-            hideFooterSelectedRowCount 
-            
-          />
-        </div>
-      )}
-    </div>
-    </div>
-</div>
-</div>
+                        </TreeView>
+                      )}
+
+                      <div style={{ marginTop: "15px" }}>
+                        <TextField
+                          label="Filter by Role"
+                          variant="outlined"
+                          value={searchQuery}
+                          onChange={handleSearchInputChange}
+                          sx={{
+                            "& .MuiInputBase-root": {
+                              height: 50,
+                            },
+                          }}
+                        />
+
+                        <div></div>
+
+                        {value === 3 && (
+                          <div style={{ height: 650, width: "94%", marginTop: "15px" }}>
+                            <DataGrid
+                              rows={filteredData.length > 0 ? filteredData : transformedData}
+                              columns={columns}
+                              hideFooterPagination
+                              hideFooterSelectedRowCount
+
+                            />
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
               )}
-
-
-              
-              
               {value === 4 && (
                 <div>
                   <div className="tabsContainer" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
@@ -1198,7 +1288,7 @@ const [roleValue,setRoleValue] = useState();
                                       <MenuItem value="Arial">Arial</MenuItem>
                                       <MenuItem value="Helvetica">Helvetica</MenuItem>
                                       <MenuItem value="Times New Roman">Times New Roman</MenuItem>
-                                     
+
                                     </Select>
                                   </FormControl>
                                   <button type="button" class="btn btn-primary float-top saveButtonRight">Save</button>
@@ -1234,9 +1324,6 @@ const [roleValue,setRoleValue] = useState();
                   </div>
                 </div>
               )}
-
-
-
               {/* <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
                 <ActionButton
                     variant="outlined"
