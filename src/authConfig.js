@@ -13,7 +13,6 @@ export const deployment = {
     // b2cClientId: "46c6b5f3-bfc0-4ef3-ac5b-198d0b383a42" 
     // b2cClientId: "5ce836ac-e084-4d0a-a1a0-589887101520" //  AIPPOC
     b2cClientId: "681b27fc-96f3-40d6-8b21-2519112067ae", // AIPDEMO
-    b2cClientId: "681b27fc-96f3-40d6-8b21-2519112067ae",
     restUrl: "https://aip-tenant-api-poc.azurewebsites.net/",
     // aipUrl: "https://aipbackend.azurewebsites.net"
     aipUrl: "https://aipdemoapi.azurewebsites.net"
