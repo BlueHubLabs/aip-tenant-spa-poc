@@ -9,10 +9,7 @@ export const deployment = {
     policyPrefix : "V1_",
     b2cTenantName: "aipb2cpoc",
     b2cTenantId: "31e8eecd-9d43-42ef-bdfa-7d40335bdd0e",
-    // b2cClientId: "7f6c6713-1c7d-4371-8154-2b847e42f276", // Local
-    // b2cClientId: "46c6b5f3-bfc0-4ef3-ac5b-198d0b383a42" 
-    // b2cClientId: "5ce836ac-e084-4d0a-a1a0-589887101520" //  AIPPOC
-    b2cClientId: "681b27fc-96f3-40d6-8b21-2519112067ae", // AIPDEMO
+    b2cClientId: "46c6b5f3-bfc0-4ef3-ac5b-198d0b383a42", // bluemoss
     restUrl: "https://aip-tenant-api-poc.azurewebsites.net/",
     // aipUrl: "https://aipbackend.azurewebsites.net"
     aipUrl: "https://aipdemoapi.azurewebsites.net"
