@@ -20,8 +20,8 @@ import TextInput from './TextInput'
 
 export const Tenant = () => {
   // const apiURL = "https://localhost:8080" //Local
-  const apiURL = "https://aipbackend.azurewebsites.net" //Dev
-  // const apiURL = "https://aipdemoapi.azurewebsites.net" //QA
+  // const apiURL = "https://aipbackend.azurewebsites.net" //Dev
+  const apiURL = "https://aipdemoapi.azurewebsites.net" //QA
   const { instance, accounts } = useMsal();
   const [loading, setLoading] = useState(true);
 
