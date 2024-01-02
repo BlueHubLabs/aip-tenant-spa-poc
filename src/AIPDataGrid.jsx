@@ -12,16 +12,16 @@ const AIPDataGrid = ({ columns, rows, handleRowClick, onRowsSelectionHandler, ch
             fontFamily: 'Cresta, Normal',
             fontSize: 14,
         },
-        palette: {
+       /*  palette: {
             background: {
                 default: '#f5f5f5', // Default background color for most components
                 paper: '#ffffff', // Background color for paper-like components (dialogs, cards, etc.)
             },
-        },
+        }, */
     });
 
     return (
-        <Box sx={{ height: '100%', width: '100%', top: 50 }}>
+        <Box sx={{ height: '700px', width: '100%',backgroundColor: 'white' }}>
             <ThemeProvider theme={muiTheme}>
                 <DataGrid
                     rows={rows}

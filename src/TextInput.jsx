@@ -48,7 +48,7 @@ const TextInput = (props) => {
             placeholder={placeholder}
             multiline={multiline}
             rows={rows}
-            size="small"
+            /* size="small" */
             fullWidth
             label={label}
             onChange={handleChange}
