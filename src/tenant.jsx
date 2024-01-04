@@ -332,7 +332,7 @@ export const Tenant = () => {
                       "USERNAME": user.userFullName,
                       "ROLENAME": user.userRoleName,
                       "EMAILADDRESS": user.userEmailAddress,})) 
-        setUsersRowsData(users);
+        setUsersRowsData(users.filter(a=> a.ROLENAME === "Super User"));
       }
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -470,12 +470,12 @@ export const Tenant = () => {
                           selectedValue={userRoleId}
                         />
                     </div>
-                      <div className="childitem">
+                      {/* <div className="childitem">
                         <label for="checkbox" class="checkbox-label">
                           <input type="checkbox" id="checkbox" name="checkbox_name" value="checkbox_value" class="checkbox-input" />
                           <span class="checkbox-text">Is Tenant Admin</span>
                         </label>
-                    </div>
+                    </div> */}
                   </div>
                 </DialogContent>
                 <DialogActions>
