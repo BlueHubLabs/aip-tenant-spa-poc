@@ -327,7 +327,7 @@ export const Tenant = () => {
       else {
         const json = await response.json();
         console.log(json);
-        const users = json?.filter(a=> a.userRoleName === "Super User")?.map(user => ({
+        const users = json?.map(user => ({
                       "id": user.userId,
                       "USERNAME": user.userFullName,
                       "ROLENAME": user.userRoleName,
