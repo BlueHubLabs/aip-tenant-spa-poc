@@ -332,7 +332,7 @@ export const Tenant = () => {
                       "USERNAME": user.userFullName,
                       "ROLENAME": user.userRoleName,
                       "EMAILADDRESS": user.userEmailAddress,})) 
-        setUsersRowsData(users.filter(a=> a.ROLENAME === "Super User"));
+        setUsersRowsData(users);
       }
     } catch (error) {
       console.error('Error fetching data:', error);
