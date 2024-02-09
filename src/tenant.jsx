@@ -16,7 +16,8 @@ import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import TextField from '@mui/material/TextField';
 import DialogActions from '@mui/material/DialogActions';
-import TextInput from './TextInput'
+import TextInput from './common/TextInput'
+import AddTenant from "./Popups/AddTenant";
 
 export const Tenant = () => {
   // const apiURL = "https://localhost:8080" //Local
@@ -367,40 +368,9 @@ export const Tenant = () => {
                     onClick={() => handleShowusers(tenant?.id)}>{tenant?.displayName}</div>
                 ))}
                 </div>}
-                <Dialog open={tenantDialogOpen} onClose={closeTenantDialog} fullWidth>
-                    <DialogTitle>
-                      Add Tenant
-                    </DialogTitle>
-                    <DialogContent>
-                        <div className="fieldsconatiner">
-                          <div className="childitem">
-                            <TextField
-                              label="Tenant Name"
-                              fullWidth
-                              variant="outlined"
-                              value={tenantName}
-                              onChange={handleTenantNameChange} />
-                          </div>
-                          <div className="childitem">
-                            <TextField
-                              label="Tenant Description"
-                              fullWidth
-                              variant="outlined"
-                              value={tenantDescription}
-                              onChange={handleTenantDescriptionChange} />
-                            </div>
-                        </div>
-                    </DialogContent>
-                    <DialogActions>
-                      <Button onClick={closeTenantDialog} 
-                        style={{ backgroundColor: 'white', color: 'gray' }}>
-                        Cancel
-                      </Button>
-                      <Button onClick={saveTenantDetails} color="primary">
-                        Submit
-                      </Button>
-                    </DialogActions>
-                  </Dialog>
+                {
+                  tenantDialogOpen && <AddTenant open={tenantDialogOpen} onClose={closeTenantDialog}/>
+                }
             </div>
           </div>
 
