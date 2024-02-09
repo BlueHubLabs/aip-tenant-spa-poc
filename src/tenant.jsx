@@ -339,6 +339,8 @@ export const Tenant = () => {
     }
   }
 
+  //PUSH CHECK
+
   return (
     <div className="tenantsParentWrapper">
         <div className="tenantsInfoWrapperParent">
