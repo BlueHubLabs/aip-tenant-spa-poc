@@ -49,7 +49,7 @@ const AddTenant = (props) => {
  const [errors, setErrors] = useState({});
 
   const MandatoryFieldErrors = () => {
-    const fieldsToKeep =['firmName', 'firmType', 'firmLogo', 'firmID', 'firmRegistrationNumber', 'regulatoryBody', 'firmDescription', 'address', 'websiteURL', 'firmJurisdiction', 'firmStructure'];
+    const fieldsToKeep =['firmName', 'firmType', 'firmLogo', 'firmID', 'firmRegistrationNumber', 'regulatoryBody', 'firmDescription', 'firmStructure'];
     const trimmedValues = { ...firmDetails };
 
     const filteredFields = fieldsToKeep.map((field) => {
@@ -76,19 +76,58 @@ const AddTenant = (props) => {
 
   const validateField = (field, value) => {
     const validationRules = {
-      firmName: (value, currState) => {
+      firmName: (value) => {
         const isValid = /^[A-Za-z ]+$/.test(value);
+        const isLengthValid = value.length >= 1 && value.length <= 50;
         return {
-          isValid,
-          error: isValid ? null : `Please Enter a valid name with only alphabets`
+          isValid: isValid && isLengthValid,
+          error: isValid && isLengthValid ? null : "Please enter a valid firm name (1-50 characters)."
         };
       },
-      phoneNo: (value, currState) => {
-        value = value.trim();
-        const isValid = /^\d{10}$/.test(value);
+      firmType: (value) => {
+        const isNotEmpty = value !== "";
         return {
-          isValid,
-          error: isValid ? null : "Please enter a valid phone number (up to 10 digits)",
+          isValid: isNotEmpty,
+          error: isNotEmpty ? null : "Please select a firm type"
+        };
+      },
+      firmID: (value) => {
+        value = value.trim();
+        const isValid = /^[A-Za-z0-9]+$/.test(value);
+        const isLengthValid = value.length >= 1 && value.length <= 20;
+        return {
+          isValid: isValid && isLengthValid,
+          error: isValid && isLengthValid ? null : "Please enter a valid firm ID (1-20 characters).",
+        };
+      },
+      //For Regulator Body When Clicked others
+      /* regulatoryBody: (value) => {
+        const isNotEmpty = value.trim() !== "";
+        return {
+          isValid: isNotEmpty,
+          error: isNotEmpty ? null : "Please select a firm type"
+        };
+      }, */
+      regulatoryBody: (value) => {
+        const isNotEmpty = value !== "";
+        return {
+          isValid: isNotEmpty,
+          error: isNotEmpty ? null : "Please select a firm type"
+        };
+      },
+      firmDescription: (value) => {
+        value = value.trim();
+        const isValid = value.length >= 1 && value.length <= 200;
+        return {
+          isValid: isValid,
+          error: isValid ? null : "Please complete firm description (1-200 characters).",
+        };
+      },
+      firmStructure: (value) => {
+        const isNotEmpty = value !== "";
+        return {
+          isValid: isNotEmpty,
+          error: isNotEmpty ? null : "Please select a firm structure"
         };
       },
     };
@@ -142,6 +181,7 @@ const handleSave = () => {
                     name="firmName"
                     label="Firm Name"
                     value={firmDetails.firmName}
+                    required={true}
                     onChange={(name, value) => handleChange(name, value)}
                     errormessage={errors.firmName || undefined}
                 />
@@ -153,6 +193,7 @@ const handleSave = () => {
                     label="Firm Type"
                     options={FirmTypeDropdown?.map(option => ({ label: option?.name, value: option?.value }))}
                     value={firmDetails.firmType}
+                    required={true}
                     onChange={(name, value) => handleChange(name, value)}
                     errormessage={errors.firmType || undefined}
                 />
@@ -163,6 +204,7 @@ const handleSave = () => {
                     name="firmID"
                     label="Firm ID"
                     value={firmDetails.firmID}
+                    required={true}
                     onChange={(name, value) => handleChange(name, value)}
                     errormessage={errors.firmID || undefined}
                 />
@@ -184,6 +226,7 @@ const handleSave = () => {
                     label="Regulatory Body"
                     options={regulatorDropdown?.map(option => ({ label: option?.name, value: option?.value }))}
                     value={firmDetails.regulatoryBody}
+                    required={true}
                     onChange={(name, value) => handleChange(name, value)}
                     errormessage={errors.regulatoryBody || undefined}
                 />
@@ -195,6 +238,7 @@ const handleSave = () => {
                         name="regulatoryBody"
                         label="Other Option"
                         value={firmDetails.firmRegistrationNumber}
+                        required={true}
                         onChange={(name, value) => handleChange(name, value)}
                         errormessage={errors.firmRegistrationNumber || undefined}
                     />
@@ -206,6 +250,7 @@ const handleSave = () => {
                     name="firmDescription"
                     label="Firm Description"
                     value={firmDetails.firmDescription}
+                    required={true}
                     onChange={(name, value) => handleChange(name, value)}
                     errormessage={errors.firmDescription || undefined}
                 />
@@ -217,7 +262,6 @@ const handleSave = () => {
                     label="Address"
                     value={firmDetails.address}
                     onChange={(name, value) => handleChange(name, value)}
-                    errormessage={errors.address || undefined}
                 />
             </div>
             <div className='margin-top-15'>
@@ -227,7 +271,6 @@ const handleSave = () => {
                     label="Website URL"
                     value={firmDetails.websiteURL}
                     onChange={(name, value) => handleChange(name, value)}
-                    errormessage={errors.websiteURL || undefined}
                 />
             </div>
             <div className='margin-top-15'>
@@ -237,7 +280,6 @@ const handleSave = () => {
                     label="Firm Jurisdiction"
                     value={firmDetails.firmJurisdiction}
                     onChange={(name, value) => handleChange(name, value)}
-                    errormessage={errors.firmJurisdiction || undefined}
                 />
             </div>
             <div className='margin-top-15'>
@@ -247,6 +289,7 @@ const handleSave = () => {
                     label="Firm Structure"
                     options={FirmInformationDropdown?.map(option => ({ label: option?.name, value: option?.value }))}
                     value={firmDetails.firmStructure}
+                    required={true}
                     onChange={(name, value) => handleChange(name, value)}
                     errormessage={errors.firmStructure || undefined}
                 />
