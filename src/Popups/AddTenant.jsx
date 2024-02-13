@@ -223,7 +223,7 @@ const AddTenant = (props) => {
 
       const includedFields = ['firmName', 'firmType', 'regulatoryBody', 'firmDescription', 'firmStructure'];
 
-      const Mandatoryerrors = Object.entries(requestBody).some(([key, value]) =>
+      const Mandatoryerrors = Object.entries(firmDetails).some(([key, value]) =>
         includedFields.includes(key) && (value === null || value === '' || value === 0)
       );
   
@@ -231,7 +231,7 @@ const AddTenant = (props) => {
     const errorsArray = Object.values(errors);
     const hasErrors = errorsArray.some(error => error !== null);
 
-    
+    debugger
     if (Mandatoryerrors || hasErrors) {
       console.error("Error updating profile:", errors);
       MandatoryFieldErrors();
@@ -246,12 +246,14 @@ const AddTenant = (props) => {
       const apiResponse = postTenantUser(formData);
       if (apiResponse.error) {
         console.log('Error in posting Tenant User');
+        setLoading(false);
+        onClose();
       }
       else {
         console.log('Tenant User posted successfully');
+        setLoading(false);
+        onClose();
       }
-      setLoading(false);
-      onClose();
     }
   }
 
