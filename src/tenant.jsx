@@ -18,11 +18,12 @@ import TextField from '@mui/material/TextField';
 import DialogActions from '@mui/material/DialogActions';
 import TextInput from './common/TextInput'
 import AddTenant from "./Popups/AddTenant";
+import Configurations from "./Configurations";
 
 export const Tenant = () => {
-  // const apiURL = "https://localhost:8080" //Local
-  // const apiURL = "https://aipbackend.azurewebsites.net" //Dev
-  const apiURL = "https://aipdemoapi.azurewebsites.net" //QA
+  // const apiBaseUri = "https://localhost:8080" //Local
+  // const apiBaseUri = "https://aipbackend.azurewebsites.net" //Dev
+  //const apiBaseUri = "https://aipdemoapi.azurewebsites.net" //QA
   const { instance, accounts } = useMsal();
   const [loading, setLoading] = useState(true);
 
@@ -62,7 +63,7 @@ export const Tenant = () => {
   const saveTenantDetails = async () => {
     try {
 
-      const url = `${apiURL}/v1/Tenant/CreateTenantDetails`;
+      const url = `${Configurations.apiBaseUri}/v1/Tenant/CreateTenantDetails`;
 
       const requestBody = {
         displayName: tenantName,
@@ -98,7 +99,7 @@ export const Tenant = () => {
 
   const fetchAllTenants = async () => {
     try {
-      const url = `${apiURL}/v1/Tenant/GetTenantDetails`;
+      const url = `${Configurations.apiBaseUri}/v1/Tenant/GetTenantDetails`;
       const response = await fetch(url);
       if (!response.ok) {
         throw new Error('Network response was not ok');
@@ -151,7 +152,7 @@ export const Tenant = () => {
 
   const fetchRoleData = async (tenantid) => {
     try {
-      const response = await fetch(`${apiURL}/v1/UserRole/GetTenantRoles?tenantID=${tenantid}&isSystemRole=1`);
+      const response = await fetch(`${Configurations.apiBaseUri}/v1/UserRole/GetTenantRoles?tenantID=${tenantid}&isSystemRole=1`);
       debugger
       if (!response.ok) {
         setuserrolesdropdown([]);
@@ -174,7 +175,7 @@ export const Tenant = () => {
   useEffect(() => {
     const fetchTenantUserData = async () => {
       try {
-        const response = await fetch(`${apiURL}/v1/UserRole/GetTenantUserDetails?tenantID=${tenantData[0]?.id}`);
+        const response = await fetch(`${Configurations.apiBaseUri}/v1/UserRole/GetTenantUserDetails?tenantID=${tenantData[0]?.id}`);
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
@@ -292,7 +293,7 @@ export const Tenant = () => {
     const formData = new FormData();
     formData.append('tenantUserData', JSON.stringify(selectedRolesData));
     // console.log(tenantUserData);
-      fetch(`${apiURL}/v1/User/CreateTenantUser?tenantID=${selectedtenant}`, {
+      fetch(`${Configurations.apiBaseUri}/v1/User/CreateTenantUser?tenantID=${selectedtenant}`, {
         method: 'POST',
         body: formData,
       })
@@ -320,7 +321,7 @@ export const Tenant = () => {
     setSelectedTenant(tenantid);
     fetchRoleData(tenantid);
     try {
-      const response = await fetch(`${apiURL}/v1/UserRole/GetTenantUserDetails?tenantID=${tenantid}`);
+      const response = await fetch(`${Configurations.apiBaseUri}/v1/UserRole/GetTenantUserDetails?tenantID=${tenantid}`);
       if (!response.ok) {
         setUsersRowsData([]);
         throw new Error('Network response was not ok');

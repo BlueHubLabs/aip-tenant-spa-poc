@@ -1,15 +1,21 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, FormControlLabel, Radio, Button, MenuItem } from '@mui/material';
 import TextInput from '../common/TextInput';
 import { useState } from 'react';
 import FileUploadButton from '../common/FileUploadButton';
 import ActionButton from '../common/ActionButton';
-import { regulatorDropdown,FirmTypeDropdown,FirmInformationDropdown } from './data';
+import { regulatorDropdown, FirmTypeDropdown, FirmInformationDropdown } from './data';
+import { getFirmStructureDetails } from './services/services';
+import { getRegulatoryComplianceDetails } from './services/services';
+import { getFirmTypeDetails } from './services/services';
+import { get } from 'jquery';
+import { regulatorOptions } from './enum';
+import { postTenantUser } from './services/services';
 
 const AddTenant = (props) => {
 
-  const {open,onClose} = props;
-/*  const [open,setOpen] = useState(true); */
+  const { open, onClose } = props;
+  /*  const [open,setOpen] = useState(true); */
 
   const initialDetails = {
     firmName: '',
@@ -22,34 +28,25 @@ const AddTenant = (props) => {
     address: '',
     websiteURL: '',
     firmJurisdiction: '',
-    firmStructure: ''
+    firmStructure: '',
+    otherregulatoryBody: ''
   };
 
-  const [loading,setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const [firmDetails, setFirmDetails] = useState(initialDetails);
-  const [isSaveEnabled, setisSaveEnabled] = useState(false);
 
-  //onEditSaveButtonClick
-  const onEditSaveButtonClick = () => {
-    if(isSaveEnabled){
-      handleSave();
-      return
-    }
-     setisSaveEnabled(!isSaveEnabled);
-   };
-
-   //onCancel
-   const onCancel = () => { 
-    setisSaveEnabled(false);
+  //onCancel
+  const onCancel = () => {
     setErrors({});
-   };
+    onClose();
+  };
 
-   //Validations
- const [errors, setErrors] = useState({});
+  //Validations
+  const [errors, setErrors] = useState({});
 
   const MandatoryFieldErrors = () => {
-    const fieldsToKeep =['firmName', 'firmType', 'firmLogo', 'firmID', 'firmRegistrationNumber', 'regulatoryBody', 'firmDescription', 'firmStructure'];
+    const fieldsToKeep = ['firmName', 'firmType', 'firmLogo', 'regulatoryBody', 'firmDescription', 'firmStructure'];
     const trimmedValues = { ...firmDetails };
 
     const filteredFields = fieldsToKeep.map((field) => {
@@ -77,11 +74,11 @@ const AddTenant = (props) => {
   const validateField = (field, value) => {
     const validationRules = {
       firmName: (value) => {
-        const isValid = /^[A-Za-z ]+$/.test(value);
+        const isValid = /^[A-Za-z]+$/.test(value);
         const isLengthValid = value.length >= 1 && value.length <= 50;
         return {
           isValid: isValid && isLengthValid,
-          error: isValid && isLengthValid ? null : "Please enter a valid firm name (1-50 characters)."
+          error: isValid && isLengthValid ? null : "Please enter a valid firm name (1-50 characters without spaces)."
         };
       },
       firmType: (value) => {
@@ -134,7 +131,7 @@ const AddTenant = (props) => {
     return validationRules[field] ? validationRules[field](value) : { isValid: true, error: null };
   };
 
-const handleChange = (field, value) => {
+  const handleChange = (field, value) => {
     const validationResult = validateField(field, value);
     if (!validationResult.isValid) {
       setErrors(prevErrors => ({ ...prevErrors, [field]: validationResult.error }));
@@ -144,161 +141,250 @@ const handleChange = (field, value) => {
         ...firmDetails,
         [field]: value
       });
+    }
   }
-}
 
-const handleFileUpload = (name, file) => {
-  if (file) {
-    const formData = new FormData();
-    formData.append(name, file, file.name);
-    handleChange(name, file);
+  const handleFileUpload = (name, file) => {
+    if (file) {
+      const formData = new FormData();
+      formData.append(name, file, file.name);
+      handleChange(name, file);
+    }
   }
-}
 
-const handleSave = () => {
-  MandatoryFieldErrors();
-};
+  const [firmStructureDropdown, setFirmStructureDropdown] = useState([]);
+
+  const getFirmStructure = async () => {
+    //write axios get call here
+    const response = await getFirmStructureDetails();
+    debugger
+    if (!response.error) {
+      setFirmStructureDropdown(response.data);
+    }
+    else {
+      console.log('Error in fetching Firm Structure');
+    }
+  }
+
+  const [regulatorDropdown, setRegulatorDropdown] = useState([]);
+  const [otherOptionID, setOtherOptionID] = useState("");
+
+  const getRegulatoryCompliance = async () => {
+    //write axios get call here
+    const response = await getRegulatoryComplianceDetails();
+    if (!response.error) {
+      setRegulatorDropdown(response.data);
+      const otherOption = response.data.find(item => item.listItemValue === regulatorOptions.OTHER_OPTION);
+      setOtherOptionID(otherOption.listItemID);
+    }
+    else {
+      console.log('Error in fetching Regulatory Compliance');
+    }
+  }
+
+  const [FirmTypeDropdown, setFirmTypeDropdown] = useState([]);
+
+  const getFirmType = async () => {
+    //write axios get call here
+    const response = await getFirmTypeDetails();
+    if (!response.error) {
+      setFirmTypeDropdown(response.data);
+    }
+    else {
+      console.log('Error in fetching Firm Type');
+    }
+  }
+
+  useEffect(() => {
+    getFirmStructure();
+    getRegulatoryCompliance();
+    getFirmType();
+  }, []);
+
+  const handleSubmit = () => {
+     
+    setLoading(true);
+    const requestBody =
+      {
+        "firmId": 0,
+        "firmName": firmDetails.firmName,
+        "firmTypeId": firmDetails.firmType,
+        "firmLogo": "",
+        "registrationNumber": "",
+        "regulatoryComplianceStatusId": firmDetails.regulatoryBody,
+        "firmDescription": firmDetails.firmDescription,
+        "website": firmDetails.websiteURL,
+        "jurisdiction": firmDetails.firmJurisdiction,
+        "firmStructureId": firmDetails.firmStructure,
+        "firmAddress": firmDetails.address,
+        "tenantGUID": "",
+        "regulatoryComplianceOtherStatus": firmDetails.otherregulatoryBody,
+      }
+
+      const includedFields = ['firmName', 'firmType', 'regulatoryBody', 'firmDescription', 'firmStructure'];
+
+      const Mandatoryerrors = Object.entries(requestBody).some(([key, value]) =>
+        includedFields.includes(key) && (value === null || value === '' || value === 0)
+      );
+  
+
+    const errorsArray = Object.values(errors);
+    const hasErrors = errorsArray.some(error => error !== null);
+
+    
+    if (Mandatoryerrors || hasErrors) {
+      console.error("Error updating profile:", errors);
+      MandatoryFieldErrors();
+      /*  toast.warning("Please fill Mandatory Values", {
+         position: toast.POSITION.BOTTOM_RIGHT,
+         theme: "colored",
+       }); */
+    } else {
+      const formData = new FormData();
+      formData.append('tenant', JSON.stringify(requestBody) );
+      formData.append('firmFile', firmDetails.firmLogo);
+      const apiResponse = postTenantUser(formData);
+      if (apiResponse.error) {
+        console.log('Error in posting Tenant User');
+      }
+      else {
+        console.log('Tenant User posted successfully');
+      }
+      setLoading(false);
+      onClose();
+    }
+  }
+
+
 
   return (
-    <Dialog open={true} onClose={onClose} fullWidth>
-        <DialogTitle>
-            Add Tenant
-        </DialogTitle>
-        <DialogContent>
-            <div className='margin-top-15'>
-                <FileUploadButton
-                    name="firmLogo"
-                    label='ICON'
-                    onChange={(name, value) => handleFileUpload(name, value)}
-                    isImage={true}
-                    defaultFile={firmDetails.firmLogo}
-                    fromWhiteLabeling={true}
-                    isSize={true} />
-            </div>
-            <div className='margin-top-15'>
-                <TextInput
-                    type="text"
-                    name="firmName"
-                    label="Firm Name"
-                    value={firmDetails.firmName}
-                    required={true}
-                    onChange={(name, value) => handleChange(name, value)}
-                    errormessage={errors.firmName || undefined}
-                />
-            </div>
-            <div className='margin-top-15'>
-                <TextInput
-                    type="select"
-                    name="firmType"
-                    label="Firm Type"
-                    options={FirmTypeDropdown?.map(option => ({ label: option?.name, value: option?.value }))}
-                    value={firmDetails.firmType}
-                    required={true}
-                    onChange={(name, value) => handleChange(name, value)}
-                    errormessage={errors.firmType || undefined}
-                />
-            </div>
-            <div className='margin-top-15'>
-                <TextInput
-                    type="text"
-                    name="firmID"
-                    label="Firm ID"
-                    value={firmDetails.firmID}
-                    required={true}
-                    onChange={(name, value) => handleChange(name, value)}
-                    errormessage={errors.firmID || undefined}
-                />
-            </div>
-            {/* <div className='margin-top-15'>
-                <TextInput
-                    type="text"
-                    name="firmRegistrationNumber"
-                    label="Firm Registration Number"
-                    value={firmDetails.firmRegistrationNumber}
-                    onChange={(name, value) => handleChange(name, value)}
-                    errormessage={errors.firmRegistrationNumber || undefined}
-                />
-            </div> */}
-            <div className='margin-top-15'>
-                <TextInput
-                    type="select"
-                    name="regulatoryBody"
-                    label="Regulatory Body"
-                    options={regulatorDropdown?.map(option => ({ label: option?.name, value: option?.value }))}
-                    value={firmDetails.regulatoryBody}
-                    required={true}
-                    onChange={(name, value) => handleChange(name, value)}
-                    errormessage={errors.regulatoryBody || undefined}
-                />
-            </div>
-            {
-                firmDetails.regulatoryBody === 5 && <div className='margin-top-15'>
-                    <TextInput
-                        type="text"
-                        name="regulatoryBody"
-                        label="Other Option"
-                        value={firmDetails.firmRegistrationNumber}
-                        required={true}
-                        onChange={(name, value) => handleChange(name, value)}
-                        errormessage={errors.firmRegistrationNumber || undefined}
-                    />
-                </div>
+    <Dialog open={open} onClose={onClose} fullWidth>
+      <DialogTitle>
+        Add Tenant
+      </DialogTitle>
+      <DialogContent>
+        <div className='margin-top-15'>
+          <FileUploadButton
+            name="firmLogo"
+            label='ICON'
+            onChange={(name, value) => handleFileUpload(name, value)}
+            isImage={true}
+            defaultFile={firmDetails.firmLogo}
+            fromWhiteLabeling={true}
+            isSize={true} />
+        </div>
+        <div className='margin-top-15'>
+          <TextInput
+            type="text"
+            name="firmName"
+            label="Firm Name"
+            value={firmDetails.firmName}
+            required={true}
+            onChange={(name, value) => handleChange(name, value)}
+            errormessage={errors.firmName || undefined}
+          />
+        </div>
+        <div className='margin-top-15'>
+          <TextInput
+            type="select"
+            name="firmType"
+            label="Firm Type"
+            options={FirmTypeDropdown
+              ? FirmTypeDropdown?.map(option => ({ label: option?.listItemValue, value: option?.listItemID }))
+              : []
             }
-            <div className='margin-top-15'>
-                <TextInput
-                    type="text"
-                    name="firmDescription"
-                    label="Firm Description"
-                    value={firmDetails.firmDescription}
-                    required={true}
-                    onChange={(name, value) => handleChange(name, value)}
-                    errormessage={errors.firmDescription || undefined}
-                />
-            </div>
-            <div className='margin-top-15'>
-                <TextInput
-                    type="text"
-                    name="address"
-                    label="Address"
-                    value={firmDetails.address}
-                    onChange={(name, value) => handleChange(name, value)}
-                />
-            </div>
-            <div className='margin-top-15'>
-                <TextInput
-                    type="text"
-                    name="websiteURL"
-                    label="Website URL"
-                    value={firmDetails.websiteURL}
-                    onChange={(name, value) => handleChange(name, value)}
-                />
-            </div>
-            <div className='margin-top-15'>
-                <TextInput
-                    type="text"
-                    name="firmJurisdiction"
-                    label="Firm Jurisdiction"
-                    value={firmDetails.firmJurisdiction}
-                    onChange={(name, value) => handleChange(name, value)}
-                />
-            </div>
-            <div className='margin-top-15'>
-                <TextInput
-                    type="select"
-                    name="firmStructure"
-                    label="Firm Structure"
-                    options={FirmInformationDropdown?.map(option => ({ label: option?.name, value: option?.value }))}
-                    value={firmDetails.firmStructure}
-                    required={true}
-                    onChange={(name, value) => handleChange(name, value)}
-                    errormessage={errors.firmStructure || undefined}
-                />
-            </div>
-        </DialogContent>
-        <DialogActions>
-            <ActionButton variant="outlined" className="btn-primary" onClick={()=>{}} label="Cancel" />
-            <ActionButton variant="contained" className="btn-primary" onClick={handleSave} label="Submit" />
-        </DialogActions>
+            value={firmDetails.firmType}
+            required={true}
+            onChange={(name, value) => handleChange(name, value)}
+            errormessage={errors.firmType || undefined}
+          />
+        </div>
+        <div className='margin-top-15'>
+          <TextInput
+            type="select"
+            name="regulatoryBody"
+            label="Regulatory Body"
+            options={regulatorDropdown
+              ? regulatorDropdown?.map(option => ({ label: option?.listItemValue, value: option?.listItemID }))
+              : []
+            }
+            value={firmDetails.regulatoryBody}
+            required={true}
+            onChange={(name, value) => handleChange(name, value)}
+            errormessage={errors.regulatoryBody || undefined}
+          />
+        </div>
+        {
+          firmDetails.regulatoryBody === otherOptionID && <div className='margin-top-15'>
+            <TextInput
+              type="text"
+              name="otherregulatoryBody"
+              label="Other Option"
+              value={firmDetails.otherregulatoryBody}
+              required={true}
+              onChange={(name, value) => handleChange(name, value)}
+              errormessage={errors.otherregulatoryBody || undefined}
+            />
+          </div>
+        }
+        <div className='margin-top-15'>
+          <TextInput
+            type="text"
+            name="firmDescription"
+            label="Firm Description"
+            value={firmDetails.firmDescription}
+            required={true}
+            onChange={(name, value) => handleChange(name, value)}
+            errormessage={errors.firmDescription || undefined}
+          />
+        </div>
+        <div className='margin-top-15'>
+          <TextInput
+            type="text"
+            name="address"
+            label="Address"
+            value={firmDetails.address}
+            onChange={(name, value) => handleChange(name, value)}
+          />
+        </div>
+        <div className='margin-top-15'>
+          <TextInput
+            type="text"
+            name="websiteURL"
+            label="Website URL"
+            value={firmDetails.websiteURL}
+            onChange={(name, value) => handleChange(name, value)}
+          />
+        </div>
+        <div className='margin-top-15'>
+          <TextInput
+            type="text"
+            name="firmJurisdiction"
+            label="Firm Jurisdiction"
+            value={firmDetails.firmJurisdiction}
+            onChange={(name, value) => handleChange(name, value)}
+          />
+        </div>
+        <div className='margin-top-15'>
+          <TextInput
+            type="select"
+            name="firmStructure"
+            label="Firm Structure"
+            options={firmStructureDropdown
+              ? firmStructureDropdown?.map(option => ({ label: option?.listItemValue, value: option?.listItemID }))
+              : []
+            }
+            value={firmDetails.firmStructure}
+            required={true}
+            onChange={(name, value) => handleChange(name, value)}
+            errormessage={errors.firmStructure || undefined}
+          />
+        </div>
+      </DialogContent>
+      <DialogActions>
+        <ActionButton variant="outlined" className="btn-primary" onClick={onCancel} label="Cancel" />
+        <ActionButton variant="contained" className="btn-primary" onClick={handleSubmit} label="Submit" />
+      </DialogActions>
     </Dialog>
   )
 }
