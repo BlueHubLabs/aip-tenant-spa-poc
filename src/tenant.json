@@ -1,0 +1,152 @@
+{
+    "UserColumns": [
+    
+        {
+    
+            "id": 1,
+    
+            "field": "ROLENAME",
+    
+            "headerName": "ROLENAME",
+    
+            "width": 460
+    
+        },
+    
+        {
+    
+            "id": 2,
+    
+            "field": "DESCRIPTION",
+    
+            "headerName": "DESCRIPTION",
+    
+            "width": 160
+    
+        }
+        
+    ],
+     "UserRows": [
+    
+        {
+    
+            "id": 1,
+    
+            "ROLENAME": "gitess",
+    
+            "DESCRIPTION": "Fund Manager"
+
+        },
+        {
+    
+            "id": 2,
+    
+            "ROLENAME": "Seshu",
+    
+            "DESCRIPTION": "Investor"
+
+        },
+        {
+    
+            "id": 3,
+    
+            "ROLENAME": "Harish",
+    
+            "DESCRIPTION": "Legal Compliance Officer"
+
+           },
+        {
+    
+            "id": 4,
+    
+            "ROLENAME": "Pragathi chowdary",
+    
+            "DESCRIPTION": "Firm"
+
+    },
+        {
+    
+            "id": 5,
+    
+            "ROLENAME": "fatima",
+    
+            "DESCRIPTION": "Legal Compliance Officer"
+
+    }
+    ],
+    
+        "FeatureColumns": [
+        {
+        
+                "id": 1,
+        
+                "field": "FEATURENAME",
+        
+                "headerName": "FEATURENAME",
+        
+                "width": 430
+        
+            }
+        ],
+        "FeatureRows": [
+     {
+        
+                "id": 1,
+        
+                "TITLE": "Fund Manager"
+        
+              
+    }
+        ],
+        "UsersColumns": [
+    
+            {
+        
+                "id": 1,
+        
+                "field": "USERNAME",
+        
+                "headerName": "USER NAME",
+        
+                "width": 250
+        
+            },
+            {
+        
+                "id": 2,
+        
+                "field": "ROLENAME",
+        
+                "headerName": "ROLE NAME",
+        
+                "width": 250
+        
+            },
+            {
+        
+                "id": 3,
+        
+                "field": "EMAILADDRESS",
+        
+                "headerName": "EMAIL ADDRESS",
+        
+                "width": 150
+        
+            }
+        ],
+        "UsersRows": [
+            {
+               
+                       "id": 1,
+               
+                       "USERNAME" : "pragathi",
+
+                       "ROLENAME"  : "investor",
+               
+                       "EMAILADDRESS" : "pragathi@gmail.com"
+           }
+        ]
+            
+
+}
+        

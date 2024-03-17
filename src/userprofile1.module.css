@@ -1,0 +1,2003 @@
+.userProfile1Child {
+
+    position: absolute;
+
+    top: 240px;
+
+    left: 140px;
+
+    border-radius: var(--br-5xs);
+
+    background-color: var(--color-white);
+
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);
+
+    width: calc(107vw - 300px);
+
+    height: 771px;
+
+  }
+
+  .userProfile1Inner,
+
+  .userProfile1Item {
+
+    position: absolute;
+
+    top: 361.05px;
+
+    left: 165.54px;
+
+    border-top: 1px solid var(--color-gainsboro);
+
+    box-sizing: border-box;
+
+    width: calc(100vw - 350px);
+
+    height: 2px;
+
+  }
+
+  .userProfile1Inner {
+
+    top: 950.16px;
+
+  }
+
+  .avatarIcon {
+
+    position: absolute;
+
+    top: 268.15px;
+
+    left: 167px;
+
+    width: 70px;
+
+    height: 70px;
+
+    object-fit: cover;
+
+  }
+
+  .avatarText{
+
+      position: absolute;
+
+      color: black;
+
+      font: bold normal normal 12px/25px Cresta;
+
+      top: 325px;
+
+      left: 200px;
+
+      transform: translate(-50%, -50%);
+
+  }
+
+  .divLabel {
+
+    position: absolute;
+
+    top: 0;
+
+    left: 1.08px;
+
+    text-align: left;
+
+    font: normal normal normal 12px/25px Cresta;
+
+    letter-spacing: 0px;
+
+    color: #1F61C5;
+
+    opacity: 1;
+
+  }
+
+  .pathIcon {
+
+    position: absolute;
+
+    width: 100%;
+
+    right: 0.5px;
+
+    bottom: -0.5px;
+
+    left: -0.5px;
+
+    max-width: 100%;
+
+    overflow: hidden;
+
+    height: 0px;
+
+  }
+
+  .fieldClass {
+
+    position: absolute;
+
+    bottom: 0px;
+
+    left: 0px;
+
+    /* font-size: var(--font-size-base);
+
+    color: var(--color-gray-100); */
+
+    text-align: left;
+
+    font: normal normal normal 16px/25px Cresta;
+
+    letter-spacing: 0px;
+
+    color: #0A1A27;
+
+    width: 100%;
+
+    opacity: 1;
+
+    border: none;
+
+    border-bottom: 1px solid gray;
+
+  }
+
+  .firstName,
+
+  .label1,
+
+  .label2,
+
+  .label3 {
+
+    position: absolute;
+
+    top: 273.24px;
+
+    left: 256.54px;
+
+    width: 330px;
+
+    height: 58.81px;
+
+  }
+
+  .subscription{
+
+    position: absolute;
+
+    top: 366.24px;
+
+    right: 805px;
+
+    width: 27%;
+
+  }
+
+  .label1,
+
+  .label2,
+
+  .label3 {
+
+    top: 543px;
+
+    left: 167px;
+
+  }
+
+  .label2,
+
+  .label3 {
+
+    top: 853.85px;
+
+    left: 167px;
+
+  }
+
+  .label3 {
+
+    left: 530.4px;
+
+    font: normal normal normal 12px/25px Cresta;
+
+    letter-spacing: 0px;
+
+    color: #1F61C5;
+
+    opacity: 1;
+
+  }
+
+  .lastName {
+
+    top: 273.24px;
+
+    left: 678.39px;
+
+  }
+
+  .lastName,
+
+  .label5,
+
+  .label6,
+
+  .label7 {
+
+    position: absolute;
+
+    width: 330px;
+
+    height: 58.81px;
+
+  }
+
+  .label5 {
+
+    top: 621px;
+
+    left: 167px;
+
+  }
+
+  .label6,
+
+  .label7 {
+
+    top: 387px;
+
+  }
+
+  .label6 {
+
+    left: 530.39px;
+
+  }
+
+  .label7 {
+
+   left: 892.75px;
+
+  }
+
+  .label8 {
+
+    top: 387px;
+
+    left: 167px;
+
+  }
+
+  .label10,
+
+  .label11,
+
+  .label12,
+
+  .label8,
+
+  .label9 {
+
+    position: absolute;
+
+    width: 330px;
+
+    height: 58.81px;
+
+  }
+
+  .label9 {
+
+    top: 699px;
+
+    left: 167px;
+
+  }
+
+  .label10,
+
+  .label11,
+
+  .label12 {
+
+    top: 464.81px;
+
+  }
+
+  .label10 {
+
+    left: 530.39px;
+
+  }
+
+  .label11,
+
+  .label12 {
+
+    left: 892.75px;
+
+  }
+
+  .label12 {
+
+    top: 542.62px;
+
+  }
+
+  .boundary,
+
+  .label13,
+
+  .label14,
+
+  .label15,
+
+  .label16 {
+
+    position: absolute;
+
+    top: 465px;
+
+    left: 167px;
+
+    width: 330px;
+
+    height: 58.81px;
+
+  }
+
+  .boundary,
+
+  .label14,
+
+  .label15,
+
+  .label16 {
+
+    top: 620.43px;
+
+    left: 530.39px;
+
+  }
+
+  .boundary,
+
+  .label15,
+
+  .label16 {
+
+    top: 698.23px;
+
+  }
+
+  .boundary,
+
+  .label16 {
+
+    top: 776.04px;
+
+  }
+
+  .boundary {
+
+    height: 100%;
+
+    width: 100%;
+
+    top: 0;
+
+    right: 0;
+
+    bottom: 0;
+
+    left: 0;
+
+  }
+
+  .colorIcon {
+
+    position: absolute;
+
+    top: calc(50% - 2px);
+
+    left: calc(50% - 5px);
+
+    width: 10px;
+
+    height: 5px;
+
+  }
+
+  .iconNavigationArrowDropDow {
+
+    position: absolute;
+
+    top: calc(50% + 0.98px);
+
+    right: 0.39px;
+
+    width: 24px;
+
+    height: 24px;
+
+  }
+
+  .labelParent {
+
+    position: absolute;
+
+    top: 542.62px;
+
+    left: 530.39px;
+
+    width: 330px;
+
+    height: 58.81px;
+
+  }
+
+  .iconNavigationArrowDropDow1 {
+
+    position: absolute;
+
+    top: 417px;
+
+    left: 1198px;
+
+    width: 24px;
+
+    height: 24px;
+
+  }
+
+  .iconNavigationArrowDropDow2 {
+
+    position: absolute;
+
+    top: calc(50% + 0.6px);
+
+    right: 0;
+
+    width: 24px;
+
+    height: 24px;
+
+  }
+
+  .labelGroup,
+
+  .rectangleDiv {
+
+    position: absolute;
+
+    top: 777px;
+
+    left: 167px;
+
+    width: 330px;
+
+    height: 58.81px;
+
+  }
+
+  .rectangleDiv {
+
+    top: 176px;
+
+    left: 134px;
+
+    border-radius: var(--br-181xl);
+
+    background-color: var(--color-aliceblue);
+
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16) inset;
+
+    width: 1200px;
+
+    height: 40px;
+
+  }
+
+  .tabButtonChild,
+
+  .userProfileChild {
+
+    position: absolute;
+
+    border-radius: var(--br-181xl);
+
+    mix-blend-mode: multiply;
+
+  }
+
+  .userProfileChild {
+
+    top: 176px;
+
+    left: 135px;
+
+    background-color: var(--color-aliceblue);
+
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16) inset;
+
+    width: 1200px;
+
+    height: 40px;
+
+  }
+
+  .tabButtonChild {
+
+    height: 100%;
+
+    width: 100%;
+
+    top: 0;
+
+    right: 0;
+
+    bottom: 0;
+
+    left: 0;
+
+    background-color: var(--color-gainsboro);
+
+  }
+
+  .personalInformation {
+
+    position: absolute;
+
+    top: calc(50% - 10px);
+
+    left: calc(50% - 115px);
+
+    letter-spacing: 1.4px;
+
+    text-transform: uppercase;
+
+    font-weight: 500;
+
+    color: #0A1A27;
+
+    font-family: 'Cresta-Medium';
+
+  }
+
+  .iconMaterialInfo {
+
+    position: absolute;
+
+    top: calc(50% - 10px);
+
+    left: calc(50% - 142px);
+
+    width: 20px;
+
+    height: 20px;
+
+  }
+
+  .tabButton1 {
+
+    position: absolute;
+
+    top: 176px;
+
+    left: 135px;
+
+    width: 338px;
+
+    height: 40px;
+
+    text-align: center;
+
+    cursor: pointer;
+
+    font-size: var(--font-size-sm);
+
+    color: var(--color-gray-100);
+
+  }
+
+  .tabButton4{
+
+    position: absolute;
+
+    top: 176px;
+
+    left: 997px;
+
+    width: 338px;
+
+    height: 40px;
+
+    cursor: pointer;
+
+    text-align: center;
+
+    font-size: var(--font-size-sm);
+
+    color: var(--color-gray-100);
+
+  }
+
+  .tabButtonItem {
+
+    position: absolute;
+
+    height: 100%;
+
+    width: 100%;
+
+    top: 0;
+
+    right: 0;
+
+    bottom: 0;
+
+    left: 0;
+
+    border-radius: var(--br-181xl);
+
+    background-color: var(--color-aliceblue);
+
+    opacity: 0;
+
+    mix-blend-mode: multiply;
+
+  }
+
+  .investmentProfile {
+
+    position: absolute;
+
+    top: calc(50% - 10px);
+
+    left: calc(50% - 70px);
+
+    letter-spacing: 1.4px;
+
+    text-transform: uppercase;
+
+    font-weight: 500;
+
+    color: #0A1A27;
+
+    font-family: 'Cresta-Medium';
+
+  }
+
+  .financeChipFill0Wght400GraIcon {
+
+    position: absolute;
+
+    top: 10.92px;
+
+    left: calc(50% - 112.54px);
+
+    width: 28.54px;
+
+    height: 18.16px;
+
+  }
+
+  .tabButton3 {
+
+    position: absolute;
+
+    top: 176px;
+
+    left: 715px;
+
+    width: 338px;
+
+    height: 40px;
+
+    cursor: pointer;
+
+    text-align: center;
+
+    font-size: var(--font-size-sm);
+
+    color: var(--color-gray-100);
+
+  }
+
+  .bankingInformation {
+
+    position: absolute;
+
+    top: calc(50% - 10px);
+
+    left: calc(50% - 74.48px);
+
+    letter-spacing: 1.4px;
+
+    text-transform: uppercase;
+
+    font-weight: 500;
+
+    color: #0A1A27;
+
+    font-family: 'Cresta-Medium';
+
+  }
+
+  .accountBalanceFill0Wght400Icon {
+
+    position: absolute;
+
+    bottom: 8px;
+
+    left: calc(50% - 111.33px);
+
+    width: 24.27px;
+
+    height: 24px;
+
+  }
+
+  .investorProfile,
+
+  .tabButton2 {
+
+    position: absolute;
+
+    color: var(--color-gray-100);
+
+  }
+
+  .tabButton2 {
+
+    top: 176px;
+
+    left: 418px;
+
+    width: 338px;
+
+    height: 40px;
+
+    cursor: pointer;
+
+    text-align: center;
+
+    font-size: var(--font-size-sm);
+
+  }
+
+  .investorProfile {
+
+    top: 109px;
+
+    left: 142px;
+
+    font-size: var(--font-size-9xl);
+
+    line-height: 40px;
+
+    color: #0A1A27;
+
+  }
+
+  .edit {
+
+    position: absolute;
+
+    top: 600px;
+
+    left: 185px;
+
+    color: var(--color-white);
+
+    text-align: center;
+
+  }
+
+  .navbarbgIcon {
+
+    position: absolute;
+
+    height: calc(100% + 18px);
+
+    width: calc(100% + 18px);
+
+    top: 0;
+
+    right: -18px;
+
+    bottom: -18px;
+
+    left: 0;
+
+    max-width: 100%;
+
+    overflow: hidden;
+
+    max-height: 100%;
+
+  }
+
+  .userMenuIcon {
+
+    position: absolute;
+
+    top: calc(50% - 17px);
+
+    right: 22px;
+
+    width: 62px;
+
+    height: 36px;
+
+  }
+
+  .groupChild {
+
+    position: absolute;
+
+    height: 100%;
+
+    top: 0;
+
+    bottom: 0;
+
+    left: 0;
+
+    max-height: 100%;
+
+    width: 109.79px;
+
+  }
+
+  .t {
+
+    letter-spacing: -0.06px;
+
+  }
+
+  .v {
+
+    letter-spacing: -0.13px;
+
+  }
+
+  .alternativeInvestmentPlatforContainer {
+
+    position: absolute;
+
+    top: calc(50% - 11px);
+
+    right: 5px;
+
+    line-height: 12px;
+
+  }
+
+  .groupParent {
+
+    position: absolute;
+
+    top: calc(50% - 19.7px);
+
+    left: 22px;
+
+    width: 261.22px;
+
+    height: 39.4px;
+
+  }
+
+  .search {
+
+    position: absolute;
+
+    top: calc(50% - 10px);
+
+    left: calc(50% - 64px);
+
+  }
+
+  .iconactionsearch24px {
+
+    position: absolute;
+
+    top: calc(50% - 12px);
+
+    left: 8px;
+
+    width: 24px;
+
+    height: 24px;
+
+  }
+
+  .searchParent {
+
+    position: absolute;
+
+    top: calc(50% - 17px);
+
+    right: 102px;
+
+    border-radius: var(--br-5xs);
+
+    background-color: var(--color-white);
+
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.16);
+
+    border: 1px solid var(--color-gray-200);
+
+    box-sizing: border-box;
+
+    width: 220px;
+
+    height: 36px;
+
+    font-family: var(--font-cresta);
+
+  }
+
+  .navbarbgParent {
+
+    position: absolute;
+
+    top: 0;
+
+    left: 80px;
+
+    width: 1520px;
+
+    height: 70px;
+
+    font-size: var(--font-size-sm);
+
+    color: var(--color-gray-100);
+
+    font-family: var(--font-cresta-medium);
+
+  }
+
+  .path428Icon {
+
+    position: absolute;
+
+    height: 100%;
+
+    width: calc(100% - 0.5px);
+
+    top: 0;
+
+    right: 0.5px;
+
+    bottom: 0;
+
+    left: 0;
+
+    max-width: 100%;
+
+    overflow: hidden;
+
+    max-height: 100%;
+
+  }
+
+  .storefrontFill0Wght400Grad0Icon {
+
+    position: absolute;
+
+    top: 20px;
+
+    right: 28.83px;
+
+    width: 22.33px;
+
+    height: 20px;
+
+    opacity: 0.5;
+
+  }
+
+  .leftNavButton {
+
+    position: absolute;
+
+    width: calc(100% - 0.5px);
+
+    top: 143px;
+
+    right: 0.5px;
+
+    left: 0;
+
+    height: 60px;
+
+  }
+
+  .notificationsFill0Wght400GrIcon {
+
+    position: absolute;
+
+    height: calc(100% - 40px);
+
+    top: 20px;
+
+    right: 32px;
+
+    bottom: 20px;
+
+    max-height: 100%;
+
+    width: 16px;
+
+    opacity: 0.5;
+
+  }
+
+  .leftNavButtonInner {
+
+    position: absolute;
+
+    top: calc(50% - 14px);
+
+    left: calc(50% - 2px);
+
+    width: 14px;
+
+    height: 14px;
+
+  }
+
+  .div3 {
+
+    position: absolute;
+
+    top: calc(50% - 13px);
+
+    left: calc(50% + 2px);
+
+    letter-spacing: 0.8px;
+
+    font-weight: 500;
+
+  }
+
+  .leftNavButton1 {
+
+    position: absolute;
+
+    width: calc(100% - 0.5px);
+
+    top: 203px;
+
+    right: 0.5px;
+
+    left: 0;
+
+    height: 60px;
+
+  }
+
+  .iconAwesomeTasks {
+
+    position: absolute;
+
+    right: 28.1px;
+
+    bottom: 20px;
+
+    width: 23.7px;
+
+    height: 20px;
+
+    opacity: 0.5;
+
+  }
+
+  .leftNavButton2 {
+
+    position: absolute;
+
+    width: calc(100% - 0.5px);
+
+    top: calc(50% - 217px);
+
+    right: 0.5px;
+
+    left: 0;
+
+    height: 60px;
+
+  }
+
+  .leftNavButtonChild1 {
+
+    position: absolute;
+
+    height: calc(100% - 12px);
+
+    top: 6px;
+
+    bottom: 6px;
+
+    left: 16px;
+
+    border-radius: var(--br-5xs);
+
+    background-color: var(--color-gainsboro);
+
+    width: 48px;
+
+  }
+
+  .manageAccountsFill1Wght400Icon {
+
+    position: absolute;
+
+    right: 28.1px;
+
+    bottom: 20px;
+
+    width: 23.8px;
+
+    height: 20px;
+
+  }
+
+  .leftNavButtonChild2 {
+
+    position: absolute;
+
+    height: calc(100% - 12px);
+
+    top: 6px;
+
+    bottom: 6px;
+
+    left: 0;
+
+    background-color: var(--color-deepskyblue);
+
+    width: 6px;
+
+  }
+
+  .leftNavButton3 {
+
+    position: absolute;
+
+    width: calc(100% - 0.5px);
+
+    top: calc(50% - 97px);
+
+    right: 0.5px;
+
+    left: 0;
+
+    height: 60px;
+
+  }
+
+  .homeStorageFill0Wght400GraIcon {
+
+    position: absolute;
+
+    right: 30.16px;
+
+    bottom: 20px;
+
+    width: 19.69px;
+
+    height: 20px;
+
+    opacity: 0.5;
+
+  }
+
+  .leftNavButton4 {
+
+    position: absolute;
+
+    width: calc(100% - 0.5px);
+
+    top: calc(50% - 157px);
+
+    right: 0.5px;
+
+    left: 0;
+
+    height: 60px;
+
+  }
+
+  .settingsFill0Wght400Grad0OIcon {
+
+    position: absolute;
+
+    top: calc(50% - 10px);
+
+    right: 30.22px;
+
+    width: 19.56px;
+
+    height: 20px;
+
+    opacity: 0.5;
+
+  }
+
+  .leftNavButton5 {
+
+    position: absolute;
+
+    width: calc(100% - 0.5px);
+
+    right: 0.5px;
+
+    bottom: 92px;
+
+    left: 0;
+
+    height: 60px;
+
+  }
+
+  .logoutFill0Wght400Grad0OpsIcon {
+
+    position: absolute;
+
+    top: 20px;
+
+    right: 30.17px;
+
+    width: 19.67px;
+
+    height: 20px;
+
+    opacity: 0.5;
+
+  }
+
+  .leftNavButton6 {
+
+    position: absolute;
+
+    width: calc(100% - 0.5px);
+
+    right: 0.5px;
+
+    bottom: 32px;
+
+    left: 0;
+
+    height: 60px;
+
+  }
+
+  .homeFill0Wght300Grad0Opsz4Icon {
+
+    position: absolute;
+
+    top: calc(50% - 10px);
+
+    left: calc(50% - 9.05px);
+
+    width: 18.1px;
+
+    height: 20px;
+
+    opacity: 0.5;
+
+  }
+
+  .leftNavButton7 {
+
+    position: absolute;
+
+    width: calc(100% - 0.5px);
+
+    top: 83px;
+
+    right: 0.5px;
+
+    left: 0;
+
+    height: 60px;
+
+  }
+
+  .leftNavClosedChild {
+
+    position: absolute;
+
+    top: 798.5px;
+
+    left: -0.5px;
+
+    border-top: 1px solid var(--color-gray-300);
+
+    box-sizing: border-box;
+
+    width: 81px;
+
+    height: 2px;
+
+  }
+
+  .closedMenuIconChild {
+
+    top: 0;
+
+    width: 22px;
+
+  }
+
+  .closedMenuIconChild,
+
+  .closedMenuIconInner,
+
+  .closedMenuIconItem {
+
+    position: absolute;
+
+    left: 0;
+
+    border-radius: var(--br-81xl);
+
+    background-color: var(--color-white);
+
+    height: 2.5px;
+
+  }
+
+  .closedMenuIconItem {
+
+    bottom: 0;
+
+    width: 22px;
+
+  }
+
+  .closedMenuIconInner {
+
+    top: calc(50% - 1.25px);
+
+    width: 17px;
+
+  }
+
+  .chevronRightFill0Wght400GrIcon {
+
+    position: absolute;
+
+    height: 73.95%;
+
+    width: 28.07%;
+
+    top: 13.55%;
+
+    right: 0;
+
+    bottom: 12.5%;
+
+    left: 71.93%;
+
+    max-width: 100%;
+
+    overflow: hidden;
+
+    max-height: 100%;
+
+  }
+
+  .closedMenuIcon {
+
+    position: absolute;
+
+    top: 25px;
+
+    left: 22.29px;
+
+    width: 29.81px;
+
+    height: 20px;
+
+    opacity: 0.5;
+
+  }
+
+  .navDrawerLeft {
+
+    position: absolute;
+
+    top: 0;
+
+    left: -0.5px;
+
+    width: 80.5px;
+
+    height: 960px;
+
+    font-size: var(--font-size-5xs);
+
+    color: var(--color-white);
+
+    font-family: var(--font-azo-sans);
+
+  }
+
+  .component2091 {
+
+    position: absolute;
+
+  top: 167px;
+
+  left: 900px;
+
+  width: 74px;
+
+  height: 74px;
+
+  }
+
+  .userProfile1 {
+
+    /* position: relative; */
+
+    background: var(--unnamed-color-eaf0f7) 0% 0% no-repeat padding-box;
+
+    background: #EAF0F7 0% 0% no-repeat padding-box;
+
+    width: 1349px;
+
+    height: 1020px;
+
+  }
+
+  .userProfile1Expanded{
+
+  left: 241px !important;
+
+  }
+
+  body {
+
+    margin: 0;
+
+    line-height: normal;
+
+  }
+
+  :root {
+
+    /* fonts */
+
+    --font-cresta: "Cresta-Regular";
+
+    --font-azo-sans: "Azo Sans";
+
+    --font-cresta-medium: Cresta-Medium;
+
+ 
+
+    /* font sizes */
+
+    --font-size-xs: 10px;
+
+    --font-size-lg: 15px;
+
+    --font-size-sm: 12px;
+
+    --font-size-xl: 23px;
+
+    --font-size-5xs: 8px;
+
+    --font-size-9xl: 28px;
+
+    --font-size-base: 16px;
+
+ 
+
+    /* Colors */
+
+    --color-aliceblue: #eaf0f7;
+
+    --color-gray-100: #0a1a27;
+
+    --color-gray-200: rgba(10, 26, 39, 0.11);
+
+    --color-gray-300: rgb(234 240 247);
+
+    --color-white: #fff;
+
+    --color-deepskyblue: #38b5e8;
+
+    --color-gainsboro: #d2dae0;
+
+    --color-royalblue: #1f61c5;
+
+ 
+
+    /* border radiuses */
+
+    --br-5xs: 8px;
+
+    --br-81xl: 100px;
+
+    --br-181xl: 200px;
+
+  }
+
+/* Styles for the button container */
+
+.buttonContainer {
+
+  /*display: flex;*/
+
+  justify-content: flex-start;
+
+  gap: 10px; /* Add spacing between buttons */
+
+  /* Optional: Set a maximum width if needed */
+
+  max-width: 100%;
+
+  overflow-x: auto; /* Enable horizontal scrolling if buttons overflow */
+
+}
+
+ 
+
+/* Common styles for the buttons */
+
+.onboardingConfirmButton {
+
+   /* Set a minimum width for each button */
+
+  height: 80px;
+
+  cursor: pointer;
+
+  width: 345px;
+
+  flex-direction: row;
+
+  border-radius: 5px;
+
+ 
+
+  background-color: white;
+
+  border: 1px solid var(--color-gray-100);
+
+  box-sizing: border-box;
+
+  position: relative;
+
+}
+
+/*.OnBoardingParent{
+
+  display: flex;
+
+  flex-direction: row;
+
+ 
+
+  width:200px;
+
+  justify-content: space-around;
+
+}*/
+
+ 
+
+/*.onboardingConfirmButtonChild {
+
+ 
+
+  height: 100%;
+
+  width: 100%;
+
+ 
+
+  border-radius: var(--br-5xs);
+
+  background-color: var(--color-white);
+
+  border: 1px solid var(--color-gray-100);
+
+  box-sizing: border-box;
+
+  display: flex;
+
+  flex-direction: column;
+
+ 
+
+}
+
+/*.investedInAlternatives,
+
+.no {
+
+  position: absolute;
+
+  top: calc(50% - 20.41px);
+
+  left: 27.55px;
+
+  line-height: 9px;
+
+  text-align: left;
+
+font: normal normal normal 13px/9px Cresta;
+
+letter-spacing: 0px;
+
+color: #0A1A27;
+
+opacity: 1;
+
+}
+
+.no {
+
+  top: calc(50% - 3.59px);
+
+  font-size: var(--font-size-lg);
+
+  text-align: left;
+
+font: normal normal normal 18px/9px Cresta;
+
+letter-spacing: 0px;
+
+color: #0A1A27;
+
+opacity: 1;
+
+}*/
+
+.investedInAlternatives,
+
+.no {
+
+  /* Adjust text alignment and font styles */
+
+  text-align: center;
+
+  font: normal 18px/1.5 'Cresta', sans-serif;
+
+  color: #0A1A27;
+
+  opacity: 1;
+
+  /* Center text vertically within the button */
+
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+
+}
+
+.editFill0Wght400Grad0Opsz4Icon {
+
+  position: absolute;
+
+  top: calc(50% - 7.67px);
+
+  right: 26.63px;
+
+  width: 16px;
+
+  height: 15.99px;
+
+}
+
+.onboardingConfirmButton {
+
+ 
+
+  top: 403px;
+
+  left: 167px;
+
+ 
+
+  height: 80px;
+
+  cursor: pointer;
+
+ 
+
+}
+
+.onboardingConfirmButton1,
+
+.onboardingConfirmButton2 {
+
+  position: absolute;
+
+  top: 503px;
+
+  left: 167px;
+
+  width: 25%;
+
+  height: 80px;
+
+  cursor: pointer;
+
+}
+
+.onboardingConfirmButton2 {
+
+  top: 603px;
+
+ 
+
+}
+
+.onboardingConfirmButton3 {
+
+  top: 403px;
+
+}
+
+.onboardingConfirmButton3,
+
+.onboardingConfirmButton4,
+
+.onboardingConfirmButton5 {
+
+  position: absolute;
+
+  left: 550px;
+
+  width: 25%;
+
+  height: 80px;
+
+  cursor: pointer;
+
+}
+
+.onboardingConfirmButton4 {
+
+  top: 503px;
+
+}
+
+.onboardingConfirmButton5 {
+
+  top: 603px;
+
+}
+
+.onboardingConfirmButton6 {
+
+  top: 402px;
+
+}
+
+.onboardingConfirmButton6,
+
+.onboardingConfirmButton7,
+
+.onboardingConfirmButton8 {
+
+  position: absolute;
+
+  left: 950px;
+
+  width: 25%;
+
+  height: 80px;
+
+  cursor: pointer;
+
+}
+
+.onboardingConfirmButton7 {
+
+  top: 502px;
+
+}
+
+.onboardingConfirmButton8 {
+
+  top: 602px;
+
+}
+
+ 
+
+.component2094 {
+
+  position: absolute;
+
+  top: 848px;
+
+  right: 4px;
+
+  width: 74px;
+
+  height: 74px;
+
+}
+
+ 
+
+ 
+
+.lastNameLabel,
+
+.firstNameLabel {
+
+  position: absolute;
+
+  top: 276.15px;
+
+  left: 257.62px;
+
+  font-size: var(--font-size-xl);
+
+  line-height: 25px;
+
+}
+
+.lastNameLabel {
+
+  left: 354px;
+
+}
+
+ 
+
+/* Edit Button */
+
+.EditandSaveButton {
+
+  position: absolute;
+
+  top: 270px;
+
+  right: 90px;
+
+  width: 115px;
+
+  height: 36px;
+
+  cursor: pointer;
+
+}
+
+.EditandSaveButtonChild {
+
+  position: absolute;
+
+  height: 100%;
+
+  width: 100%;
+
+  top: 90px;
+
+  right: 0;
+
+  bottom: 0;
+
+  left: 0;
+
+  border-radius: var(--br-5xs);
+
+  background-color: var(--color-gainsboro-100);
+
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.16);
+
+  border: 1px solid var(--color-gray-400);
+
+  box-sizing: border-box;
+
+}
+
+.Edit {
+
+  position: absolute;
+
+  top: 95px;
+
+  left: 40px ;
+
+  letter-spacing: 1.4px;
+
+  font-weight: 300;
+
+}
+
+.EditandSaveButtonIcon {
+
+  position: absolute;
+
+  height: calc(100% - 16px);
+
+  top: 8px;
+
+  bottom: 8px;
+
+  left: calc(50% + 18.5px);
+
+  max-height: 100%;
+
+  width: 20px;
+
+}
+
+ 
+
+.cancel {
+
+  position: absolute;
+
+  top: 270px;
+
+  right: 220px;
+
+  width: 115px;
+
+  height: 36px;
+
+  cursor: pointer;
+
+}
+
+.cancelChild {
+
+  position: absolute;
+
+  height: 100%;
+
+  width: 100%;
+
+  top: 90px;
+
+  right: 0;
+
+  bottom: 0;
+
+  left: 0;
+
+  border-radius: var(--br-5xs);
+
+  background-color: var(--color-gainsboro-100);
+
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.16);
+
+  border: 1px solid var(--color-gray-400);
+
+  box-sizing: border-box;
+
+}
+
+.canceltext {
+
+  position: absolute;
+
+  top: 95px;
+
+  left: 30px;
+
+  letter-spacing: 1.4px;
+
+  font-weight: 300;
+
+}
