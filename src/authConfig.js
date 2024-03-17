@@ -2,7 +2,7 @@
  * Copyright (c) Microsoft Corporation. All rights reserved.
  * Licensed under the MIT License.
  */
-
+ 
 import { LogLevel } from "@azure/msal-browser";
 
 export const deployment = {
