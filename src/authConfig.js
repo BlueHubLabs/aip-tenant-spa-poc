@@ -7,9 +7,9 @@ import { LogLevel } from "@azure/msal-browser";
 
 export const deployment = {
     policyPrefix : "V1_",
-    b2cTenantName: "aipb2cpoc",
-    b2cTenantId: "31e8eecd-9d43-42ef-bdfa-7d40335bdd0e",
-    b2cClientId: "46c6b5f3-bfc0-4ef3-ac5b-198d0b383a42", // bluemoss 46c6b5f3-bfc0-4ef3-ac5b-198d0b383a42 // Other 0c115d70-7814-4edf-ada2-09c233d30169
+    b2cTenantName: "alt360",
+    b2cTenantId: "687d523f-0304-4f59-8195-d25a5d0578f4",
+    b2cClientId: "9745b75e-536c-4e4d-9539-00c271946c44", // bluemoss 46c6b5f3-bfc0-4ef3-ac5b-198d0b383a42 // Other 0c115d70-7814-4edf-ada2-09c233d30169
     restUrl: "https://aip-tenant-api-poc.azurewebsites.net/",
      aipUrl: "https://aipbackend.azurewebsites.net"
     //aipUrl: "https://aipdemoapi.azurewebsites.net"
@@ -17,8 +17,8 @@ export const deployment = {
 }
 
 export const policyNames = {
-        signIn: `b2c_1a_${deployment.policyPrefix}signIn`,
-        newTenant: `b2c_1a_${deployment.policyPrefix}newTenant`        
+        signIn: `B2C_1_V1_SignInWithUserNameOrEmail_Dev`, //`b2c_1a_${deployment.policyPrefix}signIn`,
+        newTenant: `b2c_1a_${deployment.policyPrefix}newTenant`
 }
 /**
  * Enter here the user flows and custom policies for your B2C application
