@@ -10,14 +10,15 @@ export const deployment = {
     b2cTenantName: "alt360",
     b2cTenantId: "687d523f-0304-4f59-8195-d25a5d0578f4",
     b2cClientId: "9745b75e-536c-4e4d-9539-00c271946c44", // bluemoss 46c6b5f3-bfc0-4ef3-ac5b-198d0b383a42 // Other 0c115d70-7814-4edf-ada2-09c233d30169
-    restUrl: "https://aip-tenant-api-poc.azurewebsites.net/",
-     aipUrl: "https://aipbackend.azurewebsites.net"
+    restUrl: "https://Alt360TenantManagementAPI.azurewebsites.net/",
+     aipUrl: "https://alt360devapi.azurewebsites.net"
     //aipUrl: "https://aipdemoapi.azurewebsites.net"
     // aipUrl:"https://localhost:8080"
 }
 
 export const policyNames = {
-        signIn: `B2C_1_V1_SignInWithUserNameOrEmail_Dev`, //`b2c_1a_${deployment.policyPrefix}signIn`,
+        signIn: `b2c_1a_${deployment.policyPrefix}signIn`,
+        //signIn: `B2C_1_V1_SignInWithUserNameOrEmail_Dev`
         newTenant: `b2c_1a_${deployment.policyPrefix}newTenant`
 }
 /**
