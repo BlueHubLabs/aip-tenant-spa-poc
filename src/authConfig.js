@@ -12,7 +12,7 @@ export const deployment = {
     //b2cClientId: "99de8eb5-c322-430c-9d7c-490716895452", //local
     b2cClientId: "9745b75e-536c-4e4d-9539-00c271946c44", // purple
     restUrl: "https://Alt360TenantManagementAPI.azurewebsites.net/",
-     aipUrl: "https://alt360qaapi.azurewebsites.net"
+     aipUrl: "https://alt360devapi.azurewebsites.net"
     //aipUrl: "https://aipdemoapi.azurewebsites.net"
     // aipUrl:"https://localhost:8080"
 }
