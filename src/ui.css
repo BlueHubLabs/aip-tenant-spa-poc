@@ -49,7 +49,7 @@
 }
 .usermManagementContent{
     background-color: #EAF0F7;
-    height: calc(100vh - 67px);
+    height: calc(200vh - 67px);
 }
 .spinnerWrapper{
     position: absolute;

@@ -1,0 +1,50 @@
+/* .inputfile{
+    position: absolute;
+    opacity: 0;
+    width: 0.1px;
+    height: 0.1px;
+} */
+.fileUploadButton{
+    display: flex;
+    align-items: center !important;
+    border: 1px solid #B7B7B7;
+    color: #B7B7B7;
+     /* #B7B7B7; */
+    border-radius: 8px;
+    width: fit-content;
+    padding: 4px 8px !important;
+    cursor: pointer;
+    margin-bottom: 5px;
+    float: right;
+}
+.fileUploadButton:hover {color: #fff; background-color: #1976D2; border: 1px solid #1976D2;}
+.fileUploadButton label{
+    margin-left: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+}
+.fileInputDisabled{
+    pointer-events: none;
+    
+}
+.file-preview{
+    width: 40px;
+    margin-right: 8px;
+}
+.addUserProfile{
+    width: 60px;
+    height: 60px;
+    margin-right: 8px;
+}
+
+/* Action button */
+.MuiButton-root{
+    text-transform: unset !important;
+    border-radius: 8px !important;
+    /* padding: 8px 40px !important; */
+}
+.actionButtonLabel{
+    margin: 0;
+    line-height: normal;
+}
