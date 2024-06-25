@@ -11,7 +11,7 @@ export const deployment = {
     b2cTenantId: "31e8eecd-9d43-42ef-bdfa-7d40335bdd0e",
     b2cClientId: "46c6b5f3-bfc0-4ef3-ac5b-198d0b383a42", // bluemoss 46c6b5f3-bfc0-4ef3-ac5b-198d0b383a42 // Other 0c115d70-7814-4edf-ada2-09c233d30169
     restUrl: "https://aip-tenant-api-poc.azurewebsites.net/",
-     aipUrl: "https://aipbackend.azurewebsites.net"
+     aipUrl: "https://aipdemoapi.azurewebsites.net"
     //aipUrl: "https://aipdemoapi.azurewebsites.net"
     // aipUrl:"https://localhost:8080"
 }
